@@ -1,0 +1,24 @@
+#toolbar {
+    margin-bottom: 10px;
+}
+
+#canvas {
+    border: 1px solid #a3a3a3;
+    position: absolute;
+}
+
+#chart {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    background-size: 10px 10px;
+    background-image: linear-gradient(to right, #f1f1f1 1px, transparent 1px),
+        linear-gradient(to bottom, #f1f1f1 1px, transparent 1px);
+}
+
+#position {
+    font-size: 12px;
+    position: absolute;
+    right: 6px;
+    top: 6px;
+}
