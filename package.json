@@ -1,11 +1,20 @@
 {
-  "name": "crm-fe",
-  "version": "0.1.0",
-  "private": true,
+  "name": "flowchart-vue",
+  "version": "0.0.9",
+  "main": "dist/FlowChart.umd.min.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joyceworks/flowchart-vue.git"
+  },
+  "keywords": [
+    "flowchart", "flowchart designer"
+  ],
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "build-lib": "vue-cli-service build --target lib --name FlowChart src/components/flowchart/index.js"
   },
   "dependencies": {
     "ant-design-vue": "^1.4.11",

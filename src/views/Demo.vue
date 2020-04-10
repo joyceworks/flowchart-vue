@@ -1,7 +1,23 @@
 <template>
     <div>
+        <div id="toolbar">
+            <el-button-group>
+                <el-button size="mini" icon="el-icon-plus" @click="$refs.chart.add(10, 10)">
+                    添加
+                </el-button>
+                <el-button size="mini" icon="el-icon-minus" @click="$refs.chart.remove()">
+                    删除
+                </el-button>
+                <el-button size="mini" icon="el-icon-edit-outline" @click="$refs.chart.edit()">
+                    编辑
+                </el-button>
+                <el-button size="mini" icon="el-icon-check" @click="$refs.chart.save()">
+                    保存
+                </el-button>
+            </el-button-group>
+        </div>
         <flow-chart :nodes="nodes" :connections="connections" @editnode="handleEditNode"
-                    @editconnection="handleEditConnection" @save="handleChartSave">
+                    @editconnection="handleEditConnection" @save="handleChartSave" ref="chart">
         </flow-chart>
         <flow-chart-node-dialog :visible.sync="nodeDialogVisible"
                                 :node.sync="editingInfo.target">
@@ -13,9 +29,9 @@
     </div>
 </template>
 <script>
-  import FlowChart from '../components/flowchart/general/FlowChart';
-  import FlowChartNodeDialog from '../components/flowchart/FlowChartNodeDialog';
-  import FlowChartConnectionDialog from '../components/flowchart/FlowChartConnectionDialog';
+  import FlowChart from '../components/flowchart/Flowchart';
+  import FlowChartNodeDialog from '../components/NodeDialog';
+  import FlowChartConnectionDialog from '../components/ConnectionDialog';
 
   export default {
     components: {
@@ -82,4 +98,7 @@
   };
 </script>
 <style>
+    #toolbar {
+        margin-bottom: 10px;
+    }
 </style>

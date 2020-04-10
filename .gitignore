@@ -79,6 +79,5 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-dist/
 .idea/
 nohup.out

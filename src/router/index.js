@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import App from '../views/App';
 
-import FlowChart from '../components/flowchart/general/FlowChart';
+import FlowChart from '../components/flowchart/Flowchart';
 import Detail from '../views/Demo';
 
 Vue.use(VueRouter);

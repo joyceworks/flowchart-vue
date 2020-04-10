@@ -1,32 +1,21 @@
 <template>
-    <div>
-        <div id="toolbar">
-            <el-button-group>
-                <el-button size="mini" icon="el-icon-plus" @click="add(10, 10)">添加</el-button>
-                <el-button size="mini" icon="el-icon-minus" @click="remove()">删除</el-button>
-                <el-button size="mini" icon="el-icon-edit-outline" @click="edit()">编辑</el-button>
-                <el-button size="mini" icon="el-icon-check" @click="save()">保存</el-button>
-            </el-button-group>
-            {{currentConnection || 'null'}}
-        </div>
-        <div id="chart"
-             @mousemove="handleChartMouseMove"
-             @dblclick="handleChartDblClick($event)"
-             :style="{ cursor: cursor }"
-        >
-            <span id="position">{{ cursorToChartOffset.x + ', ' + cursorToChartOffset.y }}</span>
-            <svg width="800" height="600" id="svg"></svg>
-        </div>
-
+    <div id="chart"
+         @mousemove="handleChartMouseMove"
+         @dblclick="handleChartDblClick($event)"
+         :style="{ cursor: cursor }"
+    >
+        <span id="position">{{ cursorToChartOffset.x + ', ' + cursorToChartOffset.y }}</span>
+        <svg width="800" height="600" id="svg"></svg>
     </div>
 </template>
 <script>
-  import {lineTo, line2} from '../../../utils/svg';
-  import '../../../assets/flowchart.css';
+  import {lineTo, line2} from '../../utils/svg';
+  import '../../assets/flowchart.css';
   import * as d3 from 'd3';
   import {Message} from 'element-ui';
 
   export default {
+    name: 'flow-chart',
     props: {
       nodes: {
         type: Array,
@@ -382,7 +371,7 @@
         } else if (this.currentConnection) {
           let index = this.internalConnections.indexOf(this.currentConnection);
           this.internalConnections.splice(index, 1);
-          that.currentConnection = null;
+          this.currentConnection = null;
         }
       },
     },
