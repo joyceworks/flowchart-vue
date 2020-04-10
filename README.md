@@ -19,7 +19,7 @@ yarn add flowchart-vue
 
 2. Then open http://localhost:port/#/app/index in browser.
 
-### How To Use
+### Usage
 
 ```vue
 <template>
