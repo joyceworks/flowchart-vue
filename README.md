@@ -8,19 +8,6 @@ Flowchart & Flowchart designer component for Vue.js.
 yarn add flowchart-vue
 ```
 
-### Demo
-
-1. First:
-
-    ``` shell script
-    yarn install
-    yarn run serve
-    ```
-
-2. Then open http://localhost:port/#/app/index in browser.
-
-### Usage
-
 ```vue
 <template>
     <div id="app">
@@ -38,3 +25,14 @@ yarn add flowchart-vue
   };
 </script>
 ```
+
+### Demo
+
+1. First:
+
+    ``` shell script
+    yarn install
+    yarn run serve
+    ```
+
+2. Then open http://localhost:port/#/app/index in browser.
