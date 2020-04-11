@@ -51719,6 +51719,13 @@ module.exports = function (exec, skipClosing) {
 
 /***/ }),
 
+/***/ "5d58":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__("d8d6");
+
+/***/ }),
+
 /***/ "613b":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -53188,6 +53195,13 @@ var meta = module.exports = {
   onFreeze: onFreeze
 };
 
+
+/***/ }),
+
+/***/ "67bb":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__("f921");
 
 /***/ }),
 
@@ -59443,6 +59457,38 @@ module.exports = !__webpack_require__("9e1e") && !__webpack_require__("79e5")(fu
 
 /***/ }),
 
+/***/ "c7c6":
+/***/ (function(module, exports, __webpack_require__) {
+
+// 20.2.2.17 Math.hypot([value1[, value2[, … ]]])
+var $export = __webpack_require__("5ca1");
+var abs = Math.abs;
+
+$export($export.S, 'Math', {
+  hypot: function hypot(value1, value2) { // eslint-disable-line no-unused-vars
+    var sum = 0;
+    var i = 0;
+    var aLen = arguments.length;
+    var larg = 0;
+    var arg, div;
+    while (i < aLen) {
+      arg = abs(arguments[i++]);
+      if (larg < arg) {
+        div = larg / arg;
+        sum = sum * div * div + 1;
+        larg = arg;
+      } else if (arg > 0) {
+        div = arg / larg;
+        sum += div * div;
+      } else sum += arg;
+    }
+    return larg === Infinity ? Infinity : larg * Math.sqrt(sum);
+  }
+});
+
+
+/***/ }),
+
 /***/ "c8ba":
 /***/ (function(module, exports) {
 
@@ -65223,12 +65269,42 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2fbca0f3-vue-loader-template"}!./node_modules/@vue/cli-service/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/@vue/cli-service/node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=0cfc1c1b&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({ cursor: _vm.cursor }),attrs:{"id":"chart"},on:{"mousemove":_vm.handleChartMouseMove,"dblclick":function($event){return _vm.handleChartDblClick($event)}}},[_c('span',{attrs:{"id":"position"}},[_vm._v(_vm._s(_vm.cursorToChartOffset.x + ', ' + _vm.cursorToChartOffset.y))]),_c('svg',{attrs:{"width":"800","height":"600","id":"svg"}})])}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2fbca0f3-vue-loader-template"}!./node_modules/@vue/cli-service/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/@vue/cli-service/node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=27d87dd6&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({ cursor: _vm.cursor }),attrs:{"id":"chart"},on:{"mousemove":_vm.handleChartMouseMove,"mouseup":_vm.handleChartMouseUp,"dblclick":function($event){return _vm.handleChartDblClick($event)}}},[_c('span',{attrs:{"id":"position"}},[_vm._v(_vm._s(_vm.cursorToChartOffset.x + ', ' + _vm.cursorToChartOffset.y))]),_c('svg',{attrs:{"width":"800","height":"600","id":"svg"}})])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=0cfc1c1b&
+// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=27d87dd6&
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js
+var iterator = __webpack_require__("5d58");
+var iterator_default = /*#__PURE__*/__webpack_require__.n(iterator);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/symbol.js
+var core_js_symbol = __webpack_require__("67bb");
+var symbol_default = /*#__PURE__*/__webpack_require__.n(core_js_symbol);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime-corejs2/helpers/esm/typeof.js
+
+
+
+function typeof_typeof2(obj) { if (typeof symbol_default.a === "function" && typeof iterator_default.a === "symbol") { typeof_typeof2 = function _typeof2(obj) { return typeof obj; }; } else { typeof_typeof2 = function _typeof2(obj) { return obj && typeof symbol_default.a === "function" && obj.constructor === symbol_default.a && obj !== symbol_default.a.prototype ? "symbol" : typeof obj; }; } return typeof_typeof2(obj); }
+
+function typeof_typeof(obj) {
+  if (typeof symbol_default.a === "function" && typeof_typeof2(iterator_default.a) === "symbol") {
+    typeof_typeof = function _typeof(obj) {
+      return typeof_typeof2(obj);
+    };
+  } else {
+    typeof_typeof = function _typeof(obj) {
+      return obj && typeof symbol_default.a === "function" && obj.constructor === symbol_default.a && obj !== symbol_default.a.prototype ? "symbol" : typeof_typeof2(obj);
+    };
+  }
+
+  return typeof_typeof(obj);
+}
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es6.math.hypot.js
+var es6_math_hypot = __webpack_require__("c7c6");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es7.symbol.async-iterator.js
 var es7_symbol_async_iterator = __webpack_require__("ac4d");
@@ -77185,7 +77261,7 @@ function svg_lineTo(svgId, x1, y1, x2, y2, lineWidth, strokeStyle, dash) {
     return d[1];
   });
   var svg = src_select('#' + svgId);
-  var path = svg.append('path').attr('stroke', strokeStyle).attr('stroke-width', lineWidth).attr('fill', 'none').attr('d', lineGenerator([sta, end])).style('cursor', 'pointer');
+  var path = svg.append('path').attr('stroke', strokeStyle).attr('stroke-width', lineWidth).attr('fill', 'none').attr('d', lineGenerator([sta, end]));
 
   if (dash) {
     path.style('stroke-dasharray', dash.join(','));
@@ -78007,6 +78083,8 @@ var element_ui_common = __webpack_require__("5c96");
 
 
 
+
+
 //
 //
 //
@@ -78017,6 +78095,8 @@ var element_ui_common = __webpack_require__("5c96");
 //
 //
 //
+//
+
 
 
 
@@ -78070,9 +78150,7 @@ var element_ui_common = __webpack_require__("5c96");
       },
       connectingInfo: {
         source: null,
-        sourcePosition: null,
-        sourceX: null,
-        sourceY: null
+        sourcePosition: null
       },
       currentNode: null,
       currentConnection: null,
@@ -78084,7 +78162,12 @@ var element_ui_common = __webpack_require__("5c96");
         x: 0,
         y: 0
       },
-      clickedOnce: false
+      clickedOnce: false,
+
+      /**
+       * lines of all internalConnections
+       */
+      lines: []
     };
   },
   methods: {
@@ -78106,35 +78189,59 @@ var element_ui_common = __webpack_require__("5c96");
         element_ui_common["Message"].error('未选中任何节点');
       }
     },
-    handleChartMouseMove: function () {
-      var _handleChartMouseMove = _asyncToGenerator(
+    handleChartMouseUp: function () {
+      var _handleChartMouseUp = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee(event) {
-        var sourceOffset;
+      regeneratorRuntime.mark(function _callee() {
+        var that, tempId, conn;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                this.cursorToChartOffset.x = event.offsetX;
-                this.cursorToChartOffset.y = event.offsetY;
-
-                if (!this.connectingInfo.source) {
-                  _context.next = 9;
+                if (!this.movingInfo.target) {
+                  _context.next = 10;
                   break;
                 }
 
-                _context.next = 5;
-                return this.refresh();
-
-              case 5:
-                sourceOffset = this.getNodeConnectorOffset(this.connectingInfo.source.id, this.connectingInfo.sourcePosition);
-                this.arrowTo(sourceOffset.x, sourceOffset.y, this.cursorToChartOffset.x, this.cursorToChartOffset.y, this.connectingInfo.sourcePosition);
-                _context.next = 11;
-                break;
+                this.movingInfo.target.x = Math.round(Math.round(this.movingInfo.target.x) / 10) * 10;
+                this.movingInfo.target.y = Math.round(Math.round(this.movingInfo.target.y) / 10) * 10;
+                this.movingInfo.target = null;
+                this.movingInfo.offsetX = null;
+                this.movingInfo.offsetY = null;
+                that = this;
+                _context.next = 9;
+                return that.refresh();
 
               case 9:
-                _context.next = 11;
-                return this.refresh();
+                return _context.abrupt("return");
+
+              case 10:
+                if (this.connectingInfo.source) {
+                  if (this.hoveredConnector) {
+                    if (this.connectingInfo.source.id !== this.hoveredConnector.node.id) {
+                      // Node can't connect to itself
+                      tempId = +new Date();
+                      conn = {
+                        source: {
+                          id: this.connectingInfo.source.id,
+                          position: this.connectingInfo.sourcePosition
+                        },
+                        destination: {
+                          id: this.hoveredConnector.node.id,
+                          position: this.hoveredConnector.position
+                        },
+                        id: tempId,
+                        type: 'pass',
+                        name: '通过'
+                      };
+                      this.internalConnections.push(conn);
+                      this.refresh();
+                    }
+                  }
+
+                  this.connectingInfo.source = null;
+                  this.connectingInfo.sourcePosition = null;
+                }
 
               case 11:
               case "end":
@@ -78144,38 +78251,44 @@ var element_ui_common = __webpack_require__("5c96");
         }, _callee, this);
       }));
 
-      function handleChartMouseMove(_x) {
-        return _handleChartMouseMove.apply(this, arguments);
+      function handleChartMouseUp() {
+        return _handleChartMouseUp.apply(this, arguments);
       }
 
-      return handleChartMouseMove;
+      return handleChartMouseUp;
     }(),
-    removeConnection: function () {
-      var _removeConnection = _asyncToGenerator(
+    handleChartMouseMove: function () {
+      var _handleChartMouseMove = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee2(id) {
-        var connections;
+      regeneratorRuntime.mark(function _callee2(event) {
+        var sourceOffset, destinationPosition;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                connections = this.internalConnections.filter(function (item) {
-                  return item.id === id;
-                });
+                this.cursorToChartOffset.x = event.offsetX;
+                this.cursorToChartOffset.y = event.offsetY;
 
-                if (!(connections.length !== 1)) {
-                  _context2.next = 3;
+                if (!this.connectingInfo.source) {
+                  _context2.next = 10;
                   break;
                 }
 
-                return _context2.abrupt("return");
-
-              case 3:
-                this.internalConnections.splice(this.internalConnections.indexOf(connections[0]), 1);
-                _context2.next = 6;
+                _context2.next = 5;
                 return this.refresh();
 
-              case 6:
+              case 5:
+                sourceOffset = this.getNodeConnectorOffset(this.connectingInfo.source.id, this.connectingInfo.sourcePosition);
+                destinationPosition = this.hoveredConnector ? this.hoveredConnector.position : null;
+                this.arrowTo(sourceOffset.x, sourceOffset.y, this.cursorToChartOffset.x, this.cursorToChartOffset.y, this.connectingInfo.sourcePosition, destinationPosition);
+                _context2.next = 12;
+                break;
+
+              case 10:
+                _context2.next = 12;
+                return this.refresh();
+
+              case 12:
               case "end":
                 return _context2.stop();
             }
@@ -78183,11 +78296,11 @@ var element_ui_common = __webpack_require__("5c96");
         }, _callee2, this);
       }));
 
-      function removeConnection(_x2) {
-        return _removeConnection.apply(this, arguments);
+      function handleChartMouseMove(_x) {
+        return _handleChartMouseMove.apply(this, arguments);
       }
 
-      return removeConnection;
+      return handleChartMouseMove;
     }(),
     handleChartDblClick: function handleChartDblClick(event) {
       this.add(event.offsetX, event.offsetY);
@@ -78235,6 +78348,7 @@ var element_ui_common = __webpack_require__("5c96");
             }
           }); // render lines
 
+          that.lines = [];
           that.internalConnections.forEach(function (conn) {
             var sourcePosition = that.getNodeConnectorOffset(conn.source.id, conn.source.position);
             var destinationPosition = that.getNodeConnectorOffset(conn.destination.id, conn.destination.position);
@@ -78278,6 +78392,36 @@ var element_ui_common = __webpack_require__("5c96");
               } finally {
                 if (_didIteratorError) {
                   throw _iteratorError;
+                }
+              }
+            }
+
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+              for (var _iterator2 = result.lines[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                var line = _step2.value;
+                that.lines.push({
+                  sourceX: line.sourceX,
+                  sourceY: line.sourceY,
+                  destinationX: line.destinationX,
+                  destinationY: line.destinationY,
+                  id: conn.id
+                });
+              }
+            } catch (err) {
+              _didIteratorError2 = true;
+              _iteratorError2 = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+                  _iterator2.return();
+                }
+              } finally {
+                if (_didIteratorError2) {
+                  throw _iteratorError2;
                 }
               }
             }
@@ -78341,7 +78485,7 @@ var element_ui_common = __webpack_require__("5c96");
           var timer = setTimeout(function () {
             that.clickedOnce = false;
             clearTimeout(timer);
-          }, 1000);
+          }, 300);
           that.clickedOnce = true;
         }
 
@@ -78408,7 +78552,7 @@ var element_ui_common = __webpack_require__("5c96");
 
         var _loop = function _loop(position) {
           var positionElement = connectorPosition[position];
-          var connector = svg.append('circle').attr('cx', positionElement.x).attr('cy', positionElement.y).attr('r', 3).attr('stroke', '#bbbbbb').attr('stroke-width', '1px').attr('fill', 'white').style('cursor', 'crosshair');
+          var connector = svg.append('circle').attr('cx', positionElement.x).attr('cy', positionElement.y).attr('r', 4).attr('stroke', '#bbbbbb').attr('stroke-width', '1px').attr('fill', 'white').style('cursor', 'crosshair');
           connector.on('mousedown', function () {
             on_event.stopPropagation();
 
@@ -78418,14 +78562,6 @@ var element_ui_common = __webpack_require__("5c96");
 
             that.connectingInfo.source = node;
             that.connectingInfo.sourcePosition = position;
-          }).on('mousemove', function () {
-            on_event.stopPropagation();
-
-            if (that.connectingInfo.source) {
-              var sourceOffset = that.getNodeConnectorOffset(that.connectingInfo.source.id, that.connectingInfo.sourcePosition);
-              var destinationOffset = that.getNodeConnectorOffset(node.id, position);
-              that.arrowTo(sourceOffset.x, sourceOffset.y, destinationOffset.x, destinationOffset.y, that.connectingInfo.sourcePosition, position);
-            }
           }).on('mouseup', function () {
             on_event.stopPropagation();
 
@@ -78470,27 +78606,27 @@ var element_ui_common = __webpack_require__("5c96");
       regeneratorRuntime.mark(function _callee4() {
         var _this = this;
 
-        var connections, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, connection, index;
+        var connections, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, connection, index;
 
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
                 if (!this.currentNode) {
-                  _context4.next = 27;
+                  _context4.next = 25;
                   break;
                 }
 
                 connections = this.internalConnections.filter(function (item) {
                   return item.source.id === _this.currentNode.id || item.destination.id === _this.currentNode.id;
                 });
-                _iteratorNormalCompletion2 = true;
-                _didIteratorError2 = false;
-                _iteratorError2 = undefined;
+                _iteratorNormalCompletion3 = true;
+                _didIteratorError3 = false;
+                _iteratorError3 = undefined;
                 _context4.prev = 5;
 
-                for (_iterator2 = connections[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                  connection = _step2.value;
+                for (_iterator3 = connections[Symbol.iterator](); !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                  connection = _step3.value;
                   this.internalConnections.splice(this.internalConnections.indexOf(connection), 1);
                 }
 
@@ -78500,26 +78636,26 @@ var element_ui_common = __webpack_require__("5c96");
               case 9:
                 _context4.prev = 9;
                 _context4.t0 = _context4["catch"](5);
-                _didIteratorError2 = true;
-                _iteratorError2 = _context4.t0;
+                _didIteratorError3 = true;
+                _iteratorError3 = _context4.t0;
 
               case 13:
                 _context4.prev = 13;
                 _context4.prev = 14;
 
-                if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-                  _iterator2.return();
+                if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+                  _iterator3.return();
                 }
 
               case 16:
                 _context4.prev = 16;
 
-                if (!_didIteratorError2) {
+                if (!_didIteratorError3) {
                   _context4.next = 19;
                   break;
                 }
 
-                throw _iteratorError2;
+                throw _iteratorError3;
 
               case 19:
                 return _context4.finish(16);
@@ -78530,19 +78666,19 @@ var element_ui_common = __webpack_require__("5c96");
               case 21:
                 this.internalNodes.splice(this.internalNodes.indexOf(this.currentNode), 1);
                 this.currentNode = null;
-                _context4.next = 25;
-                return this.refresh();
-
-              case 25:
-                _context4.next = 28;
+                _context4.next = 26;
                 break;
 
-              case 27:
+              case 25:
                 if (this.currentConnection) {
                   index = this.internalConnections.indexOf(this.currentConnection);
                   this.internalConnections.splice(index, 1);
                   this.currentConnection = null;
                 }
+
+              case 26:
+                _context4.next = 28;
+                return this.refresh();
 
               case 28:
               case "end":
@@ -78635,9 +78771,96 @@ var element_ui_common = __webpack_require__("5c96");
 
       return nodes[0];
     },
+    hoveredConnector: function hoveredConnector() {
+      var _iteratorNormalCompletion4 = true;
+      var _didIteratorError4 = false;
+      var _iteratorError4 = undefined;
+
+      try {
+        for (var _iterator4 = this.internalNodes[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+          var node = _step4.value;
+          var connectorPosition = this.getConnectorPosition(node);
+
+          for (var prop in connectorPosition) {
+            var entry = connectorPosition[prop];
+
+            if (Math.hypot(entry.x - this.cursorToChartOffset.x, entry.y - this.cursorToChartOffset.y) < 10) {
+              return {
+                position: prop,
+                node: node
+              };
+            }
+          }
+        }
+      } catch (err) {
+        _didIteratorError4 = true;
+        _iteratorError4 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
+            _iterator4.return();
+          }
+        } finally {
+          if (_didIteratorError4) {
+            throw _iteratorError4;
+          }
+        }
+      }
+
+      return null;
+    },
+    hoveredConnection: function hoveredConnection() {
+      var _this3 = this;
+
+      var _iteratorNormalCompletion5 = true;
+      var _didIteratorError5 = false;
+      var _iteratorError5 = undefined;
+
+      try {
+        var _loop2 = function _loop2() {
+          var line = _step5.value;
+          var distance = distanceOfPointToLine(line.sourceX, line.sourceY, line.destinationX, line.destinationY, _this3.cursorToChartOffset.x, _this3.cursorToChartOffset.y);
+
+          if (distance < 5 && between(line.sourceX - 2, line.destinationX + 2, _this3.cursorToChartOffset.x) && between(line.sourceY - 2, line.destinationY + 2, _this3.cursorToChartOffset.y)) {
+            var connections = _this3.internalConnections.filter(function (item) {
+              return item.id === line.id;
+            });
+
+            return {
+              v: connections.length > 0 ? connections[0] : null
+            };
+          }
+        };
+
+        for (var _iterator5 = this.lines[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+          var _ret = _loop2();
+
+          if (typeof_typeof(_ret) === "object") return _ret.v;
+        }
+      } catch (err) {
+        _didIteratorError5 = true;
+        _iteratorError5 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
+            _iterator5.return();
+          }
+        } finally {
+          if (_didIteratorError5) {
+            throw _iteratorError5;
+          }
+        }
+      }
+
+      return null;
+    },
     cursor: function cursor() {
-      if (this.connectingInfo.source) {
+      if (this.connectingInfo.source || this.hoveredConnector) {
         return 'crosshair';
+      }
+
+      if (this.hoveredConnection != null) {
+        return 'pointer';
       }
 
       return null;

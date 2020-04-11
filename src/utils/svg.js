@@ -14,8 +14,7 @@ function lineTo(svgId, x1, y1, x2, y2, lineWidth, strokeStyle, dash) {
       attr('stroke', strokeStyle).
       attr('stroke-width', lineWidth).
       attr('fill', 'none').
-      attr('d', lineGenerator([sta, end])).
-      style('cursor', 'pointer');
+      attr('d', lineGenerator([sta, end]));
   if (dash) {
     path.style('stroke-dasharray', dash.join(','));
   }

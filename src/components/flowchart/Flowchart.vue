@@ -1,6 +1,7 @@
 <template>
     <div id="chart"
          @mousemove="handleChartMouseMove"
+         @mouseup="handleChartMouseUp"
          @dblclick="handleChartDblClick($event)"
          :style="{ cursor: cursor }"
     >
@@ -13,6 +14,7 @@
   import '../../assets/flowchart.css';
   import * as d3 from 'd3';
   import {Message} from 'element-ui';
+  import {between, distanceOfPointToLine} from '../../utils/math';
 
   export default {
     name: 'flow-chart',
@@ -41,7 +43,10 @@
         internalNodes: [],
         internalConnections: [],
         movingInfo: {offsetX: null, offsetY: null},
-        connectingInfo: {source: null, sourcePosition: null, sourceX: null, sourceY: null},
+        connectingInfo: {
+          source: null,
+          sourcePosition: null,
+        },
         currentNode: null,
         currentConnection: null,
         /**
@@ -49,6 +54,10 @@
          */
         cursorToChartOffset: {x: 0, y: 0},
         clickedOnce: false,
+        /**
+         * lines of all internalConnections
+         */
+        lines: [],
       };
     },
     methods: {
@@ -64,6 +73,46 @@
           Message.error('未选中任何节点');
         }
       },
+      async handleChartMouseUp() {
+        if (this.movingInfo.target) {
+          this.movingInfo.target.x =
+              Math.round(Math.round(this.movingInfo.target.x) / 10) * 10;
+          this.movingInfo.target.y =
+              Math.round(Math.round(this.movingInfo.target.y) / 10) * 10;
+          this.movingInfo.target = null;
+          this.movingInfo.offsetX = null;
+          this.movingInfo.offsetY = null;
+          let that = this;
+          await that.refresh();
+          return;
+        }
+
+        if (this.connectingInfo.source) {
+          if (this.hoveredConnector) {
+            if (this.connectingInfo.source.id !== this.hoveredConnector.node.id) {
+              // Node can't connect to itself
+              let tempId = +new Date();
+              let conn = {
+                source: {
+                  id: this.connectingInfo.source.id,
+                  position: this.connectingInfo.sourcePosition,
+                },
+                destination: {
+                  id: this.hoveredConnector.node.id,
+                  position: this.hoveredConnector.position,
+                },
+                id: tempId,
+                type: 'pass',
+                name: '通过',
+              };
+              this.internalConnections.push(conn);
+              this.refresh();
+            }
+          }
+          this.connectingInfo.source = null;
+          this.connectingInfo.sourcePosition = null;
+        }
+      },
       async handleChartMouseMove(event) {
         this.cursorToChartOffset.x = event.offsetX;
         this.cursorToChartOffset.y = event.offsetY;
@@ -73,25 +122,13 @@
               this.connectingInfo.source.id,
               this.connectingInfo.sourcePosition,
           );
-          this.arrowTo(
-              sourceOffset.x,
-              sourceOffset.y,
-              this.cursorToChartOffset.x,
-              this.cursorToChartOffset.y,
-              this.connectingInfo.sourcePosition,
+          let destinationPosition = this.hoveredConnector ? this.hoveredConnector.position : null;
+          this.arrowTo(sourceOffset.x, sourceOffset.y, this.cursorToChartOffset.x,
+              this.cursorToChartOffset.y, this.connectingInfo.sourcePosition, destinationPosition,
           );
         } else {
           await this.refresh();
         }
-      },
-      async removeConnection(id) {
-        let connections = this.internalConnections.filter(item => item.id === id);
-        if (connections.length !== 1) {
-          return;
-        }
-
-        this.internalConnections.splice(this.internalConnections.indexOf(connections[0]), 1);
-        await this.refresh();
       },
       handleChartDblClick(event) {
         this.add(event.offsetX, event.offsetY);
@@ -124,6 +161,7 @@
             });
 
             // render lines
+            that.lines = [];
             that.internalConnections.forEach(conn => {
               let sourcePosition = that.getNodeConnectorOffset(
                   conn.source.id,
@@ -160,6 +198,15 @@
                 });
                 path.on('dblclick', function() {
                   that.editConnection(conn);
+                });
+              }
+              for (const line of result.lines) {
+                that.lines.push({
+                  sourceX: line.sourceX,
+                  sourceY: line.sourceY,
+                  destinationX: line.destinationX,
+                  destinationY: line.destinationY,
+                  id: conn.id,
                 });
               }
             });
@@ -241,7 +288,7 @@
                 let timer = setTimeout(function() {
                   that.clickedOnce = false;
                   clearTimeout(timer);
-                }, 1000);
+                }, 300);
                 that.clickedOnce = true;
               }
               that.movingInfo.offsetX = that.cursorToChartOffset.x - node.x;
@@ -299,7 +346,7 @@
             let connector = svg.append('circle').
                 attr('cx', positionElement.x).
                 attr('cy', positionElement.y).
-                attr('r', 3).
+                attr('r', 4).
                 attr('stroke', '#bbbbbb').
                 attr('stroke-width', '1px').
                 attr('fill', 'white').
@@ -311,23 +358,6 @@
               }
               that.connectingInfo.source = node;
               that.connectingInfo.sourcePosition = position;
-            }).on('mousemove', function() {
-              d3.event.stopPropagation();
-              if (that.connectingInfo.source) {
-                let sourceOffset = that.getNodeConnectorOffset(
-                    that.connectingInfo.source.id,
-                    that.connectingInfo.sourcePosition,
-                );
-                let destinationOffset = that.getNodeConnectorOffset(node.id, position);
-                that.arrowTo(
-                    sourceOffset.x,
-                    sourceOffset.y,
-                    destinationOffset.x,
-                    destinationOffset.y,
-                    that.connectingInfo.sourcePosition,
-                    position,
-                );
-              }
             }).on('mouseup', function() {
               d3.event.stopPropagation();
               if (that.connectingInfo.source) {
@@ -371,12 +401,12 @@
           }
           this.internalNodes.splice(this.internalNodes.indexOf(this.currentNode), 1);
           this.currentNode = null;
-          await this.refresh();
         } else if (this.currentConnection) {
           let index = this.internalConnections.indexOf(this.currentConnection);
           this.internalConnections.splice(index, 1);
           this.currentConnection = null;
         }
+        await this.refresh();
       },
     },
     mounted() {
@@ -441,9 +471,46 @@
 
         return nodes[0];
       },
+      hoveredConnector() {
+        for (const node of this.internalNodes) {
+          let connectorPosition = this.getConnectorPosition(node);
+          for (let prop in connectorPosition) {
+            let entry = connectorPosition[prop];
+            if (Math.hypot(entry.x - this.cursorToChartOffset.x,
+                entry.y - this.cursorToChartOffset.y) < 10) {
+              return {position: prop, node: node};
+            }
+          }
+        }
+        return null;
+      },
+      hoveredConnection() {
+        for (const line of this.lines) {
+          let distance = distanceOfPointToLine(
+              line.sourceX,
+              line.sourceY,
+              line.destinationX,
+              line.destinationY,
+              this.cursorToChartOffset.x,
+              this.cursorToChartOffset.y,
+          );
+          if (
+              distance < 5 &&
+              between(line.sourceX - 2, line.destinationX + 2, this.cursorToChartOffset.x) &&
+              between(line.sourceY - 2, line.destinationY + 2, this.cursorToChartOffset.y)
+          ) {
+            let connections = this.internalConnections.filter(item => item.id === line.id);
+            return connections.length > 0 ? connections[0] : null;
+          }
+        }
+        return null;
+      },
       cursor() {
-        if (this.connectingInfo.source) {
+        if (this.connectingInfo.source || this.hoveredConnector) {
           return 'crosshair';
+        }
+        if (this.hoveredConnection != null) {
+          return 'pointer';
         }
         return null;
       },
