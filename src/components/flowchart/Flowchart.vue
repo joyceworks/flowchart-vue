@@ -48,6 +48,7 @@
          * Mouse position(relative to chart div)
          */
         cursorToChartOffset: {x: 0, y: 0},
+        clickedOnce: false,
       };
     },
     methods: {
@@ -234,14 +235,20 @@
             on('start', function() {
               that.currentConnection = null;
               that.currentNode = node;
+              if (that.clickedOnce) {
+                that.$emit('editnode', node);
+              } else {
+                let timer = setTimeout(function() {
+                  that.clickedOnce = false;
+                  clearTimeout(timer);
+                }, 1000);
+                that.clickedOnce = true;
+              }
               that.movingInfo.offsetX = that.cursorToChartOffset.x - node.x;
               that.movingInfo.offsetY = that.cursorToChartOffset.y - node.y;
             }).
             on('drag', async function() {
-              const {
-                x,
-                y,
-              } = d3.event;
+              const {x, y} = d3.event;
               node.x = x - that.movingInfo.offsetX;
               node.y = y - that.movingInfo.offsetY;
               await that.refresh();
@@ -274,7 +281,7 @@
               node.y = Math.round(Math.round(node.y) / 10) * 10;
               that.refresh();
             });
-        let container = svg.append('rect').
+        svg.append('rect').
             attr('x', node.x).
             attr('y', node.y).
             attr('width', 120).
@@ -282,11 +289,8 @@
             attr('stroke', borderColor).
             attr('stroke-width', '1px').
             style('cursor', 'move').
-            attr('fill', 'transparent').call(drag);
-        container.on('dblclick', function() {
-          d3.event.stopPropagation();
-          that.$emit('editnode', node);
-        });
+            attr('fill', 'transparent').
+            call(drag);
 
         if (connectorVisible) {
           let connectorPosition = this.getConnectorPosition(node);
