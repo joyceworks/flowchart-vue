@@ -11,7 +11,21 @@ yarn add flowchart-vue
 ```vue
 <template>
     <div id="app">
-        <flow-chart></flow-chart>
+        <button type="button" @click="$refs.chart.add(10, 10)">
+            Add
+        </button>
+        <button type="button" @click="$refs.chart.remove()">
+            Del
+        </button>
+        <button type="button" @click="$refs.chart.edit()">
+            Edit
+        </button>
+        <button type="button" @click="$refs.chart.save()">
+            Save
+        </button>
+        <flow-chart :nodes="nodes" :connections="connections" @editnode="handleEditNode"
+                    @editconnection="handleEditConnection" @save="handleChartSave" ref="chart">
+        </flow-chart>
     </div>
 </template>
 <script>
@@ -22,6 +36,30 @@ yarn add flowchart-vue
 
   export default {
     name: 'App',
+    data: function() {
+      return {
+        nodes: [
+          {id: 1, x: 140, y: 270, name: '开始', type: 'start'},
+          {id: 2, x: 540, y: 270, name: '结束', type: 'end'},
+        ],
+        connections: [
+          {
+            source: {id: 1, position: 'right'},
+            destination: {id: 2, position: 'left'},
+            id: 1,
+            type: 'pass',
+          },
+        ],
+      };
+    },
+    methods: {
+      handleChartSave(nodes, connections) {
+      },
+      handleEditNode(node) {
+      },
+      handleEditConnection(connection) {
+      },
+    }
   };
 </script>
 ```
