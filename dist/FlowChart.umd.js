@@ -65223,12 +65223,12 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2fbca0f3-vue-loader-template"}!./node_modules/@vue/cli-service/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/@vue/cli-service/node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=42ea5522&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2fbca0f3-vue-loader-template"}!./node_modules/@vue/cli-service/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/@vue/cli-service/node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=0cfc1c1b&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({ cursor: _vm.cursor }),attrs:{"id":"chart"},on:{"mousemove":_vm.handleChartMouseMove,"dblclick":function($event){return _vm.handleChartDblClick($event)}}},[_c('span',{attrs:{"id":"position"}},[_vm._v(_vm._s(_vm.cursorToChartOffset.x + ', ' + _vm.cursorToChartOffset.y))]),_c('svg',{attrs:{"width":"800","height":"600","id":"svg"}})])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=42ea5522&
+// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=0cfc1c1b&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es7.symbol.async-iterator.js
 var es7_symbol_async_iterator = __webpack_require__("ac4d");
@@ -78083,7 +78083,8 @@ var element_ui_common = __webpack_require__("5c96");
       cursorToChartOffset: {
         x: 0,
         y: 0
-      }
+      },
+      clickedOnce: false
     };
   },
   methods: {
@@ -78333,6 +78334,17 @@ var element_ui_common = __webpack_require__("5c96");
       var drag = src_drag().on('start', function () {
         that.currentConnection = null;
         that.currentNode = node;
+
+        if (that.clickedOnce) {
+          that.$emit('editnode', node);
+        } else {
+          var timer = setTimeout(function () {
+            that.clickedOnce = false;
+            clearTimeout(timer);
+          }, 1000);
+          that.clickedOnce = true;
+        }
+
         that.movingInfo.offsetX = that.cursorToChartOffset.x - node.x;
         that.movingInfo.offsetY = that.cursorToChartOffset.y - node.y;
       }).on('drag',
@@ -78389,11 +78401,7 @@ var element_ui_common = __webpack_require__("5c96");
         node.y = Math.round(Math.round(node.y) / 10) * 10;
         that.refresh();
       });
-      var container = svg.append('rect').attr('x', node.x).attr('y', node.y).attr('width', 120).attr('height', 60).attr('stroke', borderColor).attr('stroke-width', '1px').style('cursor', 'move').attr('fill', 'transparent').call(drag);
-      container.on('dblclick', function () {
-        on_event.stopPropagation();
-        that.$emit('editnode', node);
-      });
+      svg.append('rect').attr('x', node.x).attr('y', node.y).attr('width', 120).attr('height', 60).attr('stroke', borderColor).attr('stroke-width', '1px').style('cursor', 'move').attr('fill', 'transparent').call(drag);
 
       if (connectorVisible) {
         var connectorPosition = this.getConnectorPosition(node);
