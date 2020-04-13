@@ -9,7 +9,7 @@
     height: 600px;
     background-size: 10px 10px;
     background-image: linear-gradient(to right, #f1f1f1 1px, transparent 1px),
-        linear-gradient(to bottom, #f1f1f1 1px, transparent 1px);
+    linear-gradient(to bottom, #f1f1f1 1px, transparent 1px);
 }
 
 #position {
@@ -17,4 +17,14 @@
     position: absolute;
     right: 6px;
     top: 6px;
+}
+
+.unselectable {
+    moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

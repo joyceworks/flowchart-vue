@@ -63631,7 +63631,7 @@ module.exports = function (O, D) {
 
 exports = module.exports = __webpack_require__("24fb")(false);
 // Module
-exports.push([module.i, "#canvas{border:1px solid #a3a3a3;position:absolute}#chart{position:relative;width:800px;height:600px;background-size:10px 10px;background-image:linear-gradient(90deg,#f1f1f1 1px,transparent 0),linear-gradient(180deg,#f1f1f1 1px,transparent 0)}#position{font-size:12px;position:absolute;right:6px;top:6px}", ""]);
+exports.push([module.i, "#canvas{border:1px solid #a3a3a3;position:absolute}#chart{position:relative;width:800px;height:600px;background-size:10px 10px;background-image:linear-gradient(90deg,#f1f1f1 1px,transparent 0),linear-gradient(180deg,#f1f1f1 1px,transparent 0)}#position{font-size:12px;position:absolute;right:6px;top:6px}.unselectable{moz-user-select:-moz-none;-moz-user-select:none;-o-user-select:none;-khtml-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none}", ""]);
 
 
 
@@ -65260,12 +65260,12 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2fbca0f3-vue-loader-template"}!./node_modules/@vue/cli-service/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/@vue/cli-service/node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=27d87dd6&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"2fbca0f3-vue-loader-template"}!./node_modules/@vue/cli-service/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/@vue/cli-service/node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=c774806e&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({ cursor: _vm.cursor }),attrs:{"id":"chart"},on:{"mousemove":_vm.handleChartMouseMove,"mouseup":_vm.handleChartMouseUp,"dblclick":function($event){return _vm.handleChartDblClick($event)}}},[_c('span',{attrs:{"id":"position"}},[_vm._v(_vm._s(_vm.cursorToChartOffset.x + ', ' + _vm.cursorToChartOffset.y))]),_c('svg',{attrs:{"width":"800","height":"600","id":"svg"}})])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=27d87dd6&
+// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=c774806e&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js
 var iterator = __webpack_require__("5d58");
@@ -78438,7 +78438,7 @@ var element_ui_common = __webpack_require__("5c96");
       var that = this;
       var svg = src_select('#svg');
       svg.append('rect').attr('x', node.x).attr('y', node.y).attr('width', 120).attr('height', 20).attr('stroke', borderColor).attr('stroke-width', '1px').attr('fill', '#f1f3f4');
-      svg.append('text').attr('x', node.x + 4).attr('y', node.y + 15).text(function () {
+      svg.append('text').attr('x', node.x + 4).attr('y', node.y + 15).attr('class', 'unselectable').text(function () {
         return node.name;
       }).each(function wrap() {
         var self = src_select(this),
@@ -78453,7 +78453,7 @@ var element_ui_common = __webpack_require__("5c96");
       });
       var text = node.type === 'start' ? '提交' : node.type === 'end' ? '完成' : !node.approvers || node.approvers.length === 0 ? '无审批人' : node.approvers.length > 1 ? "".concat(node.approvers[0].name, "\u7B49") : node.approvers[0].name;
       svg.append('rect').attr('x', node.x).attr('y', node.y + 20).attr('width', 120).attr('height', 40).attr('stroke', borderColor).attr('stroke-width', '1px').attr('fill', 'white');
-      svg.append('text').attr('x', node.x + 60).attr('y', node.y + 45).attr('text-anchor', 'middle').text(function () {
+      svg.append('text').attr('x', node.x + 60).attr('y', node.y + 45).attr('class', 'unselectable').attr('text-anchor', 'middle').text(function () {
         return text;
       }).each(function wrap() {
         var self = src_select(this),

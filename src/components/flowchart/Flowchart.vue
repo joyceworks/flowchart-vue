@@ -239,6 +239,7 @@
         svg.append('text').
             attr('x', node.x + 4).
             attr('y', node.y + 15).
+            attr('class', 'unselectable').
             text(function() {return node.name;}).each(function wrap() {
           let self = d3.select(this),
               textLength = self.node().getComputedTextLength(),
@@ -267,6 +268,7 @@
         svg.append('text').
             attr('x', node.x + 60).
             attr('y', node.y + 45).
+            attr('class', 'unselectable').
             attr('text-anchor', 'middle').
             text(function() {return text;}).each(function wrap() {
           let self = d3.select(this),
