@@ -13,7 +13,6 @@
   import {lineTo, line2} from '../../utils/svg';
   import '../../assets/flowchart.css';
   import * as d3 from 'd3';
-  import {Message} from 'element-ui';
   import {between, distanceOfPointToLine} from '../../utils/math';
 
   export default {
@@ -69,8 +68,6 @@
           this.$emit('editnode', this.currentNode);
         } else if (this.currentConnection) {
           this.$emit('editconnection', this.currentConnection);
-        } else {
-          Message.error('未选中任何节点');
         }
       },
       async handleChartMouseUp() {

@@ -1,20 +1,20 @@
 <template>
     <div>
         <div id="toolbar">
-            <el-button-group>
-                <el-button size="mini" icon="el-icon-plus" @click="$refs.chart.add(10, 10)">
+            <a-button-group>
+                <a-button size="mini" @click="$refs.chart.add(10, 10)">
                     添加
-                </el-button>
-                <el-button size="mini" icon="el-icon-minus" @click="$refs.chart.remove()">
+                </a-button>
+                <a-button size="mini" @click="$refs.chart.remove()">
                     删除
-                </el-button>
-                <el-button size="mini" icon="el-icon-edit-outline" @click="$refs.chart.edit()">
+                </a-button>
+                <a-button size="mini" @click="$refs.chart.edit()">
                     编辑
-                </el-button>
-                <el-button size="mini" icon="el-icon-check" @click="$refs.chart.save()">
+                </a-button>
+                <a-button size="mini" @click="$refs.chart.save()">
                     保存
-                </el-button>
-            </el-button-group>
+                </a-button>
+            </a-button-group>
         </div>
         <flow-chart :nodes="nodes" :connections="connections" @editnode="handleEditNode"
                     @editconnection="handleEditConnection" @save="handleChartSave" ref="chart">

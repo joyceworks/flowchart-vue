@@ -1323,10 +1323,10 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
-ant-design-vue@^1.4.11:
-  version "1.4.11"
-  resolved "https://registry.npm.taobao.org/ant-design-vue/download/ant-design-vue-1.4.11.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fant-design-vue%2Fdownload%2Fant-design-vue-1.4.11.tgz#a1a277c164301182b2d472ab5900054b85d6cbb8"
-  integrity sha1-oaJ3wWQwEYKy1HKrWQAFS4XWy7g=
+ant-design-vue@^1.5.2:
+  version "1.5.3"
+  resolved "https://registry.npm.taobao.org/ant-design-vue/download/ant-design-vue-1.5.3.tgz#777a43a76dd233efc72abe9704103dbb2a95c558"
+  integrity sha1-d3pDp23SM+/HKr6XBBA9uyqVxVg=
   dependencies:
     "@ant-design/icons" "^2.1.1"
     "@ant-design/icons-vue" "^2.0.0"
@@ -1337,11 +1337,12 @@ ant-design-vue@^1.4.11:
     babel-runtime "6.x"
     classnames "^2.2.5"
     component-classes "^1.2.6"
-    dom-align "^1.7.0"
+    dom-align "^1.10.4"
     dom-closest "^0.2.0"
     dom-scroll-into-view "^2.0.0"
     enquire.js "^2.1.6"
     intersperse "^1.0.0"
+    is-mobile "^2.2.1"
     is-negative-zero "^2.0.0"
     ismobilejs "^1.0.0"
     json2mq "^0.2.0"
@@ -1354,7 +1355,7 @@ ant-design-vue@^1.4.11:
     resize-observer-polyfill "^1.5.1"
     shallow-equal "^1.0.0"
     shallowequal "^1.0.2"
-    vue-ref "^1.0.4"
+    vue-ref "^2.0.0"
     warning "^4.0.0"
 
 any-promise@^1.0.0:
@@ -3273,10 +3274,10 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-dom-align@^1.7.0:
-  version "1.10.4"
-  resolved "https://registry.npm.taobao.org/dom-align/download/dom-align-1.10.4.tgz?cache=0&sync_timestamp=1578476004300&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdom-align%2Fdownload%2Fdom-align-1.10.4.tgz#862ae4de0d11d6495c1c8ee1b195427e7caa727d"
-  integrity sha1-hirk3g0R1klcHI7hsZVCfnyqcn0=
+dom-align@^1.10.4:
+  version "1.11.1"
+  resolved "https://registry.npm.taobao.org/dom-align/download/dom-align-1.11.1.tgz?cache=0&sync_timestamp=1584440839259&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdom-align%2Fdownload%2Fdom-align-1.11.1.tgz#7592be99a660a36cdedc1d6eeb22b8109d758cae"
+  integrity sha1-dZK+maZgo2ze3B1u6yK4EJ11jK4=
 
 dom-closest@^0.2.0:
   version "0.2.0"
@@ -5077,6 +5078,11 @@ is-glob@^4.0.0:
   integrity sha1-dWfb6fL14kZ7x3q4PEopSCQHpdw=
   dependencies:
     is-extglob "^2.1.1"
+
+is-mobile@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.npm.taobao.org/is-mobile/download/is-mobile-2.2.1.tgz#10f2320012c410cc285feecb13406bd586f1b2f8"
+  integrity sha1-EPIyABLEEMwoX+7LE0Br1Ybxsvg=
 
 is-negative-zero@^2.0.0:
   version "2.0.0"
@@ -8785,10 +8791,10 @@ vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-ref@^1.0.4:
-  version "1.0.6"
-  resolved "https://registry.npm.taobao.org/vue-ref/download/vue-ref-1.0.6.tgz#b9b3d7d0e290ee2fd3d50d5d7bdac520806cb265"
-  integrity sha1-ubPX0OKQ7i/T1Q1de9rFIIBssmU=
+vue-ref@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npm.taobao.org/vue-ref/download/vue-ref-2.0.0.tgz#483084d732abed11da796778a8266a3af0ea1a9c"
+  integrity sha1-SDCE1zKr7RHaeWd4qCZqOvDqGpw=
 
 vue-router@^3.0.2:
   version "3.0.6"

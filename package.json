@@ -1,6 +1,6 @@
 {
   "name": "flowchart-vue",
-  "version": "0.2.1",
+  "version": "0.3.2",
   "main": "dist/FlowChart.umd.min.js",
   "repository": {
     "type": "git",
@@ -17,11 +17,10 @@
     "build-lib": "vue-cli-service build --target lib --name FlowChart src/components/flowchart/index.js"
   },
   "dependencies": {
-    "ant-design-vue": "^1.4.11",
+    "ant-design-vue": "^1.5.2",
     "babel-plugin-import": "^1.11.0",
     "css-loader": "^2.1.0",
     "d3": "^5.15.0",
-    "element-ui": "2.13.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "lodash": "^4.17.13",

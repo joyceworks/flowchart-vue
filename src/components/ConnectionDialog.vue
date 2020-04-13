@@ -1,33 +1,29 @@
 <template>
     <div>
-        <el-dialog title="编辑" :visible.sync="visible" width="440px"
-                   :before-close="handleClickCancelSaveConnection"
-        >
-            <el-form ref="form" :model="connectionForm" label-width="80px">
-                <el-form-item label="名称">
-                    <el-input v-model="connectionForm.name"/>
-                </el-form-item>
-                <el-form-item label="类型">
-                    <el-select v-model="connectionForm.type" placeholder="请选择"
-                               style="width: 100%;"
-                    >
-                        <el-option :key="'connection-type-' + item.id"
-                                   v-for="item in [ { name: '通过', id: 'pass' }, { name: '驳回', id: 'reject' } ]"
-                                   :label="item.name"
-                                   :value="item.id"
-                        >
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="表达式">
-                    <el-input v-model="connectionForm.expression"/>
-                </el-form-item>
-            </el-form>
+        <a-modal title="编辑" v-model="visible" width="440px" :keyboard="false" :closable="false"
+                 :maskClosable="false">
+            <a-form-model ref="form" :model="connectionForm" label-width="80px">
+                <a-form-model-item label="名称">
+                    <a-input v-model="connectionForm.name"/>
+                </a-form-model-item>
+                <a-form-model-item label="类型">
+                    <a-select v-model="connectionForm.type" placeholder="请选择">
+                        <a-select-option :key="'connection-type-' + item.id"
+                                         v-for="item in [ { name: '通过', id: 'pass' }, { name: '驳回', id: 'reject' } ]"
+                                         :value="item.id">
+                            {{item.name}}
+                        </a-select-option>
+                    </a-select>
+                </a-form-model-item>
+                <a-form-model-item label="表达式">
+                    <a-input v-model="connectionForm.expression"/>
+                </a-form-model-item>
+            </a-form-model>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="handleClickCancelSaveConnection">取消</el-button>
-                <el-button type="primary" @click="handleClickSaveConnection">确定</el-button>
+                <a-button @click="handleClickCancelSaveConnection">取消</a-button>
+                <a-button type="primary" @click="handleClickSaveConnection">确定</a-button>
             </span>
-        </el-dialog>
+        </a-modal>
     </div>
 </template>
 <script>
