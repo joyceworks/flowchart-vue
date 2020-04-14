@@ -413,10 +413,10 @@
       that.internalNodes.splice(0, that.internalNodes.length);
       that.internalConnections.splice(0, that.internalConnections.length);
       that.nodes.forEach(node => {
-        that.internalNodes.push(node);
+        that.internalNodes.push(JSON.parse(JSON.stringify(node)));
       });
       that.connections.forEach(connection => {
-        that.internalConnections.push(connection);
+        that.internalConnections.push(JSON.parse(JSON.stringify(connection)));
       });
       that.refresh();
       document.onkeydown = function(event) {

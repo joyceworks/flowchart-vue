@@ -2,16 +2,16 @@
     <div>
         <div id="toolbar">
             <a-button-group>
-                <a-button size="mini" @click="$refs.chart.add(10, 10)">
+                <a-button @click="$refs.chart.add(10, 10)">
                     添加
                 </a-button>
-                <a-button size="mini" @click="$refs.chart.remove()">
+                <a-button @click="$refs.chart.remove()">
                     删除
                 </a-button>
-                <a-button size="mini" @click="$refs.chart.edit()">
+                <a-button @click="$refs.chart.edit()">
                     编辑
                 </a-button>
-                <a-button size="mini" @click="$refs.chart.save()">
+                <a-button @click="$refs.chart.save()">
                     保存
                 </a-button>
             </a-button-group>
