@@ -1,12 +1,12 @@
 <template>
     <div id="chart"
+         :style="{width: isNaN(width) ? width : (width + 'px'), height: isNaN(height) ? height : (height + 'px'), cursor: cursor}"
          @mousemove="handleChartMouseMove"
          @mouseup="handleChartMouseUp"
          @dblclick="handleChartDblClick($event)"
-         :style="{ cursor: cursor }"
     >
         <span id="position">{{ cursorToChartOffset.x + ', ' + cursorToChartOffset.y }}</span>
-        <svg width="800" height="600" id="svg"></svg>
+        <svg style="width: 100%; height: 100%;" id="svg"></svg>
     </div>
 </template>
 <script>
@@ -36,6 +36,14 @@
           },
         ],
       },
+      width: {
+        type: [String, Number],
+        default: 800
+      },
+      height: {
+        type: Number,
+        default: 600
+      }
     },
     data() {
       return {

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="height: calc(100% - 50px)">
         <div id="toolbar">
             <a-button-group>
                 <a-button @click="$refs.chart.add(10, 10)">
@@ -17,6 +17,7 @@
             </a-button-group>
         </div>
         <flow-chart :nodes="nodes" :connections="connections" @editnode="handleEditNode"
+                    :width="'100%'" :height="'100%'"
                     @editconnection="handleEditConnection" @save="handleChartSave" ref="chart">
         </flow-chart>
         <flow-chart-node-dialog :visible.sync="nodeDialogVisible"
