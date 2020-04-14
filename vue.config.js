@@ -9,6 +9,7 @@ module.exports = {
         plugins: [],
       },
     },
-    extract: false
+    extract: false,
   },
+  publicPath: process.env.NODE_ENV === "production" ? "/flowchart-vue" : "/"
 };
