@@ -2,7 +2,7 @@
 
 Flowchart & Flowchart designer component for Vue.js.
 
-### Usage
+## Usage
 
 ```shell script
 yarn add flowchart-vue
@@ -64,13 +64,6 @@ yarn add flowchart-vue
 </script>
 ```
 
-### Demo
+## Demo
 
-1. First:
-
-    ``` shell script
-    yarn install
-    yarn run serve
-    ```
-
-2. Then open http://localhost:port/#/ in browser.
+[GitHub Pages](https://joyceworks.github.io/flowchart-vue/)
