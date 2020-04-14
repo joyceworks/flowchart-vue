@@ -73,4 +73,4 @@ yarn add flowchart-vue
     yarn run serve
     ```
 
-2. Then open http://localhost:port/#/app/index in browser.
+2. Then open http://localhost:port/#/ in browser.

@@ -1,13 +1,14 @@
 {
   "name": "flowchart-vue",
-  "version": "0.3.2",
+  "version": "0.4.1",
   "main": "dist/FlowChart.umd.min.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/joyceworks/flowchart-vue.git"
   },
   "keywords": [
-    "flowchart", "flowchart designer"
+    "flowchart",
+    "flowchart designer"
   ],
   "private": false,
   "scripts": {
@@ -18,18 +19,8 @@
   },
   "dependencies": {
     "ant-design-vue": "^1.5.2",
-    "babel-plugin-import": "^1.11.0",
-    "css-loader": "^2.1.0",
     "d3": "^5.15.0",
-    "less": "^3.9.0",
-    "less-loader": "^4.1.0",
-    "lodash": "^4.17.13",
-    "moment": "^2.24.0",
-    "postcss-pxtorem": "^4.0.1",
-    "vue": "^2.5.22",
-    "vue-router": "^3.0.2",
-    "vuex": "^3.1.0",
-    "vuex-persistedstate": "^2.5.4"
+    "vue": "^2.5.22"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.1.0",
