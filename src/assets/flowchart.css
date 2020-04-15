@@ -10,6 +10,8 @@
     background-size: 10px 10px;
     background-image: linear-gradient(to right, #f1f1f1 1px, transparent 1px),
     linear-gradient(to bottom, #f1f1f1 1px, transparent 1px);
+    background-position: left -1px top -1px;
+    border: 1px solid #f1f1f1;
 }
 
 #position {

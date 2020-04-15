@@ -1,5 +1,5 @@
 <template>
-    <div style="height: calc(100% - 50px)">
+    <div style="height: calc(100% - 50px); padding: 10px;">
         <div id="toolbar">
             <a-button-group>
                 <a-button @click="$refs.chart.add(10, 10)">

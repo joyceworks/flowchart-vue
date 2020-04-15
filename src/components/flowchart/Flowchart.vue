@@ -119,8 +119,9 @@
         }
       },
       async handleChartMouseMove(event) {
-        this.cursorToChartOffset.x = event.offsetX;
-        this.cursorToChartOffset.y = event.offsetY;
+        let boundingClientRect = event.currentTarget.getBoundingClientRect();
+        this.cursorToChartOffset.x = event.pageX - boundingClientRect.left - window.scrollX;
+        this.cursorToChartOffset.y = event.pageY - boundingClientRect.top - window.scrollY;
         if (this.connectingInfo.source) {
           await this.refresh();
           let sourceOffset = this.getNodeConnectorOffset(
