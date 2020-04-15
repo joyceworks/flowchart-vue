@@ -38,12 +38,12 @@
       },
       width: {
         type: [String, Number],
-        default: 800
+        default: 800,
       },
       height: {
-        type: Number,
-        default: 600
-      }
+        type: [String, Number],
+        default: 600,
+      },
     },
     data() {
       return {
@@ -305,6 +305,23 @@
               const {x, y} = d3.event;
               node.x = x - that.movingInfo.offsetX;
               node.y = y - that.movingInfo.offsetY;
+
+              let chart = document.getElementById('chart');
+              let width = chart.clientWidth;
+              let height = chart.clientHeight;
+              if (node.x > width - 120) {
+                node.x = width - 120;
+              }
+              if (node.x < 0) {
+                node.x = 0;
+              }
+              if (node.y > height - 60) {
+                node.y = height - 60;
+              }
+              if (node.y < 0) {
+                node.y = 0;
+              }
+
               await that.refresh();
               let expectX = Math.round(Math.round(node.x) / 10) * 10;
               let expectY = Math.round(Math.round(node.y) / 10) * 10;
