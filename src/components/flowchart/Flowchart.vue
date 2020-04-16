@@ -234,28 +234,45 @@
       renderNode(node, borderColor, connectorVisible) {
         let that = this;
         let svg = d3.select('#svg');
-        svg.append('rect').
-            attr('x', node.x).
-            attr('y', node.y).
-            attr('width', 120).
-            attr('height', 20).
-            attr('stroke', borderColor).
-            attr('stroke-width', '1px').
-            attr('fill', '#f1f3f4');
-        svg.append('text').
-            attr('x', node.x + 4).
-            attr('y', node.y + 15).
-            attr('class', 'unselectable').
-            text(function() {return node.name;}).each(function wrap() {
-          let self = d3.select(this),
-              textLength = self.node().getComputedTextLength(),
-              text = self.text();
-          while (textLength > (120 - 2 * 4) && text.length > 0) {
-            text = text.slice(0, -1);
-            self.text(text + '...');
-            textLength = self.node().getComputedTextLength();
-          }
-        });
+
+        if (node.type !== 'start' && node.type !== 'end') {
+          // title
+          svg.append('rect').
+              attr('x', node.x).
+              attr('y', node.y).
+              attr('width', 120).
+              attr('height', 20).
+              attr('stroke', borderColor).
+              attr('stroke-width', '1px').
+              attr('fill', '#f1f3f4');
+          svg.append('text').
+              attr('x', node.x + 4).
+              attr('y', node.y + 15).
+              attr('class', 'unselectable').
+              text(function() {return node.name;}).each(function wrap() {
+            let self = d3.select(this),
+                textLength = self.node().getComputedTextLength(),
+                text = self.text();
+            while (textLength > (120 - 2 * 4) && text.length > 0) {
+              text = text.slice(0, -1);
+              self.text(text + '...');
+              textLength = self.node().getComputedTextLength();
+            }
+          });
+        }
+
+        // body
+        let body = null;
+        if (node.type !== 'start' && node.type !== 'end') {
+          body = svg.append('rect');
+          body.attr('x', node.x).attr('y', node.y + 20).attr('width', 120).attr('height', 40);
+        } else {
+          body = svg.append('ellipse');
+          body.attr('cx', node.x + 60).attr('cy', node.y + 30).attr('rx', 60).attr('ry', 30);
+        }
+        body.attr('stroke', borderColor).attr('stroke-width', '1px').attr('fill', 'white');
+
+        // body text
         let text = node.type === 'start' ? '提交' : (node.type === 'end' ? '完成' : (
                 (!node.approvers || node.approvers.length === 0) ? '无审批人' : (
                     node.approvers.length > 1 ? `${node.approvers[0].name}等` :
@@ -263,17 +280,15 @@
                 )
             )
         );
-        svg.append('rect').
-            attr('x', node.x).
-            attr('y', node.y + 20).
-            attr('width', 120).
-            attr('height', 40).
-            attr('stroke', borderColor).
-            attr('stroke-width', '1px').
-            attr('fill', 'white');
+        let bodyTextY;
+        if (node.type !== 'start' && node.type !== 'end') {
+          bodyTextY = node.y + 45;
+        } else {
+          bodyTextY = node.y + 35;
+        }
         svg.append('text').
             attr('x', node.x + 60).
-            attr('y', node.y + 45).
+            attr('y', bodyTextY).
             attr('class', 'unselectable').
             attr('text-anchor', 'middle').
             text(function() {return text;}).each(function wrap() {
@@ -286,6 +301,7 @@
             textLength = self.node().getComputedTextLength();
           }
         });
+
         let drag = d3.drag().
             on('start', function() {
               that.currentConnection = null;
@@ -353,12 +369,15 @@
               node.y = Math.round(Math.round(node.y) / 10) * 10;
               that.refresh();
             });
-        svg.append('rect').
-            attr('x', node.x).
-            attr('y', node.y).
-            attr('width', 120).
-            attr('height', 60).
-            attr('stroke', borderColor).
+        let shape = null;
+        if (node.type === 'start' || node.type === 'end') {
+          shape = svg.append('ellipse');
+          shape.attr('cx', node.x + 60).attr('cy', node.y + 30).attr('rx', 60).attr('ry', 30);
+        } else {
+          shape = svg.append('rect');
+          shape.attr('x', node.x).attr('y', node.y).attr('width', 120).attr('height', 60);
+        }
+        shape.attr('stroke', borderColor).
             attr('stroke-width', '1px').
             style('cursor', 'move').
             attr('fill', 'transparent').

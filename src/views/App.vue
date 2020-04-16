@@ -44,12 +44,25 @@
         nodes: [
           {id: 1, x: 140, y: 270, name: '开始', type: 'start'},
           {id: 2, x: 540, y: 270, name: '结束', type: 'end'},
+          {id: 3, x: 340, y: 180, name: '节点', type: 'operation'},
         ],
         connections: [
           {
             source: {id: 1, position: 'right'},
             destination: {id: 2, position: 'left'},
             id: 1,
+            type: 'pass',
+          },
+          {
+            source: {id: 1, position: 'top'},
+            destination: {id: 3, position: 'left'},
+            id: 2,
+            type: 'pass',
+          },
+          {
+            source: {id: 3, position: 'right'},
+            destination: {id: 2, position: 'top'},
+            id: 3,
             type: 'pass',
           },
         ],
