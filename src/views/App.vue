@@ -63,29 +63,6 @@
     },
     methods: {
       async handleChartSave(nodes, connections) {
-        let data = nodes.map(node => {
-          let result = {
-            id: node.id,
-            x: node.x || 0,
-            y: node.y || 0,
-            name: node.name,
-            state: node.type,
-            approvers: node.approvers,
-            processDefinitionId: this.$route.query.id,
-          };
-          result.transitions = connections.filter(conn => conn.source.id === node.id).map(conn => {
-            return {
-              source: conn.source.id,
-              destination: conn.destination.id,
-              type: conn.type,
-              sourcePosition: conn.source.position,
-              destinationPosition: conn.destination.position,
-              name: conn.name,
-              expression: conn.expression,
-            };
-          });
-          return result;
-        });
       },
       handleEditNode(node) {
         this.editingInfo.target = node;
