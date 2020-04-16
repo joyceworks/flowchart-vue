@@ -67,3 +67,7 @@ yarn add flowchart-vue
 ## Demo
 
 [GitHub Pages](https://joyceworks.github.io/flowchart-vue/)
+
+## API
+
+[Wiki](https://github.com/joyceworks/flowchart-vue/wiki)
