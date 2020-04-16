@@ -66,7 +66,18 @@ yarn add flowchart-vue
 
 ## Demo
 
-[GitHub Pages](https://joyceworks.github.io/flowchart-vue/)
+- [GitHub Pages](https://joyceworks.github.io/flowchart-vue/)
+
+- Development Environment
+
+  ``` shell
+  git clone https://github.com/joyceworks/flowchart-vue.git
+  cd flowchart-vue
+  yarn install
+  yarn run serve
+  ```
+  
+  Then open http://localhost:yourport/ in browser.
 
 ## API
 
