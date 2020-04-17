@@ -1,27 +1,24 @@
 <template>
     <div>
-        <a-modal title="编辑" v-model="visible" width="440px" :keyboard="false" :closable="false"
+        <a-modal title="Edit" v-model="visible" width="440px" :keyboard="false" :closable="false"
                  :maskClosable="false">
             <a-form-model ref="form" :model="connectionForm" label-width="80px">
-                <a-form-model-item label="名称">
+                <a-form-model-item label="Name">
                     <a-input v-model="connectionForm.name"/>
                 </a-form-model-item>
-                <a-form-model-item label="类型">
-                    <a-select v-model="connectionForm.type" placeholder="请选择">
+                <a-form-model-item label="Type">
+                    <a-select v-model="connectionForm.type" placeholder="Select...">
                         <a-select-option :key="'connection-type-' + item.id"
-                                         v-for="item in [ { name: '通过', id: 'pass' }, { name: '驳回', id: 'reject' } ]"
+                                         v-for="item in [ { name: 'Pass', id: 'pass' }, { name: 'Reject', id: 'reject' } ]"
                                          :value="item.id">
                             {{item.name}}
                         </a-select-option>
                     </a-select>
                 </a-form-model-item>
-                <a-form-model-item label="表达式">
-                    <a-input v-model="connectionForm.expression"/>
-                </a-form-model-item>
             </a-form-model>
             <span slot="footer" class="dialog-footer">
-                <a-button @click="handleClickCancelSaveConnection">取消</a-button>
-                <a-button type="primary" @click="handleClickSaveConnection">确定</a-button>
+                <a-button @click="handleClickCancelSaveConnection">Cancel</a-button>
+                <a-button type="primary" @click="handleClickSaveConnection">Ok</a-button>
             </span>
         </a-modal>
     </div>

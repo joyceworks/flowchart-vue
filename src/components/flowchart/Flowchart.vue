@@ -14,6 +14,18 @@
   import '../../assets/flowchart.css';
   import * as d3 from 'd3';
   import {between, distanceOfPointToLine} from '../../utils/math';
+  import Vue from 'vue';
+  import VueI18n from 'vue-i18n';
+
+  Vue.use(VueI18n);
+
+  const i18n = new VueI18n({
+    locale: 'zh',
+    messages: {
+      'en': require('../../assets/en'),
+      'zh': require('../../assets/zh'),
+    },
+  })
 
   export default {
     name: 'flow-chart',
@@ -21,8 +33,8 @@
       nodes: {
         type: Array,
         default: () => [
-          {id: 1, x: 140, y: 270, name: '开始', type: 'start'},
-          {id: 2, x: 540, y: 270, name: '结束', type: 'end'},
+          {id: 1, x: 140, y: 270, name: i18n.t('message.start'), type: 'start'},
+          {id: 2, x: 540, y: 270, name: i18n.t('message.end'), type: 'end'},
         ],
       },
       connections: {
@@ -44,6 +56,10 @@
         type: [String, Number],
         default: 600,
       },
+      locale: {
+        type: String,
+        default: 'en'
+      }
     },
     data() {
       return {
@@ -69,7 +85,7 @@
     },
     methods: {
       add(x, y) {
-        this.internalNodes.push({id: +new Date(), x: x, y: y, name: '新建节点', type: 'operation'});
+        this.internalNodes.push({id: +new Date(), x: x, y: y, name: i18n.t('message.new'), type: 'operation'});
       },
       edit() {
         if (this.currentNode) {
@@ -108,7 +124,7 @@
                 },
                 id: tempId,
                 type: 'pass',
-                name: '通过',
+                name: i18n.t('message.pass'),
               };
               this.internalConnections.push(conn);
               this.refresh();
@@ -273,9 +289,9 @@
         body.attr('stroke', borderColor).attr('stroke-width', '1px').attr('fill', 'white');
 
         // body text
-        let text = node.type === 'start' ? '提交' : (node.type === 'end' ? '完成' : (
-                (!node.approvers || node.approvers.length === 0) ? '无审批人' : (
-                    node.approvers.length > 1 ? `${node.approvers[0].name}等` :
+        let text = node.type === 'start' ? i18n.t('message.start') : (node.type === 'end' ? i18n.t('message.end') : (
+                (!node.approvers || node.approvers.length === 0) ? i18n.t('message.noApprover') : (
+                    node.approvers.length > 1 ? `${node.approvers[0].name + i18n.t('message.etc')}` :
                         node.approvers[0].name
                 )
             )
@@ -419,7 +435,7 @@
                     },
                     id: tempId,
                     type: 'pass',
-                    name: '通过',
+                    name: i18n.t('message.pass'),
                   };
                   that.internalConnections.push(conn);
                   that.refresh();
@@ -502,6 +518,9 @@
         that.refresh();
       };
     },
+    created() {
+      i18n.locale = this.locale;
+    },
     computed: {
       hoveredNode() {
         let nodes = this.internalNodes.filter(
@@ -568,5 +587,6 @@
         },
       },
     },
+    i18n: i18n,
   };
 </script>

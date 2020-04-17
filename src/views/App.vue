@@ -3,16 +3,16 @@
         <div id="toolbar">
             <a-button-group>
                 <a-button @click="$refs.chart.add(10, 10)">
-                    添加
+                    Add
                 </a-button>
                 <a-button @click="$refs.chart.remove()">
-                    删除
+                    Delete
                 </a-button>
                 <a-button @click="$refs.chart.edit()">
-                    编辑
+                    Edit
                 </a-button>
                 <a-button @click="$refs.chart.save()">
-                    保存
+                    Save
                 </a-button>
             </a-button-group>
         </div>
@@ -42,9 +42,9 @@
     data: function() {
       return {
         nodes: [
-          {id: 1, x: 140, y: 270, name: '开始', type: 'start'},
-          {id: 2, x: 540, y: 270, name: '结束', type: 'end'},
-          {id: 3, x: 340, y: 180, name: '节点', type: 'operation'},
+          {id: 1, x: 140, y: 270, name: 'Start', type: 'start'},
+          {id: 2, x: 540, y: 270, name: 'End', type: 'end'},
+          {id: 3, x: 340, y: 180, name: 'Operation', type: 'operation'},
         ],
         connections: [
           {

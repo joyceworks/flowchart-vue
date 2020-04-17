@@ -1,15 +1,15 @@
 <template>
     <div>
-        <a-modal title="编辑" v-model="visible" width="440px" :keyboard="false" :closable="false"
+        <a-modal title="Edit" v-model="visible" width="440px" :keyboard="false" :closable="false"
                  :maskClosable="false">
             <a-form-model ref="form" :model="nodeForm" label-width="80px">
-                <a-form-model-item label="名称">
+                <a-form-model-item label="Name">
                     <a-input v-model="nodeForm.name"/>
                 </a-form-model-item>
-                <a-form-model-item label="类型">
-                    <a-select v-model="nodeForm.type" placeholder="请选择" style="width: 100%;">
+                <a-form-model-item label="Type">
+                    <a-select v-model="nodeForm.type" placeholder="Select..." style="width: 100%;">
                         <a-select-option :key="'node-type-' + item.id" :value="item.id"
-                                         v-for="item in [ { name: '开始', id: 'start' }, { name: '结束', id: 'end' }, { name: '审批', id: 'operation' } ]"
+                                         v-for="item in [ { name: 'Start', id: 'start' }, { name: 'End', id: 'end' }, { name: 'Operation', id: 'operation' } ]"
                         >
                             {{item.name}}
                         </a-select-option>
@@ -17,8 +17,8 @@
                 </a-form-model-item>
             </a-form-model>
             <span slot="footer" class="dialog-footer">
-                <a-button @click="handleClickCancelSaveNode">取消</a-button>
-                <a-button type="primary" @click="handleClickSaveNode">确定</a-button>
+                <a-button @click="handleClickCancelSaveNode">Cancel</a-button>
+                <a-button type="primary" @click="handleClickSaveNode">Ok</a-button>
             </span>
         </a-modal>
     </div>

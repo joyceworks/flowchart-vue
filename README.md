@@ -39,8 +39,8 @@ yarn add flowchart-vue
     data: function() {
       return {
         nodes: [
-          {id: 1, x: 140, y: 270, name: '开始', type: 'start'},
-          {id: 2, x: 540, y: 270, name: '结束', type: 'end'},
+          {id: 1, x: 140, y: 270, name: 'Start', type: 'start'},
+          {id: 2, x: 540, y: 270, name: 'End', type: 'end'},
         ],
         connections: [
           {
