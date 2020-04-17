@@ -6,7 +6,7 @@
          @dblclick="handleChartDblClick($event)"
     >
         <span id="position">{{ cursorToChartOffset.x + ', ' + cursorToChartOffset.y }}</span>
-        <svg style="width: 100%; height: 100%;" id="svg"></svg>
+        <svg style="width: 100%; height: 100%;" id="svg" @mousewheel="handleChartMouseWheel"></svg>
     </div>
 </template>
 <script>
@@ -25,7 +25,7 @@
       'en': require('../../assets/en'),
       'zh': require('../../assets/zh'),
     },
-  })
+  });
 
   export default {
     name: 'flow-chart',
@@ -58,8 +58,8 @@
       },
       locale: {
         type: String,
-        default: 'en'
-      }
+        default: 'en',
+      },
     },
     data() {
       return {
@@ -85,7 +85,8 @@
     },
     methods: {
       add(x, y) {
-        this.internalNodes.push({id: +new Date(), x: x, y: y, name: i18n.t('message.new'), type: 'operation'});
+        let name = i18n.t('message.new');
+        this.internalNodes.push({id: +new Date(), x: x, y: y, name: name, type: 'operation'});
       },
       edit() {
         if (this.currentNode) {
@@ -93,6 +94,12 @@
         } else if (this.currentConnection) {
           this.$emit('editconnection', this.currentConnection);
         }
+      },
+      handleChartMouseWheel(event) {
+        let chart = document.getElementById('chart');
+        let zoom = parseFloat(chart.style.zoom || 1);
+        zoom -= (event.deltaY / 100 / 10);
+        chart.style.zoom = zoom;
       },
       async handleChartMouseUp() {
         if (this.movingInfo.target) {
@@ -289,9 +296,12 @@
         body.attr('stroke', borderColor).attr('stroke-width', '1px').attr('fill', 'white');
 
         // body text
-        let text = node.type === 'start' ? i18n.t('message.start') : (node.type === 'end' ? i18n.t('message.end') : (
+        let text = node.type === 'start' ? i18n.t('message.start') : (node.type === 'end' ? i18n.t(
+                'message.end') : (
                 (!node.approvers || node.approvers.length === 0) ? i18n.t('message.noApprover') : (
-                    node.approvers.length > 1 ? `${node.approvers[0].name + i18n.t('message.etc')}` :
+                    node.approvers.length > 1
+                        ? `${node.approvers[0].name + i18n.t('message.etc')}`
+                        :
                         node.approvers[0].name
                 )
             )
