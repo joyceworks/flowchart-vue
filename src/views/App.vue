@@ -1,5 +1,7 @@
 <template>
-    <div style="height: calc(100% - 50px); padding: 10px;">
+    <div style="width: 800px; margin: auto;">
+        <h1 style="margin-top: 20px; margin-bottom: 0">Flowchart Vue</h1>
+        <h5 style="margin-bottom: 10px;">Flowchart & Flowchart designer component for Vue.js.</h5>
         <div id="toolbar">
             <button @click="$refs.chart.add(10, 10)">
                 Add(Double-click canvas)
@@ -15,7 +17,7 @@
             </button>
         </div>
         <flow-chart :nodes="nodes" :connections="connections" @editnode="handleEditNode"
-                    :width="'100%'" :height="'100%'" :readonly="false"
+                    :width="'100%'" :height="500" :readonly="false"
                     @editconnection="handleEditConnection" @save="handleChartSave" ref="chart">
         </flow-chart>
         <flow-chart-node-dialog :visible.sync="nodeDialogVisible"
@@ -40,27 +42,47 @@
     data: function() {
       return {
         nodes: [
-          {id: 1, x: 140, y: 270, name: 'Start', type: 'start'},
-          {id: 2, x: 540, y: 270, name: 'End', type: 'end'},
-          {id: 3, x: 340, y: 180, name: 'Operation', type: 'operation'},
+          {id: 1, x: 50, y: 220, name: 'Start', type: 'start'},
+          {id: 2, x: 630, y: 220, name: 'End', type: 'end'},
+          {id: 3, x: 340, y: 130, name: 'Operation', type: 'operation'},
+          {id: 4, x: 240, y: 220, name: 'Operation', type: 'operation'},
+          {id: 5, x: 440, y: 220, name: 'Operation', type: 'operation'},
         ],
         connections: [
           {
             source: {id: 1, position: 'right'},
-            destination: {id: 2, position: 'left'},
+            destination: {id: 4, position: 'left'},
             id: 1,
             type: 'pass',
           },
           {
+            source: {id: 4, position: 'right'},
+            destination: {id: 5, position: 'left'},
+            id: 2,
+            type: 'pass',
+          },
+          {
+            source: {id: 5, position: 'right'},
+            destination: {id: 2, position: 'left'},
+            id: 3,
+            type: 'pass',
+          },
+          {
+            source: {id: 5, position: 'bottom'},
+            destination: {id: 4, position: 'bottom'},
+            id: 4,
+            type: 'reject',
+          },
+          {
             source: {id: 1, position: 'top'},
             destination: {id: 3, position: 'left'},
-            id: 2,
+            id: 5,
             type: 'pass',
           },
           {
             source: {id: 3, position: 'right'},
             destination: {id: 2, position: 'top'},
-            id: 3,
+            id: 6,
             type: 'pass',
           },
         ],
