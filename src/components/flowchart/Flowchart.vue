@@ -305,16 +305,18 @@
         body.attr('stroke', borderColor).attr('stroke-width', '1px').attr('fill', 'white');
 
         // body text
-        let text = node.type === 'start' ? i18n.t('message.start') : (node.type === 'end' ? i18n.t(
-                'message.end') : (
-                (!node.approvers || node.approvers.length === 0) ? i18n.t('message.noApprover') : (
-                    node.approvers.length > 1
-                        ? `${node.approvers[0].name + i18n.t('message.etc')}`
-                        :
-                        node.approvers[0].name
+        let text = node.type === 'start'
+            ? i18n.t('message.start')
+            : (node.type === 'end' ? i18n.t('message.end') : (
+                    (!node.approvers || node.approvers.length === 0)
+                        ? i18n.t('message.noApprover')
+                        : (
+                            node.approvers.length > 1
+                                ? `${node.approvers[0].name + i18n.t('message.etc')}`
+                                : node.approvers[0].name
+                        )
                 )
-            )
-        );
+            );
         let bodyTextY;
         if (node.type !== 'start' && node.type !== 'end') {
           bodyTextY = node.y + 45;

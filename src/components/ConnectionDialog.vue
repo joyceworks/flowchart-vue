@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="modal" v-show="visible" style="width: 320px">
+        <div class="modal" v-if="visible" style="width: 320px">
             <div class="header">
                 <span>Edit</span>
             </div>

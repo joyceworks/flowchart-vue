@@ -636,19 +636,23 @@ function line2(svgId, x1, y1, x2, y2, startPosition, endPosition, lineWidth,
 function arrowTo(svgId, x1, y1, x2, y2, lineWidth, strokeStyle) {
   let path = lineTo(svgId, x1, y1, x2, y2, lineWidth, strokeStyle);
   let svg = d3.select('#' + svgId);
-  svg.append('marker').
-      attr('id', 'arrow').
-      attr('markerUnits', 'strokeWidth').
-      attr('viewBox', '0 0 12 12').
-      attr('refX', 9).
-      attr('refY', 6).
-      attr('markerWidth', 12).
-      attr('markerHeight', 12).
-      attr('orient', 'auto').
-      append('path').
-      attr('d', 'M2,2 L10,6 L2,10 L6,6 L2,2').
-      attr('fill', strokeStyle);
-  path.attr('marker-end', 'url(#arrow)');
+  let markerId = 'arrow' + strokeStyle;
+  let marker = document.getElementById(markerId);
+  if (!marker) {
+    svg.append('marker').
+        attr('id', markerId).
+        attr('markerUnits', 'strokeWidth').
+        attr('viewBox', '0 0 12 12').
+        attr('refX', 9).
+        attr('refY', 6).
+        attr('markerWidth', 12).
+        attr('markerHeight', 12).
+        attr('orient', 'auto').
+        append('path').
+        attr('d', 'M2,2 L10,6 L2,10 L6,6 L2,2').
+        attr('fill', strokeStyle);
+  }
+  path.attr('marker-end', 'url(#' + markerId + ')');
   return path;
 }
 
