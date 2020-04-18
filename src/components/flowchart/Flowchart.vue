@@ -60,6 +60,10 @@
         type: String,
         default: 'en',
       },
+      readonly: {
+        type: Boolean,
+        default: false,
+      },
     },
     data() {
       return {
@@ -85,15 +89,30 @@
     },
     methods: {
       add(x, y) {
+        if (this.readonly) {
+          return;
+        }
         let name = i18n.t('message.new');
         this.internalNodes.push({id: +new Date(), x: x, y: y, name: name, type: 'operation'});
       },
-      edit() {
+      editCurrent() {
         if (this.currentNode) {
-          this.$emit('editnode', this.currentNode);
+          this.editNode(this.currentNode);
         } else if (this.currentConnection) {
-          this.$emit('editconnection', this.currentConnection);
+          this.editConnection(this.currentConnection);
         }
+      },
+      editNode(node) {
+        if (this.readonly) {
+          return;
+        }
+        this.$emit('editnode', node);
+      },
+      editConnection(connection) {
+        if (this.readonly) {
+          return;
+        }
+        this.$emit('editconnection', connection);
       },
       handleChartMouseWheel(event) {
         event.stopPropagation();
@@ -169,6 +188,9 @@
         }
       },
       handleChartDblClick(event) {
+        if (this.readonly) {
+          return;
+        }
         this.add(event.offsetX, event.offsetY);
         this.refresh();
       },
@@ -178,9 +200,6 @@
         let bottom = {x: node.x + 60, y: node.y + 60};
         let right = {x: node.x + 120, y: node.y + 30};
         return {left, right, top, bottom};
-      },
-      editConnection(conn) {
-        this.$emit('editconnection', conn);
       },
       refresh() {
         let that = this;
@@ -344,7 +363,7 @@
               that.currentConnection = null;
               that.currentNode = node;
               if (that.clickedOnce) {
-                that.$emit('editnode', node);
+                that.editNode(node);
               } else {
                 let timer = setTimeout(function() {
                   that.clickedOnce = false;
@@ -356,6 +375,9 @@
               that.movingInfo.offsetY = that.cursorToChartOffset.y - node.y;
             }).
             on('drag', async function() {
+              if (that.readonly) {
+                return;
+              }
               const {x, y} = d3.event;
               node.x = x - that.movingInfo.offsetX;
               node.y = y - that.movingInfo.offsetY;
@@ -434,7 +456,7 @@
                 style('cursor', 'crosshair');
             connector.on('mousedown', function() {
               d3.event.stopPropagation();
-              if (node.type === 'end') {
+              if (node.type === 'end' || that.readonly) {
                 return;
               }
               that.connectingInfo.source = node;
@@ -469,9 +491,15 @@
         }
       },
       save() {
+        if (this.readonly) {
+          return;
+        }
         this.$emit('save', this.internalNodes, this.internalConnections);
       },
       async remove() {
+        if (this.readonly) {
+          return;
+        }
         if (this.currentNode) {
           let connections = this.internalConnections.filter(
               item => item.source.id === this.currentNode.id ||
@@ -489,6 +517,12 @@
         }
         await this.refresh();
       },
+      moveCurrentNode(x, y) {
+        if (this.currentNode && !this.readonly) {
+          this.currentNode.x += x;
+          this.currentNode.y += y;
+        }
+      },
     },
     mounted() {
       let that = this;
@@ -504,24 +538,16 @@
       document.onkeydown = function(event) {
         switch (event.keyCode) {
           case 37:
-            if (that.currentNode != null) {
-              that.currentNode.x -= 10;
-            }
+            that.moveCurrentNode(-10, 0);
             break;
           case 38:
-            if (that.currentNode != null) {
-              that.currentNode.y -= 10;
-            }
+            that.moveCurrentNode(0, -10);
             break;
           case 39:
-            if (that.currentNode != null) {
-              that.currentNode.x += 10;
-            }
+            that.moveCurrentNode(10, 0);
             break;
           case 40:
-            if (that.currentNode != null) {
-              that.currentNode.y += 10;
-            }
+            that.moveCurrentNode(0, 10);
             break;
           case 27:
             if (that.currentNode) {

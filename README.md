@@ -17,7 +17,7 @@ yarn add flowchart-vue
         <button type="button" @click="$refs.chart.remove()">
             Del
         </button>
-        <button type="button" @click="$refs.chart.edit()">
+        <button type="button" @click="$refs.chart.editCurrent()">
             Edit
         </button>
         <button type="button" @click="$refs.chart.save()">

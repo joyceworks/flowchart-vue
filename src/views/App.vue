@@ -7,7 +7,7 @@
             <button @click="$refs.chart.remove()">
                 Delete(Del)
             </button>
-            <button @click="$refs.chart.edit()">
+            <button @click="$refs.chart.editCurrent()">
                 Edit(Double-click node)
             </button>
             <button @click="$refs.chart.save()">
@@ -15,7 +15,7 @@
             </button>
         </div>
         <flow-chart :nodes="nodes" :connections="connections" @editnode="handleEditNode"
-                    :width="'100%'" :height="'100%'"
+                    :width="'100%'" :height="'100%'" :readonly="true"
                     @editconnection="handleEditConnection" @save="handleChartSave" ref="chart">
         </flow-chart>
         <flow-chart-node-dialog :visible.sync="nodeDialogVisible"
