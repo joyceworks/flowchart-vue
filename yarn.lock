@@ -1323,9 +1323,9 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
-ant-design-vue@^1.5.2:
+ant-design-vue@^1.5.3:
   version "1.5.3"
-  resolved "https://registry.npm.taobao.org/ant-design-vue/download/ant-design-vue-1.5.3.tgz#777a43a76dd233efc72abe9704103dbb2a95c558"
+  resolved "https://registry.npm.taobao.org/ant-design-vue/download/ant-design-vue-1.5.3.tgz?cache=0&sync_timestamp=1586751353554&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fant-design-vue%2Fdownload%2Fant-design-vue-1.5.3.tgz#777a43a76dd233efc72abe9704103dbb2a95c558"
   integrity sha1-d3pDp23SM+/HKr6XBBA9uyqVxVg=
   dependencies:
     "@ant-design/icons" "^2.1.1"

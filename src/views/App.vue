@@ -1,20 +1,18 @@
 <template>
     <div style="height: calc(100% - 50px); padding: 10px;">
         <div id="toolbar">
-            <a-button-group>
-                <a-button @click="$refs.chart.add(10, 10)">
-                    Add
-                </a-button>
-                <a-button @click="$refs.chart.remove()">
-                    Delete
-                </a-button>
-                <a-button @click="$refs.chart.edit()">
-                    Edit
-                </a-button>
-                <a-button @click="$refs.chart.save()">
-                    Save
-                </a-button>
-            </a-button-group>
+            <button @click="$refs.chart.add(10, 10)">
+                Add(Double-click canvas)
+            </button>
+            <button @click="$refs.chart.remove()">
+                Delete(Del)
+            </button>
+            <button @click="$refs.chart.edit()">
+                Edit(Double-click node)
+            </button>
+            <button @click="$refs.chart.save()">
+                Save
+            </button>
         </div>
         <flow-chart :nodes="nodes" :connections="connections" @editnode="handleEditNode"
                     :width="'100%'" :height="'100%'"
@@ -91,5 +89,9 @@
 <style scoped>
     #toolbar {
         margin-bottom: 10px;
+    }
+
+    #toolbar > button {
+        margin-right: 4px;
     }
 </style>

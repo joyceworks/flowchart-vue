@@ -1,29 +1,31 @@
 <template>
     <div>
-        <a-modal title="Edit" v-model="visible" width="440px" :keyboard="false" :closable="false"
-                 :maskClosable="false">
-            <a-form-model ref="form" :model="nodeForm" label-width="80px">
-                <a-form-model-item label="Name">
-                    <a-input v-model="nodeForm.name"/>
-                </a-form-model-item>
-                <a-form-model-item label="Type">
-                    <a-select v-model="nodeForm.type" placeholder="Select..." style="width: 100%;">
-                        <a-select-option :key="'node-type-' + item.id" :value="item.id"
-                                         v-for="item in [ { name: 'Start', id: 'start' }, { name: 'End', id: 'end' }, { name: 'Operation', id: 'operation' } ]"
-                        >
-                            {{item.name}}
-                        </a-select-option>
-                    </a-select>
-                </a-form-model-item>
-            </a-form-model>
-            <span slot="footer" class="dialog-footer">
-                <a-button @click="handleClickCancelSaveNode">Cancel</a-button>
-                <a-button type="primary" @click="handleClickSaveNode">Ok</a-button>
-            </span>
-        </a-modal>
+        <div class="modal" v-show="visible" style="width: 320px">
+            <div class="header">
+                <span>Edit</span>
+            </div>
+            <div class="body">
+                <label for="name">Name</label>
+                <input class="form-control" id="name" v-model="nodeForm.name"/>
+                <label for="type">Type</label>
+                <select class="form-control" id="type" v-model="nodeForm.type">
+                    <option :key="'node-type-' + item.id" :value="item.id"
+                            v-for="item in [ { name: 'Start', id: 'start' }, { name: 'End', id: 'end' }, { name: 'Operation', id: 'operation' } ]"
+                    >
+                        {{item.name}}
+                    </option>
+                </select>
+            </div>
+            <div class="footer">
+                <button @click="handleClickCancelSaveNode">Cancel</button>
+                <button @click="handleClickSaveNode">Ok</button>
+            </div>
+        </div>
     </div>
 </template>
 <script>
+  import '../assets/modal.css';
+
   export default {
     props: {
       visible: {

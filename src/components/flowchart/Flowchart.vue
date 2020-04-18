@@ -96,10 +96,17 @@
         }
       },
       handleChartMouseWheel(event) {
-        let chart = document.getElementById('chart');
-        let zoom = parseFloat(chart.style.zoom || 1);
-        zoom -= (event.deltaY / 100 / 10);
-        chart.style.zoom = zoom;
+        event.stopPropagation();
+        event.preventDefault();
+        if (event.ctrlKey) {
+          let chart = document.getElementById('chart');
+          let zoom = parseFloat(chart.style.zoom || 1);
+          if (event.deltaY > 0 && zoom === 0.1) {
+            return;
+          }
+          zoom -= (event.deltaY / 100 / 10);
+          chart.style.zoom = zoom;
+        }
       },
       async handleChartMouseUp() {
         if (this.movingInfo.target) {
@@ -143,8 +150,10 @@
       },
       async handleChartMouseMove(event) {
         let boundingClientRect = event.currentTarget.getBoundingClientRect();
-        this.cursorToChartOffset.x = event.pageX - boundingClientRect.left - window.scrollX;
-        this.cursorToChartOffset.y = event.pageY - boundingClientRect.top - window.scrollY;
+        let actualX = event.pageX - boundingClientRect.left - window.scrollX;
+        this.cursorToChartOffset.x = Math.trunc(actualX);
+        let actualY = event.pageY - boundingClientRect.top - window.scrollY;
+        this.cursorToChartOffset.y = Math.trunc(actualY);
         if (this.connectingInfo.source) {
           await this.refresh();
           let sourceOffset = this.getNodeConnectorOffset(

@@ -1,29 +1,31 @@
 <template>
     <div>
-        <a-modal title="Edit" v-model="visible" width="440px" :keyboard="false" :closable="false"
-                 :maskClosable="false">
-            <a-form-model ref="form" :model="connectionForm" label-width="80px">
-                <a-form-model-item label="Name">
-                    <a-input v-model="connectionForm.name"/>
-                </a-form-model-item>
-                <a-form-model-item label="Type">
-                    <a-select v-model="connectionForm.type" placeholder="Select...">
-                        <a-select-option :key="'connection-type-' + item.id"
-                                         v-for="item in [ { name: 'Pass', id: 'pass' }, { name: 'Reject', id: 'reject' } ]"
-                                         :value="item.id">
-                            {{item.name}}
-                        </a-select-option>
-                    </a-select>
-                </a-form-model-item>
-            </a-form-model>
-            <span slot="footer" class="dialog-footer">
-                <a-button @click="handleClickCancelSaveConnection">Cancel</a-button>
-                <a-button type="primary" @click="handleClickSaveConnection">Ok</a-button>
-            </span>
-        </a-modal>
+        <div class="modal" v-show="visible" style="width: 320px">
+            <div class="header">
+                <span>Edit</span>
+            </div>
+            <div class="body">
+                <label for="name">Name</label>
+                <input id="name" class="form-control" v-model="connectionForm.name"/>
+                <label for="type">Type</label>
+                <select id="type" class="form-control" v-model="connectionForm.type">
+                    <option :key="'connection-type-' + item.id"
+                            v-for="item in [ { name: 'Pass', id: 'pass' }, { name: 'Reject', id: 'reject' } ]"
+                            :value="item.id">
+                        {{item.name}}
+                    </option>
+                </select>
+            </div>
+            <div class="footer">
+                <button @click="handleClickCancelSaveConnection">Cancel</button>
+                <button @click="handleClickSaveConnection">Ok</button>
+            </div>
+        </div>
     </div>
 </template>
 <script>
+  import '../assets/modal.css';
+
   export default {
     props: {
       visible: {
