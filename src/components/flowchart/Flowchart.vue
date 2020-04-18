@@ -28,7 +28,7 @@
   });
 
   export default {
-    name: 'flow-chart',
+    name: 'flowchart',
     props: {
       nodes: {
         type: Array,

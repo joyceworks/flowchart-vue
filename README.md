@@ -23,9 +23,9 @@ yarn add flowchart-vue
         <button type="button" @click="$refs.chart.save()">
             Save
         </button>
-        <flow-chart :nodes="nodes" :connections="connections" @editnode="handleEditNode"
+        <flowchart :nodes="nodes" :connections="connections" @editnode="handleEditNode"
                     @editconnection="handleEditConnection" @save="handleChartSave" ref="chart">
-        </flow-chart>
+        </flowchart>
     </div>
 </template>
 <script>
