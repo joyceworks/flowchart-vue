@@ -4,9 +4,10 @@
          @mousemove="handleChartMouseMove"
          @mouseup="handleChartMouseUp"
          @dblclick="handleChartDblClick($event)"
+         @mousewheel="handleChartMouseWheel"
     >
         <span id="position">{{ cursorToChartOffset.x + ', ' + cursorToChartOffset.y }}</span>
-        <svg id="svg" @mousewheel="handleChartMouseWheel"></svg>
+        <svg id="svg"></svg>
     </div>
 </template>
 <script>
@@ -118,13 +119,13 @@
         event.stopPropagation();
         event.preventDefault();
         if (event.ctrlKey) {
-          let chart = document.getElementById('chart');
-          let zoom = parseFloat(chart.style.zoom || 1);
+          let svg = document.getElementById('svg');
+          let zoom = parseFloat(svg.style.zoom || 1);
           if (event.deltaY > 0 && zoom === 0.1) {
             return;
           }
           zoom -= (event.deltaY / 100 / 10);
-          chart.style.zoom = zoom;
+          svg.style.zoom = zoom;
         }
       },
       async handleChartMouseUp() {
