@@ -6,12 +6,12 @@
          @dblclick="handleChartDblClick($event)"
     >
         <span id="position">{{ cursorToChartOffset.x + ', ' + cursorToChartOffset.y }}</span>
-        <svg style="width: 100%; height: 100%;" id="svg" @mousewheel="handleChartMouseWheel"></svg>
+        <svg id="svg" @mousewheel="handleChartMouseWheel"></svg>
     </div>
 </template>
 <script>
   import {lineTo, line2} from '../../utils/svg';
-  import '../../assets/flowchart.css';
+  import './style.css';
   import * as d3 from 'd3';
   import {between, distanceOfPointToLine} from '../../utils/math';
   import Vue from 'vue';
@@ -22,8 +22,8 @@
   const i18n = new VueI18n({
     locale: 'zh',
     messages: {
-      'en': require('../../assets/en'),
-      'zh': require('../../assets/zh'),
+      'en': require('../../assets/locale/en'),
+      'zh': require('../../assets/locale/zh'),
     },
   });
 

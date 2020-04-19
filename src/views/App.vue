@@ -1,7 +1,7 @@
 <template>
-    <div style="width: 800px; margin: auto;">
-        <h1 style="margin-top: 20px; margin-bottom: 0">Flowchart Vue</h1>
-        <h5 style="margin-bottom: 10px;">Flowchart & Flowchart designer component for Vue.js.</h5>
+    <div class="container">
+        <h1 class="title">Flowchart Vue</h1>
+        <h5 class="subtitle">Flowchart & Flowchart designer component for Vue.js.</h5>
         <div id="toolbar">
             <button @click="$refs.chart.add(10, 10)">Add(Double-click canvas)</button>
             <button @click="$refs.chart.remove()">Delete(Del)</button>
@@ -103,7 +103,21 @@
         margin-bottom: 10px;
     }
 
+    .title {
+        margin-top: 10px;
+        margin-bottom: 0;
+    }
+
+    .subtitle {
+        margin-bottom: 10px;
+    }
+
     #toolbar > button {
         margin-right: 4px;
+    }
+
+    .container {
+        width: 800px;
+        margin: auto;
     }
 </style>
