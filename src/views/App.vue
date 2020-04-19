@@ -1,43 +1,33 @@
 <template>
-    <div style="width: 800px; margin: auto;">
-        <h1 style="margin-top: 20px; margin-bottom: 0">Flowchart Vue</h1>
-        <h5 style="margin-bottom: 10px;">Flowchart & Flowchart designer component for Vue.js.</h5>
+    <div class="container">
+        <h1 class="title">Flowchart Vue</h1>
+        <h5 class="subtitle">Flowchart & Flowchart designer component for Vue.js.</h5>
         <div id="toolbar">
-            <button @click="$refs.chart.add(10, 10)">
-                Add(Double-click canvas)
-            </button>
-            <button @click="$refs.chart.remove()">
-                Delete(Del)
-            </button>
-            <button @click="$refs.chart.editCurrent()">
-                Edit(Double-click node)
-            </button>
-            <button @click="$refs.chart.save()">
-                Save
-            </button>
+            <button @click="$refs.chart.add(10, 10)">Add(Double-click canvas)</button>
+            <button @click="$refs.chart.remove()">Delete(Del)</button>
+            <button @click="$refs.chart.editCurrent()">Edit(Double-click node)</button>
+            <button @click="$refs.chart.save()">Save</button>
         </div>
-        <flow-chart :nodes="nodes" :connections="connections" @editnode="handleEditNode"
-                    :width="'100%'" :height="500" :readonly="false"
-                    @editconnection="handleEditConnection" @save="handleChartSave" ref="chart">
-        </flow-chart>
-        <flow-chart-node-dialog :visible.sync="nodeDialogVisible"
-                                :node.sync="editingInfo.target">
-        </flow-chart-node-dialog>
-        <flow-chart-connection-dialog :visible.sync="connectionDialogVisible"
-                                      :connection.sync="connectionEditingInfo.target"
-                                      :operation="connectionEditingInfo.operation">
-        </flow-chart-connection-dialog>
+        <flowchart :nodes="nodes" :connections="connections" @editnode="handleEditNode"
+                   :width="'100%'" :height="500" :readonly="false"
+                   @editconnection="handleEditConnection" @save="handleChartSave" ref="chart">
+        </flowchart>
+        <node-dialog :visible.sync="nodeDialogVisible" :node.sync="nodeForm.target"></node-dialog>
+        <connection-dialog :visible.sync="connectionDialogVisible"
+                           :connection.sync="connectionForm.target"
+                           :operation="connectionForm.operation">
+        </connection-dialog>
     </div>
 </template>
 <script>
 
-  import FlowChartConnectionDialog from '../components/ConnectionDialog';
-  import FlowChartNodeDialog from '../components/NodeDialog';
-  import FlowChart from '../components/flowchart/Flowchart';
+  import ConnectionDialog from '../components/ConnectionDialog';
+  import NodeDialog from '../components/NodeDialog';
+  import Flowchart from '../components/flowchart/Flowchart';
 
   export default {
     components: {
-      FlowChartConnectionDialog, FlowChartNodeDialog, FlowChart,
+      ConnectionDialog, NodeDialog, Flowchart,
     },
     data: function() {
       return {
@@ -86,8 +76,8 @@
             type: 'pass',
           },
         ],
-        editingInfo: {target: null},
-        connectionEditingInfo: {target: null, operation: null},
+        nodeForm: {target: null},
+        connectionForm: {target: null, operation: null},
         nodeDialogVisible: false,
         connectionDialogVisible: false,
       };
@@ -98,11 +88,11 @@
       async handleChartSave(nodes, connections) {
       },
       handleEditNode(node) {
-        this.editingInfo.target = node;
+        this.nodeForm.target = node;
         this.nodeDialogVisible = true;
       },
       handleEditConnection(connection) {
-        this.connectionEditingInfo.target = connection;
+        this.connectionForm.target = connection;
         this.connectionDialogVisible = true;
       },
     },
@@ -113,7 +103,21 @@
         margin-bottom: 10px;
     }
 
+    .title {
+        margin-top: 10px;
+        margin-bottom: 0;
+    }
+
+    .subtitle {
+        margin-bottom: 10px;
+    }
+
     #toolbar > button {
         margin-right: 4px;
+    }
+
+    .container {
+        width: 800px;
+        margin: auto;
     }
 </style>

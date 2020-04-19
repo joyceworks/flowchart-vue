@@ -4,14 +4,15 @@
          @mousemove="handleChartMouseMove"
          @mouseup="handleChartMouseUp"
          @dblclick="handleChartDblClick($event)"
+         @mousewheel="handleChartMouseWheel"
     >
         <span id="position">{{ cursorToChartOffset.x + ', ' + cursorToChartOffset.y }}</span>
-        <svg style="width: 100%; height: 100%;" id="svg" @mousewheel="handleChartMouseWheel"></svg>
+        <svg id="svg"></svg>
     </div>
 </template>
 <script>
   import {lineTo, line2} from '../../utils/svg';
-  import '../../assets/flowchart.css';
+  import './style.css';
   import * as d3 from 'd3';
   import {between, distanceOfPointToLine} from '../../utils/math';
   import Vue from 'vue';
@@ -22,13 +23,13 @@
   const i18n = new VueI18n({
     locale: 'zh',
     messages: {
-      'en': require('../../assets/en'),
-      'zh': require('../../assets/zh'),
+      'en': require('../../assets/locale/en'),
+      'zh': require('../../assets/locale/zh'),
     },
   });
 
   export default {
-    name: 'flow-chart',
+    name: 'flowchart',
     props: {
       nodes: {
         type: Array,
@@ -118,13 +119,13 @@
         event.stopPropagation();
         event.preventDefault();
         if (event.ctrlKey) {
-          let chart = document.getElementById('chart');
-          let zoom = parseFloat(chart.style.zoom || 1);
+          let svg = document.getElementById('svg');
+          let zoom = parseFloat(svg.style.zoom || 1);
           if (event.deltaY > 0 && zoom === 0.1) {
             return;
           }
           zoom -= (event.deltaY / 100 / 10);
-          chart.style.zoom = zoom;
+          svg.style.zoom = zoom;
         }
       },
       async handleChartMouseUp() {
@@ -450,10 +451,7 @@
                 attr('cx', positionElement.x).
                 attr('cy', positionElement.y).
                 attr('r', 4).
-                attr('stroke', '#bbbbbb').
-                attr('stroke-width', '1px').
-                attr('fill', 'white').
-                style('cursor', 'crosshair');
+                attr('class', 'connector');
             connector.on('mousedown', function() {
               d3.event.stopPropagation();
               if (node.type === 'end' || that.readonly) {
