@@ -450,10 +450,7 @@
                 attr('cx', positionElement.x).
                 attr('cy', positionElement.y).
                 attr('r', 4).
-                attr('stroke', '#bbbbbb').
-                attr('stroke-width', '1px').
-                attr('fill', 'white').
-                style('cursor', 'crosshair');
+                attr('class', 'connector');
             connector.on('mousedown', function() {
               d3.event.stopPropagation();
               if (node.type === 'end' || that.readonly) {

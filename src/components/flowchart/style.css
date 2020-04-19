@@ -31,3 +31,14 @@
     -ms-user-select: none;
     user-select: none;
 }
+
+.connector {
+    cursor: crosshair;
+    fill: white;
+    stroke: #bbbbbb;
+    stroke-width: 1px;
+}
+
+.connector:hover {
+    stroke: red;
+}
