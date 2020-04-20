@@ -1,5 +1,5 @@
 <template>
-    <div id="chart"
+    <div id="chart" tabindex="0"
          :style="{width: isNaN(width) ? width : (width + 'px'), height: isNaN(height) ? height : (height + 'px'), cursor: cursor}"
          @mousemove="handleChartMouseMove"
          @mouseup="handleChartMouseUp"
@@ -10,9 +10,9 @@
         <svg id="svg"></svg>
     </div>
 </template>
+<style src="./style.css"></style>
 <script>
   import {lineTo, line2} from '../../utils/svg';
-  import './style.css';
   import * as d3 from 'd3';
   import {between, distanceOfPointToLine} from '../../utils/math';
   import Vue from 'vue';
@@ -70,13 +70,13 @@
       return {
         internalNodes: [],
         internalConnections: [],
-        movingInfo: {offsetX: null, offsetY: null},
+        movingInfo: {target: null},
         connectingInfo: {
           source: null,
           sourcePosition: null,
         },
-        currentNode: null,
-        currentConnection: null,
+        currentNodes: [],
+        currentConnections: [],
         /**
          * Mouse position(relative to chart div)
          */
@@ -97,10 +97,10 @@
         this.internalNodes.push({id: +new Date(), x: x, y: y, name: name, type: 'operation'});
       },
       editCurrent() {
-        if (this.currentNode) {
-          this.editNode(this.currentNode);
-        } else if (this.currentConnection) {
-          this.editConnection(this.currentConnection);
+        if (this.currentNodes.length === 1) {
+          this.editNode(this.currentNodes[0]);
+        } else if (this.currentConnections.length === 1) {
+          this.editConnection(this.currentConnections[0]);
         }
       },
       editNode(node) {
@@ -129,19 +129,6 @@
         }
       },
       async handleChartMouseUp() {
-        if (this.movingInfo.target) {
-          this.movingInfo.target.x =
-              Math.round(Math.round(this.movingInfo.target.x) / 10) * 10;
-          this.movingInfo.target.y =
-              Math.round(Math.round(this.movingInfo.target.y) / 10) * 10;
-          this.movingInfo.target = null;
-          this.movingInfo.offsetX = null;
-          this.movingInfo.offsetY = null;
-          let that = this;
-          await that.refresh();
-          return;
-        }
-
         if (this.connectingInfo.source) {
           if (this.hoveredConnector) {
             if (this.connectingInfo.source.id !== this.hoveredConnector.node.id) {
@@ -211,7 +198,7 @@
             let connectorVisible = that.connectingInfo.source || that.hoveredNode;
             // render nodes
             that.internalNodes.forEach(node => {
-              if (node === that.currentNode) {
+              if (that.currentNodes.filter(item => item === node).length > 0) {
                 that.renderNode(node, '#666666', connectorVisible);
               } else {
                 that.renderNode(node, '#bbbbbb', connectorVisible);
@@ -233,7 +220,7 @@
                 pass: '#52c41a',
                 reject: 'red',
               };
-              if (conn === that.currentConnection) {
+              if (that.currentConnections.filter(item => item === conn).length > 0) {
                 colors = {
                   pass: '#12640a',
                   reject: 'darkred',
@@ -250,8 +237,9 @@
               );
               for (const path of result.paths) {
                 path.on('click', function() {
-                  that.currentNode = null;
-                  that.currentConnection = conn;
+                  that.currentNodes.splice(0, that.currentNodes.length);
+                  that.currentConnections.splice(0, that.currentConnections.length);
+                  that.currentConnections.push(conn);
                   that.refresh();
                 });
                 path.on('dblclick', function() {
@@ -292,37 +280,33 @@
           svg.append('rect').
               attr('x', node.x).
               attr('y', node.y).
-              attr('width', 120).
-              attr('height', 20).
               attr('stroke', borderColor).
-              attr('stroke-width', '1px').
-              attr('fill', '#f1f3f4');
+              attr('class', 'title');
           svg.append('text').
               attr('x', node.x + 4).
               attr('y', node.y + 15).
               attr('class', 'unselectable').
-              text(function() {return node.name;}).each(function wrap() {
-            let self = d3.select(this),
-                textLength = self.node().getComputedTextLength(),
-                text = self.text();
-            while (textLength > (120 - 2 * 4) && text.length > 0) {
-              text = text.slice(0, -1);
-              self.text(text + '...');
-              textLength = self.node().getComputedTextLength();
-            }
-          });
+              text(() => node.name).
+              each(function wrap() {
+                let self = d3.select(this),
+                    textLength = self.node().getComputedTextLength(),
+                    text = self.text();
+                while (textLength > (120 - 2 * 4) && text.length > 0) {
+                  text = text.slice(0, -1);
+                  self.text(text + '...');
+                  textLength = self.node().getComputedTextLength();
+                }
+              });
         }
 
         // body
-        let body = null;
+        let body = svg.append('rect').attr('class', 'body');
         if (node.type !== 'start' && node.type !== 'end') {
-          body = svg.append('rect');
-          body.attr('x', node.x).attr('y', node.y + 20).attr('width', 120).attr('height', 40);
+          body.attr('x', node.x).attr('y', node.y + 20);
         } else {
-          body = svg.append('ellipse');
-          body.attr('cx', node.x + 60).attr('cy', node.y + 30).attr('rx', 60).attr('ry', 30);
+          body.attr('x', node.x).attr('y', node.y).classed(node.type, true).attr('rx', 30);
         }
-        body.attr('stroke', borderColor).attr('stroke-width', '1px').attr('fill', 'white');
+        body.attr('stroke', borderColor);
 
         // body text
         let text = node.type === 'start'
@@ -361,8 +345,14 @@
 
         let drag = d3.drag().
             on('start', function() {
-              that.currentConnection = null;
-              that.currentNode = node;
+              // handle mousedown
+              let isNotCurrentNode = that.currentNodes.filter(item => item === node).length === 0;
+              if (isNotCurrentNode) {
+                that.currentConnections.splice(0, that.currentConnections.length);
+                that.currentNodes.splice(0, that.currentNodes.length);
+                that.currentNodes.push(node);
+              }
+
               if (that.clickedOnce) {
                 that.editNode(node);
               } else {
@@ -372,39 +362,25 @@
                 }, 300);
                 that.clickedOnce = true;
               }
-              that.movingInfo.offsetX = that.cursorToChartOffset.x - node.x;
-              that.movingInfo.offsetY = that.cursorToChartOffset.y - node.y;
             }).
             on('drag', async function() {
               if (that.readonly) {
                 return;
               }
-              const {x, y} = d3.event;
-              node.x = x - that.movingInfo.offsetX;
-              node.y = y - that.movingInfo.offsetY;
 
-              let chart = document.getElementById('chart');
-              let width = chart.clientWidth;
-              let height = chart.clientHeight;
-              if (node.x > width - 120) {
-                node.x = width - 120;
+              let zoom = parseFloat(document.getElementById('svg').style.zoom || 1);
+              for (let currentNode of that.currentNodes) {
+                currentNode.x += (d3.event.dx / zoom);
+                currentNode.y += (d3.event.dy / zoom);
               }
-              if (node.x < 0) {
-                node.x = 0;
-              }
-              if (node.y > height - 60) {
-                node.y = height - 60;
-              }
-              if (node.y < 0) {
-                node.y = 0;
-              }
-
               await that.refresh();
-              let expectX = Math.round(Math.round(node.x) / 10) * 10;
-              let expectY = Math.round(Math.round(node.y) / 10) * 10;
+
+              let edge = that.getCurrentNodesEdge();
+              let expectX = Math.round(Math.round(edge.start.x) / 10) * 10;
+              let expectY = Math.round(Math.round(edge.start.y) / 10) * 10;
               let guidelineDash = [5, 3];
               that.internalNodes.forEach(item => {
-                if (item.id !== node.id) {
+                if (that.currentNodes.filter(currentNode => currentNode === item).length === 0) {
                   if (item.x === expectX) {
                     // vertical guideline
                     if (item.y < expectY) {
@@ -423,25 +399,33 @@
                   }
                 }
               });
-            }).
-            on('end', function() {
-              node.x = Math.round(Math.round(node.x) / 10) * 10;
-              node.y = Math.round(Math.round(node.y) / 10) * 10;
+            }).on('end', function() {
+              for (let currentNode of that.currentNodes) {
+                currentNode.x = Math.round(Math.round(currentNode.x) / 10) * 10;
+                currentNode.y = Math.round(Math.round(currentNode.y) / 10) * 10;
+              }
               that.refresh();
             });
-        let shape = null;
+        let container = svg.append('rect').
+            attr('class', 'container').
+            attr('x', node.x).
+            attr('y', node.y);
         if (node.type === 'start' || node.type === 'end') {
-          shape = svg.append('ellipse');
-          shape.attr('cx', node.x + 60).attr('cy', node.y + 30).attr('rx', 60).attr('ry', 30);
-        } else {
-          shape = svg.append('rect');
-          shape.attr('x', node.x).attr('y', node.y).attr('width', 120).attr('height', 60);
+          container.attr('rx', 30).classed(node.type, true);
         }
-        shape.attr('stroke', borderColor).
-            attr('stroke-width', '1px').
-            style('cursor', 'move').
-            attr('fill', 'transparent').
-            call(drag);
+        container.attr('stroke', borderColor).call(drag);
+        container.on('mousedown', function() {
+          // handle ctrl+mousedown
+          if (!d3.event.ctrlKey) {
+            return;
+          }
+          let isNotCurrentNode = that.currentNodes.filter(item => item === node).length === 0;
+          if (isNotCurrentNode) {
+            that.currentNodes.push(node);
+          } else {
+            that.currentNodes.splice(that.currentNodes.indexOf(node), 1);
+          }
+        });
 
         if (connectorVisible) {
           let connectorPosition = this.getConnectorPosition(node);
@@ -488,6 +472,22 @@
           }
         }
       },
+      getCurrentNodesEdge() {
+        let that = this;
+        let minX = that.currentNodes.reduce((prev, currentNode) => {
+          return currentNode.x < prev ? currentNode.x : prev;
+        }, Infinity);
+        let maxX = that.currentNodes.reduce((prev, currentNode) => {
+          return currentNode.x > prev ? currentNode.x : prev;
+        }, 0);
+        let minY = that.currentNodes.reduce((prev, currentNode) => {
+          return currentNode.y < prev ? currentNode.y : prev;
+        }, Infinity);
+        let maxY = that.currentNodes.reduce((prev, currentNode) => {
+          return currentNode.y > prev ? currentNode.y : prev;
+        }, 0);
+        return {start: {x: minX, y: minY}, end: {x: maxX + 120, y: maxY + 60}};
+      },
       save() {
         if (this.readonly) {
           return;
@@ -498,27 +498,39 @@
         if (this.readonly) {
           return;
         }
-        if (this.currentNode) {
-          let connections = this.internalConnections.filter(
-              item => item.source.id === this.currentNode.id ||
-                  item.destination.id === this.currentNode.id,
-          );
-          for (let connection of connections) {
-            this.internalConnections.splice(this.internalConnections.indexOf(connection), 1);
+        if (this.currentNodes.length > 0) {
+          for (let node of this.currentNodes) {
+            this.removeNode(node);
           }
-          this.internalNodes.splice(this.internalNodes.indexOf(this.currentNode), 1);
-          this.currentNode = null;
-        } else if (this.currentConnection) {
-          let index = this.internalConnections.indexOf(this.currentConnection);
-          this.internalConnections.splice(index, 1);
-          this.currentConnection = null;
+          this.currentNodes.splice(0, this.currentNodes.length);
+        }
+        if (this.currentConnections.length > 0) {
+          for (let conn of this.currentConnections) {
+            this.removeConnection(conn);
+          }
+          this.currentConnections.splice(0, this.currentConnections.length);
         }
         await this.refresh();
       },
+      removeNode(node) {
+        let connections = this.internalConnections.filter(
+            item => item.source.id === node.id || item.destination.id === node.id,
+        );
+        for (let connection of connections) {
+          this.internalConnections.splice(this.internalConnections.indexOf(connection), 1);
+        }
+        this.internalNodes.splice(this.internalNodes.indexOf(node), 1);
+      },
+      removeConnection(conn) {
+        let index = this.internalConnections.indexOf(conn);
+        this.internalConnections.splice(index, 1);
+      },
       moveCurrentNode(x, y) {
-        if (this.currentNode && !this.readonly) {
-          this.currentNode.x += x;
-          this.currentNode.y += y;
+        if (this.currentNodes.length > 0 && !this.readonly) {
+          for (let node of this.currentNodes) {
+            node.x += x;
+            node.y += y;
+          }
         }
       },
     },
@@ -548,10 +560,16 @@
             that.moveCurrentNode(0, 10);
             break;
           case 27:
-            if (that.currentNode) {
-              that.currentNode = null;
-            } else if (that.currentConnection) {
-              that.currentConnection = null;
+            that.currentNodes.splice(0, that.currentNodes.length);
+            that.currentConnections.splice(0, that.currentConnection.length);
+            break;
+          case 65:
+            if (document.activeElement === document.getElementById('chart')) {
+              that.currentNodes.splice(0, that.currentNodes.length);
+              that.currentConnections.splice(0, that.currentConnections.length);
+              that.currentNodes.push(...that.internalNodes);
+              that.currentConnections.push(...that.internalConnections);
+              event.preventDefault();
             }
             break;
           case 46:
@@ -573,11 +591,8 @@
                 (item.x + 120) >= this.cursorToChartOffset.x &&
                 item.y <= this.cursorToChartOffset.y &&
                 (item.y + 60) >= this.cursorToChartOffset.y);
-        if (nodes.length <= 0) {
-          return null;
-        }
+        return nodes.length <= 0 ? null : nodes[0];
 
-        return nodes[0];
       },
       hoveredConnector() {
         for (const node of this.internalNodes) {
