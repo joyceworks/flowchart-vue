@@ -34,9 +34,30 @@
         nodes: [
           {id: 1, x: 50, y: 220, name: 'Start', type: 'start'},
           {id: 2, x: 630, y: 220, name: 'End', type: 'end'},
-          {id: 3, x: 340, y: 130, name: 'Operation', type: 'operation'},
-          {id: 4, x: 240, y: 220, name: 'Operation', type: 'operation'},
-          {id: 5, x: 440, y: 220, name: 'Operation', type: 'operation'},
+          {
+            id: 3,
+            x: 340,
+            y: 130,
+            name: 'Operation',
+            type: 'operation',
+            approvers: [{id: 1, name: 'Joyce'}],
+          },
+          {
+            id: 4,
+            x: 240,
+            y: 220,
+            name: 'Operation',
+            type: 'operation',
+            approvers: [{id: 2, name: 'Allen'}],
+          },
+          {
+            id: 5,
+            x: 440,
+            y: 220,
+            name: 'Operation',
+            type: 'operation',
+            approvers: [{id: 3, name: 'Teresa'}],
+          },
         ],
         connections: [
           {
