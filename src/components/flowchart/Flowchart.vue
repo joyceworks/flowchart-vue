@@ -10,9 +10,9 @@
         <svg id="svg"></svg>
     </div>
 </template>
+<style src="./style.css"></style>
 <script>
   import {lineTo, line2} from '../../utils/svg';
-  import './style.css';
   import * as d3 from 'd3';
   import {between, distanceOfPointToLine} from '../../utils/math';
   import Vue from 'vue';
@@ -280,37 +280,33 @@
           svg.append('rect').
               attr('x', node.x).
               attr('y', node.y).
-              attr('width', 120).
-              attr('height', 20).
               attr('stroke', borderColor).
-              attr('stroke-width', '1px').
-              attr('fill', '#f1f3f4');
+              attr('class', 'title');
           svg.append('text').
               attr('x', node.x + 4).
               attr('y', node.y + 15).
               attr('class', 'unselectable').
-              text(function() {return node.name;}).each(function wrap() {
-            let self = d3.select(this),
-                textLength = self.node().getComputedTextLength(),
-                text = self.text();
-            while (textLength > (120 - 2 * 4) && text.length > 0) {
-              text = text.slice(0, -1);
-              self.text(text + '...');
-              textLength = self.node().getComputedTextLength();
-            }
-          });
+              text(() => node.name).
+              each(function wrap() {
+                let self = d3.select(this),
+                    textLength = self.node().getComputedTextLength(),
+                    text = self.text();
+                while (textLength > (120 - 2 * 4) && text.length > 0) {
+                  text = text.slice(0, -1);
+                  self.text(text + '...');
+                  textLength = self.node().getComputedTextLength();
+                }
+              });
         }
 
         // body
-        let body = null;
+        let body = svg.append('rect').attr('class', 'body');
         if (node.type !== 'start' && node.type !== 'end') {
-          body = svg.append('rect');
-          body.attr('x', node.x).attr('y', node.y + 20).attr('width', 120).attr('height', 40);
+          body.attr('x', node.x).attr('y', node.y + 20);
         } else {
-          body = svg.append('ellipse');
-          body.attr('cx', node.x + 60).attr('cy', node.y + 30).attr('rx', 60).attr('ry', 30);
+          body.attr('x', node.x).attr('y', node.y).classed(node.type, true).attr('rx', 30);
         }
-        body.attr('stroke', borderColor).attr('stroke-width', '1px').attr('fill', 'white');
+        body.attr('stroke', borderColor);
 
         // body text
         let text = node.type === 'start'
@@ -410,20 +406,15 @@
               }
               that.refresh();
             });
-        let shape = null;
+        let container = svg.append('rect').
+            attr('class', 'container').
+            attr('x', node.x).
+            attr('y', node.y);
         if (node.type === 'start' || node.type === 'end') {
-          shape = svg.append('ellipse');
-          shape.attr('cx', node.x + 60).attr('cy', node.y + 30).attr('rx', 60).attr('ry', 30);
-        } else {
-          shape = svg.append('rect');
-          shape.attr('x', node.x).attr('y', node.y).attr('width', 120).attr('height', 60);
+          container.attr('rx', 30).classed(node.type, true);
         }
-        shape.attr('stroke', borderColor).
-            attr('stroke-width', '1px').
-            style('cursor', 'move').
-            attr('fill', 'transparent').
-            call(drag);
-        shape.on('mousedown', function() {
+        container.attr('stroke', borderColor).call(drag);
+        container.on('mousedown', function() {
           // handle ctrl+mousedown
           if (!d3.event.ctrlKey) {
             return;
@@ -570,10 +561,12 @@
             break;
           case 27:
             that.currentNodes.splice(0, that.currentNodes.length);
-            that.currentConnection.splice(0, that.currentConnection.length);
+            that.currentConnections.splice(0, that.currentConnection.length);
             break;
           case 65:
             if (document.activeElement === document.getElementById('chart')) {
+              that.currentNodes.splice(0, that.currentNodes.length);
+              that.currentConnections.splice(0, that.currentConnections.length);
               that.currentNodes.push(...that.internalNodes);
               that.currentConnections.push(...that.internalConnections);
               event.preventDefault();

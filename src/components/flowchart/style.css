@@ -41,3 +41,29 @@
 .connector:hover {
     stroke: red;
 }
+
+#svg .title {
+    width: 120px;
+    height: 20px;
+    stroke-width: 1px;
+    fill: #f1f3f4;
+}
+
+#svg .body {
+    width: 120px;
+    height: 40px;
+    stroke-width: 1px;
+    fill: white;
+}
+
+#svg .body.start, #svg .body.end {
+    height: 60px;
+}
+
+#svg .container {
+    stroke-width: 1px;
+    cursor: move;
+    fill: transparent;
+    width: 120px;
+    height: 60px;
+}
