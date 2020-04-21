@@ -148,9 +148,9 @@
                 name: i18n.t('message.pass'),
               };
               this.internalConnections.push(conn);
-              this.refresh();
             }
           }
+          await this.refresh();
           this.connectingInfo.source = null;
           this.connectingInfo.sourcePosition = null;
         }
@@ -169,6 +169,9 @@
 
         if (this.connectingInfo.source) {
           await this.refresh();
+
+            d3.selectAll('#svg > .connector').classed('active', true);
+
           let sourceOffset = this.getNodeConnectorOffset(
               this.connectingInfo.source.id,
               this.connectingInfo.sourcePosition,
