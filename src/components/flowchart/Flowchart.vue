@@ -562,17 +562,17 @@
         if (this.readonly) {
           return;
         }
-        if (this.currentNodes.length > 0) {
-          for (let node of this.currentNodes) {
-            this.removeNode(node);
-          }
-          this.currentNodes.splice(0, this.currentNodes.length);
-        }
         if (this.currentConnections.length > 0) {
           for (let conn of this.currentConnections) {
             this.removeConnection(conn);
           }
           this.currentConnections.splice(0, this.currentConnections.length);
+        }
+        if (this.currentNodes.length > 0) {
+          for (let node of this.currentNodes) {
+            this.removeNode(node);
+          }
+          this.currentNodes.splice(0, this.currentNodes.length);
         }
         await this.refresh();
       },
