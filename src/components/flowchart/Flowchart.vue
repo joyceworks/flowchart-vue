@@ -315,13 +315,12 @@
                   {x: line.sourceX, y: line.sourceY},
                   {x: line.destinationX, y: line.destinationY},
                 ];
-                if (points.every(point => pointRectangleIntersection(point, edge))) {
+                if (points.every(point => pointRectangleIntersection(point, edge)) && that.currentConnections.every(item => item.id !== line.id)) {
                   let connection = that.internalConnections.filter(conn => conn.id === line.id)[0];
                   that.currentConnections.push(connection);
                 }
               });
             }
-
             resolve();
           });
         });
@@ -588,6 +587,7 @@
       },
       removeConnection(conn) {
         let index = this.internalConnections.indexOf(conn);
+        console.log(index);
         this.internalConnections.splice(index, 1);
       },
       moveCurrentNode(x, y) {
