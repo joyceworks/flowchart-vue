@@ -28,4 +28,14 @@ function getEdgeOfPoints(points) {
   return {start: {x: minX, y: minY}, end: {x: maxX, y: maxY}};
 }
 
-export {distanceOfPointToLine, between, approximatelyEquals, getEdgeOfPoints};
+function pointRectangleIntersection(p, r) {
+  return p.x > r.start.x && p.x < r.end.x && p.y > r.start.y && p.y < r.end.y;
+}
+
+export {
+  distanceOfPointToLine,
+  between,
+  approximatelyEquals,
+  getEdgeOfPoints,
+  pointRectangleIntersection,
+};

@@ -14,7 +14,12 @@
 <script>
   import {lineTo, line2} from '../../utils/svg';
   import * as d3 from 'd3';
-  import {between, distanceOfPointToLine, getEdgeOfPoints} from '../../utils/math';
+  import {
+    between,
+    distanceOfPointToLine,
+    getEdgeOfPoints,
+    pointRectangleIntersection,
+  } from '../../utils/math';
   import Vue from 'vue';
   import VueI18n from 'vue-i18n';
 
@@ -82,6 +87,7 @@
          */
         cursorToChartOffset: {x: 0, y: 0},
         clickedOnce: false,
+        pathClickedOnce: false,
         /**
          * lines of all internalConnections
          */
@@ -170,7 +176,7 @@
         if (this.connectingInfo.source) {
           await this.refresh();
 
-            d3.selectAll('#svg > .connector').classed('active', true);
+          d3.selectAll('#svg > .connector').classed('active', true);
 
           let sourceOffset = this.getNodeConnectorOffset(
               this.connectingInfo.source.id,
@@ -247,14 +253,21 @@
                   colors[conn.type],
               );
               for (const path of result.paths) {
-                path.on('click', function() {
+                path.on('mousedown', function() {
+                  d3.event.stopPropagation();
+                  if (that.pathClickedOnce) {
+                    that.editConnection(conn);
+                  } else {
+                    let timer = setTimeout(function() {
+                      that.pathClickedOnce = false;
+                      clearTimeout(timer);
+                    }, 300);
+                    that.pathClickedOnce = true;
+                  }
                   that.currentNodes.splice(0, that.currentNodes.length);
                   that.currentConnections.splice(0, that.currentConnections.length);
                   that.currentConnections.push(conn);
                   that.refresh();
-                });
-                path.on('dblclick', function() {
-                  that.editConnection(conn);
                 });
               }
               for (const line of result.lines) {
@@ -270,6 +283,8 @@
 
             // render selection rectangle
             if (that.selectionInfo) {
+              that.currentNodes.splice(0, that.currentNodes.length);
+              that.currentConnections.splice(0, that.currentConnections.length);
               let edge = getEdgeOfPoints([
                 {x: that.selectionInfo.x, y: that.selectionInfo.y},
                 {x: that.cursorToChartOffset.x, y: that.cursorToChartOffset.y},
@@ -283,6 +298,28 @@
                   attr('stroke', 'lightblue').
                   attr('fill-opacity', 0.8).
                   attr('fill', 'lightblue');
+
+              that.internalNodes.forEach(item => {
+                let points = [
+                  {x: item.x, y: item.y},
+                  {x: item.x, y: item.y + 60},
+                  {x: item.x + 120, y: item.y},
+                  {x: item.x + 120, y: item.y + 60},
+                ];
+                if (points.every(point => pointRectangleIntersection(point, edge))) {
+                  that.currentNodes.push(item);
+                }
+              });
+              that.lines.forEach(line => {
+                let points = [
+                  {x: line.sourceX, y: line.sourceY},
+                  {x: line.destinationX, y: line.destinationY},
+                ];
+                if (points.every(point => pointRectangleIntersection(point, edge))) {
+                  let connection = that.internalConnections.filter(conn => conn.id === line.id)[0];
+                  that.currentConnections.push(connection);
+                }
+              });
             }
 
             resolve();
