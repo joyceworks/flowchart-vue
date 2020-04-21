@@ -12,4 +12,20 @@ function approximatelyEquals(n, m) {
   return Math.abs(m - n) <= 3;
 }
 
-export {distanceOfPointToLine, between, approximatelyEquals};
+function getEdgeOfPoints(points) {
+  let minX = points.reduce((prev, currentNode) => {
+    return currentNode.x < prev ? currentNode.x : prev;
+  }, Infinity);
+  let maxX = points.reduce((prev, currentNode) => {
+    return currentNode.x > prev ? currentNode.x : prev;
+  }, 0);
+  let minY = points.reduce((prev, currentNode) => {
+    return currentNode.y < prev ? currentNode.y : prev;
+  }, Infinity);
+  let maxY = points.reduce((prev, currentNode) => {
+    return currentNode.y > prev ? currentNode.y : prev;
+  }, 0);
+  return {start: {x: minX, y: minY}, end: {x: maxX, y: maxY}};
+}
+
+export {distanceOfPointToLine, between, approximatelyEquals, getEdgeOfPoints};

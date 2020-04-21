@@ -1,12 +1,12 @@
 <template>
     <div id="chart" tabindex="0"
          :style="{width: isNaN(width) ? width : (width + 'px'), height: isNaN(height) ? height : (height + 'px'), cursor: cursor}"
-         @mousemove="handleChartMouseMove"
-         @mouseup="handleChartMouseUp"
-         @dblclick="handleChartDblClick($event)"
-         @mousewheel="handleChartMouseWheel"
-    >
-        <span id="position">{{ cursorToChartOffset.x + ', ' + cursorToChartOffset.y }}</span>
+         @mousemove="handleChartMouseMove" @mouseup="handleChartMouseUp"
+         @dblclick="handleChartDblClick($event)" @mousewheel="handleChartMouseWheel"
+         @mousedown="handleChartMouseDown($event)">
+        <span id="position" class="unselectable">
+            {{ cursorToChartOffset.x + ', ' + cursorToChartOffset.y }}
+        </span>
         <svg id="svg"></svg>
     </div>
 </template>
@@ -14,7 +14,7 @@
 <script>
   import {lineTo, line2} from '../../utils/svg';
   import * as d3 from 'd3';
-  import {between, distanceOfPointToLine} from '../../utils/math';
+  import {between, distanceOfPointToLine, getEdgeOfPoints} from '../../utils/math';
   import Vue from 'vue';
   import VueI18n from 'vue-i18n';
 
@@ -70,11 +70,11 @@
       return {
         internalNodes: [],
         internalConnections: [],
-        movingInfo: {target: null},
         connectingInfo: {
           source: null,
           sourcePosition: null,
         },
+        selectionInfo: null,
         currentNodes: [],
         currentConnections: [],
         /**
@@ -154,13 +154,19 @@
           this.connectingInfo.source = null;
           this.connectingInfo.sourcePosition = null;
         }
+        if (this.selectionInfo) {
+          this.selectionInfo = null;
+          await this.refresh();
+        }
       },
       async handleChartMouseMove(event) {
+        // calc offset of cursor to chart
         let boundingClientRect = event.currentTarget.getBoundingClientRect();
         let actualX = event.pageX - boundingClientRect.left - window.scrollX;
         this.cursorToChartOffset.x = Math.trunc(actualX);
         let actualY = event.pageY - boundingClientRect.top - window.scrollY;
         this.cursorToChartOffset.y = Math.trunc(actualY);
+
         if (this.connectingInfo.source) {
           await this.refresh();
           let sourceOffset = this.getNodeConnectorOffset(
@@ -171,7 +177,7 @@
           this.arrowTo(sourceOffset.x, sourceOffset.y, this.cursorToChartOffset.x,
               this.cursorToChartOffset.y, this.connectingInfo.sourcePosition, destinationPosition,
           );
-        } else {
+        } else if (this.selectionInfo) {
           await this.refresh();
         }
       },
@@ -181,6 +187,9 @@
         }
         this.add(event.offsetX, event.offsetY);
         this.refresh();
+      },
+      handleChartMouseDown(event) {
+        this.selectionInfo = {x: event.offsetX, y: event.offsetY};
       },
       getConnectorPosition(node) {
         let top = {x: node.x + 60, y: node.y};
@@ -195,13 +204,28 @@
           that.$nextTick(function() {
             d3.selectAll('svg > *').remove();
 
-            let connectorVisible = that.connectingInfo.source || that.hoveredNode;
+            // render selection rectangle
+            if (that.selectionInfo) {
+              let edge = getEdgeOfPoints([
+                {x: that.selectionInfo.x, y: that.selectionInfo.y},
+                {x: that.cursorToChartOffset.x, y: that.cursorToChartOffset.y},
+              ]);
+              let svg = d3.select('#svg');
+              svg.append('rect').
+                  attr('x', edge.start.x).
+                  attr('y', edge.start.y).
+                  attr('width', edge.end.x - edge.start.x).
+                  attr('height', edge.end.y - edge.start.y).
+                  attr('stroke', 'black').
+                  attr('fill', 'transparent');
+            }
+
             // render nodes
             that.internalNodes.forEach(node => {
               if (that.currentNodes.filter(item => item === node).length > 0) {
-                that.renderNode(node, '#666666', connectorVisible);
+                that.renderNode(node, '#666666');
               } else {
-                that.renderNode(node, '#bbbbbb', connectorVisible);
+                that.renderNode(node, '#bbbbbb');
               }
             });
 
@@ -271,7 +295,7 @@
         line2('svg', x1, y1, x2, y2, startPosition, endPosition, 1, color || '#a3a3a3', true);
         return line2('svg', x1, y1, x2, y2, startPosition, endPosition, 5, 'transparent', false);
       },
-      renderNode(node, borderColor, connectorVisible) {
+      renderNode(node, borderColor) {
         let that = this;
         let svg = d3.select('#svg');
 
@@ -427,66 +451,65 @@
           }
         });
 
-        if (connectorVisible) {
-          let connectorPosition = this.getConnectorPosition(node);
-          for (let position in connectorPosition) {
-            let positionElement = connectorPosition[position];
-            let connector = svg.append('circle').
-                attr('cx', positionElement.x).
-                attr('cy', positionElement.y).
-                attr('r', 4).
-                attr('class', 'connector');
-            connector.on('mousedown', function() {
-              d3.event.stopPropagation();
-              if (node.type === 'end' || that.readonly) {
-                return;
+        let connectors = [];
+        let connectorPosition = this.getConnectorPosition(node);
+        for (let position in connectorPosition) {
+          let positionElement = connectorPosition[position];
+          let connector = svg.append('circle').
+              attr('cx', positionElement.x).
+              attr('cy', positionElement.y).
+              attr('r', 4).
+              attr('class', 'connector');
+          connector.on('mousedown', function() {
+            d3.event.stopPropagation();
+            if (node.type === 'end' || that.readonly) {
+              return;
+            }
+            that.connectingInfo.source = node;
+            that.connectingInfo.sourcePosition = position;
+          }).on('mouseup', function() {
+            d3.event.stopPropagation();
+            if (that.connectingInfo.source) {
+              if (that.connectingInfo.source.id !== node.id) {
+                // Node can't connect to itself
+                let tempId = +new Date();
+                let conn = {
+                  source: {
+                    id: that.connectingInfo.source.id,
+                    position: that.connectingInfo.sourcePosition,
+                  },
+                  destination: {
+                    id: node.id,
+                    position: position,
+                  },
+                  id: tempId,
+                  type: 'pass',
+                  name: i18n.t('message.pass'),
+                };
+                that.internalConnections.push(conn);
+                that.refresh();
               }
-              that.connectingInfo.source = node;
-              that.connectingInfo.sourcePosition = position;
-            }).on('mouseup', function() {
-              d3.event.stopPropagation();
-              if (that.connectingInfo.source) {
-                if (that.connectingInfo.source.id !== node.id) {
-                  // Node can't connect to itself
-                  let tempId = +new Date();
-                  let conn = {
-                    source: {
-                      id: that.connectingInfo.source.id,
-                      position: that.connectingInfo.sourcePosition,
-                    },
-                    destination: {
-                      id: node.id,
-                      position: position,
-                    },
-                    id: tempId,
-                    type: 'pass',
-                    name: i18n.t('message.pass'),
-                  };
-                  that.internalConnections.push(conn);
-                  that.refresh();
-                }
-                that.connectingInfo.source = null;
-                that.connectingInfo.sourcePosition = null;
-              }
-            });
-          }
+              that.connectingInfo.source = null;
+              that.connectingInfo.sourcePosition = null;
+            }
+          }).on('mouseover', function() {
+            connector.classed('active', true);
+          }).on('mouseout', function() {
+            connector.classed('active', false);
+          });
+          connectors.push(connector);
         }
+        container.on('mouseover', function() {
+          connectors.forEach(conn => conn.classed('active', true));
+        }).on('mouseout', function() {
+          connectors.forEach(conn => conn.classed('active', false));
+        });
       },
       getCurrentNodesEdge() {
-        let that = this;
-        let minX = that.currentNodes.reduce((prev, currentNode) => {
-          return currentNode.x < prev ? currentNode.x : prev;
-        }, Infinity);
-        let maxX = that.currentNodes.reduce((prev, currentNode) => {
-          return currentNode.x > prev ? currentNode.x : prev;
-        }, 0);
-        let minY = that.currentNodes.reduce((prev, currentNode) => {
-          return currentNode.y < prev ? currentNode.y : prev;
-        }, Infinity);
-        let maxY = that.currentNodes.reduce((prev, currentNode) => {
-          return currentNode.y > prev ? currentNode.y : prev;
-        }, 0);
-        return {start: {x: minX, y: minY}, end: {x: maxX + 120, y: maxY + 60}};
+        let edgeOfPoints = getEdgeOfPoints(this.currentNodes);
+        edgeOfPoints.x += 120;
+        edgeOfPoints.y += 60;
+        return edgeOfPoints;
       },
       save() {
         if (this.readonly) {
@@ -592,7 +615,6 @@
                 item.y <= this.cursorToChartOffset.y &&
                 (item.y + 60) >= this.cursorToChartOffset.y);
         return nodes.length <= 0 ? null : nodes[0];
-
       },
       hoveredConnector() {
         for (const node of this.internalNodes) {

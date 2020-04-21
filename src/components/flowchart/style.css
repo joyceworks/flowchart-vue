@@ -36,6 +36,11 @@
     fill: white;
     stroke: #bbbbbb;
     stroke-width: 1px;
+    display: none;
+}
+
+.connector.active {
+    display: block;
 }
 
 .connector:hover {
