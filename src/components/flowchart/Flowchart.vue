@@ -207,22 +207,6 @@
           that.$nextTick(function() {
             d3.selectAll('svg > *').remove();
 
-            // render selection rectangle
-            if (that.selectionInfo) {
-              let edge = getEdgeOfPoints([
-                {x: that.selectionInfo.x, y: that.selectionInfo.y},
-                {x: that.cursorToChartOffset.x, y: that.cursorToChartOffset.y},
-              ]);
-              let svg = d3.select('#svg');
-              svg.append('rect').
-                  attr('x', edge.start.x).
-                  attr('y', edge.start.y).
-                  attr('width', edge.end.x - edge.start.x).
-                  attr('height', edge.end.y - edge.start.y).
-                  attr('stroke', 'black').
-                  attr('fill', 'transparent');
-            }
-
             // render nodes
             that.internalNodes.forEach(node => {
               if (that.currentNodes.filter(item => item === node).length > 0) {
@@ -283,6 +267,24 @@
                 });
               }
             });
+
+            // render selection rectangle
+            if (that.selectionInfo) {
+              let edge = getEdgeOfPoints([
+                {x: that.selectionInfo.x, y: that.selectionInfo.y},
+                {x: that.cursorToChartOffset.x, y: that.cursorToChartOffset.y},
+              ]);
+              let svg = d3.select('#svg');
+              svg.append('rect').
+                  attr('x', edge.start.x).
+                  attr('y', edge.start.y).
+                  attr('width', edge.end.x - edge.start.x).
+                  attr('height', edge.end.y - edge.start.y).
+                  attr('stroke', 'lightblue').
+                  attr('fill-opacity', 0.8).
+                  attr('fill', 'lightblue');
+            }
+
             resolve();
           });
         });
