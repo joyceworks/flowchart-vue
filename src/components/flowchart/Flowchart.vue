@@ -211,9 +211,8 @@
         let that = this;
         return new Promise(function(resolve) {
           that.$nextTick(function() {
-            d3.selectAll('#svg > *').remove();
+            d3.selectAll('#svg > g').remove();
             // d3.selectAll('svg > path').remove();
-            // d3.selectAll('svg > .selection').remove();
 
             // render nodes
             that.internalNodes.forEach(node => {
@@ -292,8 +291,14 @@
                 {x: that.cursorToChartOffset.x, y: that.cursorToChartOffset.y},
               ]);
               let svg = d3.select('#svg');
-              svg.append('rect').
-                  attr('x', edge.start.x).
+              let selections = svg.select('.selection');
+              let rect;
+              if (selections.size() > 0) {
+                rect = selections;
+              } else {
+                rect = svg.append('rect');
+              }
+              rect.attr('x', edge.start.x).
                   attr('y', edge.start.y).
                   attr('width', edge.end.x - edge.start.x).
                   attr('height', edge.end.y - edge.start.y).
@@ -321,6 +326,8 @@
                   that.currentConnections.push(connection);
                 }
               });
+            } else {
+              d3.selectAll('#svg > .selection').remove();
             }
             resolve();
           });
