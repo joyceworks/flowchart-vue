@@ -176,7 +176,7 @@
         if (this.connectingInfo.source) {
           await this.refresh();
 
-          d3.selectAll('#svg > .connector').classed('active', true);
+          d3.selectAll('#svg .connector').classed('active', true);
 
           let sourceOffset = this.getNodeConnectorOffset(
               this.connectingInfo.source.id,
@@ -211,7 +211,9 @@
         let that = this;
         return new Promise(function(resolve) {
           that.$nextTick(function() {
-            d3.selectAll('svg > *').remove();
+            d3.selectAll('#svg > *').remove();
+            // d3.selectAll('svg > path').remove();
+            // d3.selectAll('svg > .selection').remove();
 
             // render nodes
             that.internalNodes.forEach(node => {
@@ -295,9 +297,7 @@
                   attr('y', edge.start.y).
                   attr('width', edge.end.x - edge.start.x).
                   attr('height', edge.end.y - edge.start.y).
-                  attr('stroke', 'lightblue').
-                  attr('fill-opacity', 0.8).
-                  attr('fill', 'lightblue');
+                  attr('class', 'selection');
 
               that.internalNodes.forEach(item => {
                 let points = [
@@ -315,7 +315,8 @@
                   {x: line.sourceX, y: line.sourceY},
                   {x: line.destinationX, y: line.destinationY},
                 ];
-                if (points.every(point => pointRectangleIntersection(point, edge)) && that.currentConnections.every(item => item.id !== line.id)) {
+                if (points.every(point => pointRectangleIntersection(point, edge)) &&
+                    that.currentConnections.every(item => item.id !== line.id)) {
                   let connection = that.internalConnections.filter(conn => conn.id === line.id)[0];
                   that.currentConnections.push(connection);
                 }
@@ -330,24 +331,30 @@
         return this.getConnectorPosition(node)[connectorPosition];
       },
       lineTo(x1, y1, x2, y2, dash) {
-        lineTo('svg', x1, y1, x2, y2, 1, '#a3a3a3', dash);
+        let svg = d3.select('#svg');
+        let g = svg.append('g');
+        lineTo(g, x1, y1, x2, y2, 1, '#a3a3a3', dash);
       },
       arrowTo(x1, y1, x2, y2, startPosition, endPosition, color) {
-        line2('svg', x1, y1, x2, y2, startPosition, endPosition, 1, color || '#a3a3a3', true);
-        return line2('svg', x1, y1, x2, y2, startPosition, endPosition, 5, 'transparent', false);
+        let svg = d3.select('#svg');
+        let g = svg.append('g');
+        line2(g, x1, y1, x2, y2, startPosition, endPosition, 1, color || '#a3a3a3', true);
+        // a 5px cover to make mouse operation conveniently
+        return line2(g, x1, y1, x2, y2, startPosition, endPosition, 5, 'transparent', false);
       },
       renderNode(node, borderColor) {
         let that = this;
         let svg = d3.select('#svg');
+        let g = svg.append('g').attr('cursor', 'move');
 
         if (node.type !== 'start' && node.type !== 'end') {
           // title
-          svg.append('rect').
+          g.append('rect').
               attr('x', node.x).
               attr('y', node.y).
               attr('stroke', borderColor).
               attr('class', 'title');
-          svg.append('text').
+          g.append('text').
               attr('x', node.x + 4).
               attr('y', node.y + 15).
               attr('class', 'unselectable').
@@ -365,7 +372,7 @@
         }
 
         // body
-        let body = svg.append('rect').attr('class', 'body');
+        let body = g.append('rect').attr('class', 'body');
         if (node.type !== 'start' && node.type !== 'end') {
           body.attr('x', node.x).attr('y', node.y + 20);
         } else {
@@ -392,7 +399,7 @@
         } else {
           bodyTextY = node.y + 35;
         }
-        svg.append('text').
+        g.append('text').
             attr('x', node.x + 60).
             attr('y', bodyTextY).
             attr('class', 'unselectable').
@@ -471,15 +478,8 @@
               }
               that.refresh();
             });
-        let container = svg.append('rect').
-            attr('class', 'container').
-            attr('x', node.x).
-            attr('y', node.y);
-        if (node.type === 'start' || node.type === 'end') {
-          container.attr('rx', 30).classed(node.type, true);
-        }
-        container.attr('stroke', borderColor).call(drag);
-        container.on('mousedown', function() {
+        g.call(drag);
+        g.on('mousedown', function() {
           // handle ctrl+mousedown
           if (!d3.event.ctrlKey) {
             return;
@@ -496,7 +496,7 @@
         let connectorPosition = this.getConnectorPosition(node);
         for (let position in connectorPosition) {
           let positionElement = connectorPosition[position];
-          let connector = svg.append('circle').
+          let connector = g.append('circle').
               attr('cx', positionElement.x).
               attr('cy', positionElement.y).
               attr('r', 4).
@@ -540,7 +540,7 @@
           });
           connectors.push(connector);
         }
-        container.on('mouseover', function() {
+        g.on('mouseover', function() {
           connectors.forEach(conn => conn.classed('active', true));
         }).on('mouseout', function() {
           connectors.forEach(conn => conn.classed('active', false));
@@ -650,14 +650,6 @@
       i18n.locale = this.locale;
     },
     computed: {
-      hoveredNode() {
-        let nodes = this.internalNodes.filter(
-            item => item.x <= this.cursorToChartOffset.x &&
-                (item.x + 120) >= this.cursorToChartOffset.x &&
-                item.y <= this.cursorToChartOffset.y &&
-                (item.y + 60) >= this.cursorToChartOffset.y);
-        return nodes.length <= 0 ? null : nodes[0];
-      },
       hoveredConnector() {
         for (const node of this.internalNodes) {
           let connectorPosition = this.getConnectorPosition(node);

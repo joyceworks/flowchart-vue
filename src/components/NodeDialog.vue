@@ -74,7 +74,9 @@
           this.nodeForm.id = val.id;
           this.nodeForm.name = val.name;
           this.nodeForm.type = val.type;
-          this.nodeForm.approver = val.approvers[0];
+          if (val.approvers && val.approvers.length > 0) {
+            this.nodeForm.approver = val.approvers[0];
+          }
         },
       },
     },

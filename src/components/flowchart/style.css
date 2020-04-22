@@ -33,14 +33,14 @@
 
 .connector {
     cursor: crosshair;
-    fill: white;
-    stroke: #bbbbbb;
-    stroke-width: 1px;
-    display: none;
+    opacity: 0;
 }
 
 .connector.active {
-    display: block;
+    opacity: 1;
+    fill: white;
+    stroke: #bbbbbb;
+    stroke-width: 1px;
 }
 
 .connector:hover {
@@ -66,9 +66,10 @@
 }
 
 #svg .container {
-    stroke-width: 1px;
-    cursor: move;
-    fill: transparent;
-    width: 120px;
-    height: 60px;
+}
+
+#svg .selection {
+    stroke: lightblue;
+    fill: lightblue;
+    fill-opacity: 0.8;
 }
