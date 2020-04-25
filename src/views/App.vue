@@ -107,6 +107,11 @@
     },
     methods: {
       async handleChartSave(nodes, connections) {
+        // axios.post(url, {nodes, connection}).then(resp => {
+        //   this.nodes = resp.nodes;
+        //   this.connections = resp.connections;
+        //   // Flowchart will refresh after this.nodes and this.connections changed
+        // });
       },
       handleEditNode(node) {
         this.nodeForm.target = node;

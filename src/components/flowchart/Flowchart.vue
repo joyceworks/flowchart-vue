@@ -596,7 +596,6 @@
       },
       removeConnection(conn) {
         let index = this.internalConnections.indexOf(conn);
-        console.log(index);
         this.internalConnections.splice(index, 1);
       },
       moveCurrentNode(x, y) {
@@ -607,17 +606,21 @@
           }
         }
       },
+      init() {
+        let that = this;
+        that.internalNodes.splice(0, that.internalNodes.length);
+        that.internalConnections.splice(0, that.internalConnections.length);
+        that.nodes.forEach(node => {
+          that.internalNodes.push(JSON.parse(JSON.stringify(node)));
+        });
+        that.connections.forEach(connection => {
+          that.internalConnections.push(JSON.parse(JSON.stringify(connection)));
+        });
+      },
     },
     mounted() {
       let that = this;
-      that.internalNodes.splice(0, that.internalNodes.length);
-      that.internalConnections.splice(0, that.internalConnections.length);
-      that.nodes.forEach(node => {
-        that.internalNodes.push(JSON.parse(JSON.stringify(node)));
-      });
-      that.connections.forEach(connection => {
-        that.internalConnections.push(JSON.parse(JSON.stringify(connection)));
-      });
+      that.init();
       document.onkeydown = function(event) {
         switch (event.keyCode) {
           case 37:
@@ -754,6 +757,20 @@
           this.renderConnections();
         },
       },
+      nodes: {
+        immediate: true,
+        deep: true,
+        handler() {
+          this.init();
+        }
+      },
+      connections: {
+        immediate: true,
+        deep: true,
+        handler() {
+          this.init();
+        }
+      }
     },
     i18n: i18n,
   };

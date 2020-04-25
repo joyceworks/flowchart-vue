@@ -54,6 +54,11 @@ yarn add flowchart-vue
     },
     methods: {
       handleChartSave(nodes, connections) {
+        // axios.post(url, {nodes, connection}).then(resp => {
+        //   this.nodes = resp.nodes;
+        //   this.connections = resp.connections;
+        //   // Flowchart will refresh after this.nodes and this.connections changed
+        // });
       },
       handleEditNode(node) {
       },
@@ -63,6 +68,8 @@ yarn add flowchart-vue
   };
 </script>
 ```
+
+See more at [src/views/App.vue](https://github.com/joyceworks/flowchart-vue/blob/master/src/views/App.vue).
 
 ## Demo
 
