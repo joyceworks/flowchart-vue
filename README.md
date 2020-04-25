@@ -54,9 +54,9 @@ yarn add flowchart-vue
     },
     methods: {
       handleChartSave(nodes, connections) {
-        // axios.post(url, {nodes, connection}).then(resp => {
-        //   this.nodes = resp.nodes;
-        //   this.connections = resp.connections;
+        // axios.post(url, {nodes, connections}).then(resp => {
+        //   this.nodes = resp.data.nodes;
+        //   this.connections = resp.data.connections;
         //   // Flowchart will refresh after this.nodes and this.connections changed
         // });
       },
