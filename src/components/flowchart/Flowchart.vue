@@ -321,20 +321,18 @@
       renderNodes() {
         let that = this;
         return new Promise(function(resolve) {
-          that.$nextTick(async function() {
-            d3.selectAll('#svg > g.node, #svg > g.guideline').remove();
+          d3.selectAll('#svg > g.node').remove();
 
-            // render nodes
-            that.internalNodes.forEach(node => {
-              if (that.currentNodes.filter(item => item === node).length > 0) {
-                that.renderNode(node, '#666666');
-              } else {
-                that.renderNode(node, '#bbbbbb');
-              }
-            });
-
-            resolve();
+          // render nodes
+          that.internalNodes.forEach(node => {
+            if (that.currentNodes.filter(item => item === node).length > 0) {
+              that.renderNode(node, '#666666');
+            } else {
+              that.renderNode(node, '#bbbbbb');
+            }
           });
+
+          resolve();
         });
       },
       getNodeConnectorOffset(nodeId, connectorPosition) {
@@ -459,6 +457,7 @@
                 currentNode.y += (d3.event.dy / zoom);
               }
 
+              d3.selectAll('#svg > g.guideline').remove();
               let edge = that.getCurrentNodesEdge();
               let expectX = Math.round(Math.round(edge.start.x) / 10) * 10;
               let expectY = Math.round(Math.round(edge.start.y) / 10) * 10;
@@ -558,8 +557,8 @@
       },
       getCurrentNodesEdge() {
         let edgeOfPoints = getEdgeOfPoints(this.currentNodes);
-        edgeOfPoints.x += 120;
-        edgeOfPoints.y += 60;
+        edgeOfPoints.end.x += 120;
+        edgeOfPoints.end.y += 60;
         return edgeOfPoints;
       },
       save() {
