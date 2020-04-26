@@ -72,4 +72,9 @@
     stroke: lightblue;
     fill: lightblue;
     fill-opacity: 0.8;
+    display: none;
+}
+
+#svg .selection.active {
+    display: block;
 }

@@ -7,7 +7,9 @@
         <span id="position" class="unselectable">
             {{ cursorToChartOffset.x + ', ' + cursorToChartOffset.y }}
         </span>
-        <svg id="svg"></svg>
+        <svg id="svg">
+            <rect class="selection" height="0" width="0"></rect>
+        </svg>
     </div>
 </template>
 <style src="./style.css"></style>
@@ -216,18 +218,11 @@
             {x: that.cursorToChartOffset.x, y: that.cursorToChartOffset.y},
           ]);
           let svg = d3.select('#svg');
-          let selections = svg.select('.selection');
-          let rect;
-          if (selections.size() > 0) {
-            rect = selections;
-          } else {
-            rect = svg.append('rect');
-          }
+          let rect = svg.select('.selection').classed('active', true);
           rect.attr('x', edge.start.x).
               attr('y', edge.start.y).
               attr('width', edge.end.x - edge.start.x).
-              attr('height', edge.end.y - edge.start.y).
-              attr('class', 'selection');
+              attr('height', edge.end.y - edge.start.y);
 
           that.internalNodes.forEach(item => {
             let points = [
@@ -252,7 +247,7 @@
             }
           });
         } else {
-          d3.selectAll('#svg > .selection').remove();
+          d3.selectAll('#svg > .selection').classed('active', false);
         }
       },
       renderConnections() {
@@ -342,15 +337,17 @@
         let node = this.internalNodes.filter(item => item.id === nodeId)[0];
         return this.getConnectorPosition(node)[connectorPosition];
       },
-      guideLineTo(x1, y1, x2, y2, dash) {
+      append(element) {
         let svg = d3.select('#svg');
-        let g = svg.append('g');
+        return svg.insert(element, '.selection');
+      },
+      guideLineTo(x1, y1, x2, y2, dash) {
+        let g = this.append('g');
         g.classed('guideline', true);
         lineTo(g, x1, y1, x2, y2, 1, '#a3a3a3', dash);
       },
       arrowTo(x1, y1, x2, y2, startPosition, endPosition, color) {
-        let svg = d3.select('#svg');
-        let g = svg.append('g');
+        let g = this.append('g');
         g.classed('connection', true);
         line2(g, x1, y1, x2, y2, startPosition, endPosition, 1, color || '#a3a3a3', true);
         // a 5px cover to make mouse operation conveniently
@@ -358,8 +355,7 @@
       },
       renderNode(node, borderColor) {
         let that = this;
-        let svg = d3.select('#svg');
-        let g = svg.append('g').attr('cursor', 'move').classed('node', true);
+        let g = that.append('g').attr('cursor', 'move').classed('node', true);
 
         if (node.type !== 'start' && node.type !== 'end') {
           // title
@@ -765,15 +761,15 @@
         deep: true,
         handler() {
           this.init();
-        }
+        },
       },
       connections: {
         immediate: true,
         deep: true,
         handler() {
           this.init();
-        }
-      }
+        },
+      },
     },
     i18n: i18n,
   };
