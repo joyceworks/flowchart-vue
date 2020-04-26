@@ -193,6 +193,9 @@
         this.add(event.offsetX, event.offsetY);
       },
       handleChartMouseDown(event) {
+        if (event.ctrlKey) {
+          return;
+        }
         this.selectionInfo = {x: event.offsetX, y: event.offsetY};
       },
       getConnectorPosition(node) {
