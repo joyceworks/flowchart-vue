@@ -436,6 +436,7 @@
               }
 
               if (that.clickedOnce) {
+                that.currentNodes.splice(0, that.currentNodes.length);
                 that.editNode(node);
               } else {
                 let timer = setTimeout(function() {
