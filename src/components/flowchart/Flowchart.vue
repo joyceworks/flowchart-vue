@@ -12,7 +12,7 @@
         </svg>
     </div>
 </template>
-<style src="./style.css"></style>
+<style src="./index.css"></style>
 <script>
   import {line2, lineTo} from '../../utils/svg';
   import * as d3 from 'd3';
@@ -20,7 +20,7 @@
     between,
     distanceOfPointToLine,
     getEdgeOfPoints,
-    pointRectangleIntersection,
+    pointRectangleIntersection, roundTo20,
   } from '../../utils/math';
   import Vue from 'vue';
   import VueI18n from 'vue-i18n';
@@ -389,8 +389,10 @@
         body.style('width', node.width + 'px');
         if (node.type !== 'start' && node.type !== 'end') {
           body.attr('x', node.x).attr('y', node.y + 20);
+          body.style('height', roundTo20(node.height - 20) + 'px');
         } else {
           body.attr('x', node.x).attr('y', node.y).classed(node.type, true).attr('rx', 30);
+          body.style('height', roundTo20(node.height) + 'px');
         }
         body.attr('stroke', borderColor);
 
@@ -409,9 +411,9 @@
             );
         let bodyTextY;
         if (node.type !== 'start' && node.type !== 'end') {
-          bodyTextY = node.y + 45;
+          bodyTextY = node.y + 25 + roundTo20(node.height - 20) / 2;
         } else {
-          bodyTextY = node.y + 35;
+          bodyTextY = node.y + 5 + roundTo20(node.height) / 2;
         }
         g.append('text').
             attr('x', node.x + node.width / 2).

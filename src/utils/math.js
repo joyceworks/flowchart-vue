@@ -32,10 +32,15 @@ function pointRectangleIntersection(p, r) {
   return p.x > r.start.x && p.x < r.end.x && p.y > r.start.y && p.y < r.end.y;
 }
 
+function roundTo20(number) {
+  return number < 20 ? 20 : number;
+}
+
 export {
   distanceOfPointToLine,
   between,
   approximatelyEquals,
   getEdgeOfPoints,
   pointRectangleIntersection,
+  roundTo20,
 };
