@@ -48,14 +48,12 @@
 }
 
 #svg .title {
-    width: 120px;
     height: 20px;
     stroke-width: 1px;
     fill: #f1f3f4;
 }
 
 #svg .body {
-    width: 120px;
     height: 40px;
     stroke-width: 1px;
     fill: white;

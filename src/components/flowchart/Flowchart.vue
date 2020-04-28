@@ -14,7 +14,7 @@
 </template>
 <style src="./style.css"></style>
 <script>
-  import {lineTo, line2} from '../../utils/svg';
+  import {line2, lineTo} from '../../utils/svg';
   import * as d3 from 'd3';
   import {
     between,
@@ -201,10 +201,12 @@
         this.selectionInfo = {x: event.offsetX, y: event.offsetY};
       },
       getConnectorPosition(node) {
-        let top = {x: node.x + 60, y: node.y};
-        let left = {x: node.x, y: node.y + 30};
-        let bottom = {x: node.x + 60, y: node.y + 60};
-        let right = {x: node.x + 120, y: node.y + 30};
+        const halfWidth = node.width / 2;
+        const halfHeight = node.height / 2;
+        let top = {x: node.x + halfWidth, y: node.y};
+        let left = {x: node.x, y: node.y + halfHeight};
+        let bottom = {x: node.x + halfWidth, y: node.y + node.height};
+        let right = {x: node.x + node.width, y: node.y + halfHeight};
         return {left, right, top, bottom};
       },
       renderSelection() {
@@ -227,9 +229,9 @@
           that.internalNodes.forEach(item => {
             let points = [
               {x: item.x, y: item.y},
-              {x: item.x, y: item.y + 60},
-              {x: item.x + 120, y: item.y},
-              {x: item.x + 120, y: item.y + 60},
+              {x: item.x, y: item.y + item.height},
+              {x: item.x + item.width, y: item.y},
+              {x: item.x + item.width, y: item.y + item.height},
             ];
             if (points.every(point => pointRectangleIntersection(point, edge))) {
               that.currentNodes.push(item);
@@ -341,10 +343,10 @@
         let svg = d3.select('#svg');
         return svg.insert(element, '.selection');
       },
-      guideLineTo(x1, y1, x2, y2, dash) {
+      guideLineTo(x1, y1, x2, y2) {
         let g = this.append('g');
         g.classed('guideline', true);
-        lineTo(g, x1, y1, x2, y2, 1, '#a3a3a3', dash);
+        lineTo(g, x1, y1, x2, y2, 1, '#a3a3a3', [5, 3]);
       },
       arrowTo(x1, y1, x2, y2, startPosition, endPosition, color) {
         let g = this.append('g');
@@ -363,7 +365,8 @@
               attr('x', node.x).
               attr('y', node.y).
               attr('stroke', borderColor).
-              attr('class', 'title');
+              attr('class', 'title').
+              style('width', node.width);
           g.append('text').
               attr('x', node.x + 4).
               attr('y', node.y + 15).
@@ -373,7 +376,7 @@
                 let self = d3.select(this),
                     textLength = self.node().getComputedTextLength(),
                     text = self.text();
-                while (textLength > (120 - 2 * 4) && text.length > 0) {
+                while (textLength > (node.width - 2 * 4) && text.length > 0) {
                   text = text.slice(0, -1);
                   self.text(text + '...');
                   textLength = self.node().getComputedTextLength();
@@ -383,6 +386,7 @@
 
         // body
         let body = g.append('rect').attr('class', 'body');
+        body.style('width', node.width + 'px');
         if (node.type !== 'start' && node.type !== 'end') {
           body.attr('x', node.x).attr('y', node.y + 20);
         } else {
@@ -410,7 +414,7 @@
           bodyTextY = node.y + 35;
         }
         g.append('text').
-            attr('x', node.x + 60).
+            attr('x', node.x + node.width / 2).
             attr('y', bodyTextY).
             attr('class', 'unselectable').
             attr('text-anchor', 'middle').
@@ -418,7 +422,7 @@
           let self = d3.select(this),
               textLength = self.node().getComputedTextLength(),
               text = self.text();
-          while (textLength > (120 - 2 * 4) && text.length > 0) {
+          while (textLength > (node.width - 2 * 4) && text.length > 0) {
             text = text.slice(0, -1);
             self.text(text + '...');
             textLength = self.node().getComputedTextLength();
@@ -461,23 +465,22 @@
               let edge = that.getCurrentNodesEdge();
               let expectX = Math.round(Math.round(edge.start.x) / 10) * 10;
               let expectY = Math.round(Math.round(edge.start.y) / 10) * 10;
-              let guidelineDash = [5, 3];
               that.internalNodes.forEach(item => {
                 if (that.currentNodes.filter(currentNode => currentNode === item).length === 0) {
                   if (item.x === expectX) {
                     // vertical guideline
                     if (item.y < expectY) {
-                      that.guideLineTo(item.x, item.y + 60, expectX, expectY, guidelineDash);
+                      that.guideLineTo(item.x, item.y + item.height, expectX, expectY);
                     } else {
-                      that.guideLineTo(expectX, expectY + 60, item.x, item.y, guidelineDash);
+                      that.guideLineTo(expectX, expectY + item.height, item.x, item.y);
                     }
                   }
                   if (item.y === expectY) {
                     // horizontal guideline
                     if (item.x < expectX) {
-                      that.guideLineTo(item.x + 120, item.y, expectX, expectY, guidelineDash);
+                      that.guideLineTo(item.x + item.width, item.y, expectX, expectY);
                     } else {
-                      that.guideLineTo(expectX + 120, expectY, item.x, item.y, guidelineDash);
+                      that.guideLineTo(expectX + item.width, expectY, item.x, item.y);
                     }
                   }
                 }
@@ -557,10 +560,14 @@
         });
       },
       getCurrentNodesEdge() {
-        let edgeOfPoints = getEdgeOfPoints(this.currentNodes);
-        edgeOfPoints.end.x += 120;
-        edgeOfPoints.end.y += 60;
-        return edgeOfPoints;
+        let points = this.currentNodes.map(node => ({
+          x: node.x, y: node.y,
+        }));
+        points.push(...this.currentNodes.map(node => ({
+          x: node.x + node.width,
+          y: node.y + node.height,
+        })));
+        return getEdgeOfPoints(points);
       },
       save() {
         if (this.readonly) {
@@ -611,7 +618,10 @@
         that.internalNodes.splice(0, that.internalNodes.length);
         that.internalConnections.splice(0, that.internalConnections.length);
         that.nodes.forEach(node => {
-          that.internalNodes.push(JSON.parse(JSON.stringify(node)));
+          let newNode = JSON.parse(JSON.stringify(node));
+          newNode.width = newNode.width || 120;
+          newNode.height = newNode.height || 60;
+          that.internalNodes.push(newNode);
         });
         that.connections.forEach(connection => {
           that.internalConnections.push(JSON.parse(JSON.stringify(connection)));

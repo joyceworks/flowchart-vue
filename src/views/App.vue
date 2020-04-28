@@ -38,9 +38,10 @@
             id: 3,
             x: 340,
             y: 130,
-            name: 'Operation',
+            name: 'Custom width',
             type: 'operation',
             approvers: [{id: 1, name: 'Joyce'}],
+            width: 100,
           },
           {
             id: 4,

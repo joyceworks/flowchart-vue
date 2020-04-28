@@ -1,6 +1,6 @@
 {
   "name": "flowchart-vue",
-  "version": "0.13.12",
+  "version": "0.14.1",
   "license": "MIT",
   "main": "dist/FlowChart.umd.min.js",
   "repository": {

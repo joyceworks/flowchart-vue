@@ -616,8 +616,9 @@ function line2(g, x1, y1, x2, y2, startPosition, endPosition, lineWidth,
 
 function arrowTo(g, x1, y1, x2, y2, lineWidth, strokeStyle) {
   let path = lineTo(g, x1, y1, x2, y2, lineWidth, strokeStyle);
+  const id = 'arrow' + strokeStyle.replace('#', '');
   g.append('marker').
-      attr('id', 'arrow').
+      attr('id', id).
       attr('markerUnits', 'strokeWidth').
       attr('viewBox', '0 0 12 12').
       attr('refX', 9).
@@ -628,7 +629,7 @@ function arrowTo(g, x1, y1, x2, y2, lineWidth, strokeStyle) {
       append('path').
       attr('d', 'M2,2 L10,6 L2,10 L6,6 L2,2').
       attr('fill', strokeStyle);
-  path.attr('marker-end', 'url(#arrow)');
+  path.attr('marker-end', 'url(#' + id + ')');
   return path;
 }
 
