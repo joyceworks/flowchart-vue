@@ -358,78 +358,82 @@
       renderNode(node, borderColor) {
         let that = this;
         let g = that.append('g').attr('cursor', 'move').classed('node', true);
+        g.attr('stroke', borderColor);
 
-        if (node.type !== 'start' && node.type !== 'end') {
-          // title
-          g.append('rect').
-              attr('x', node.x).
-              attr('y', node.y).
-              attr('stroke', borderColor).
-              attr('class', 'title').
-              style('width', node.width);
-          g.append('text').
-              attr('x', node.x + 4).
-              attr('y', node.y + 15).
-              attr('class', 'unselectable').
-              text(() => node.name).
-              each(function wrap() {
-                let self = d3.select(this),
-                    textLength = self.node().getComputedTextLength(),
-                    text = self.text();
-                while (textLength > (node.width - 2 * 4) && text.length > 0) {
-                  text = text.slice(0, -1);
-                  self.text(text + '...');
-                  textLength = self.node().getComputedTextLength();
-                }
-              });
-        }
-
-        // body
-        let body = g.append('rect').attr('class', 'body');
-        body.style('width', node.width + 'px');
-        if (node.type !== 'start' && node.type !== 'end') {
-          body.attr('x', node.x).attr('y', node.y + 20);
-          body.style('height', roundTo20(node.height - 20) + 'px');
-        } else {
-          body.attr('x', node.x).attr('y', node.y).classed(node.type, true).attr('rx', 30);
-          body.style('height', roundTo20(node.height) + 'px');
-        }
-        body.attr('stroke', borderColor);
-
-        // body text
-        let text = node.type === 'start'
-            ? i18n.t('message.start')
-            : (node.type === 'end' ? i18n.t('message.end') : (
-                    (!node.approvers || node.approvers.length === 0)
-                        ? i18n.t('message.noApprover')
-                        : (
-                            node.approvers.length > 1
-                                ? `${node.approvers[0].name + i18n.t('message.etc')}`
-                                : node.approvers[0].name
-                        )
-                )
-            );
-        let bodyTextY;
-        if (node.type !== 'start' && node.type !== 'end') {
-          bodyTextY = node.y + 25 + roundTo20(node.height - 20) / 2;
-        } else {
-          bodyTextY = node.y + 5 + roundTo20(node.height) / 2;
-        }
-        g.append('text').
-            attr('x', node.x + node.width / 2).
-            attr('y', bodyTextY).
-            attr('class', 'unselectable').
-            attr('text-anchor', 'middle').
-            text(function() {return text;}).each(function wrap() {
-          let self = d3.select(this),
-              textLength = self.node().getComputedTextLength(),
-              text = self.text();
-          while (textLength > (node.width - 2 * 4) && text.length > 0) {
-            text = text.slice(0, -1);
-            self.text(text + '...');
-            textLength = self.node().getComputedTextLength();
+        node.render = node.render || function(g, node) {
+          if (node.type !== 'start' && node.type !== 'end') {
+            // title
+            g.append('rect').
+                attr('x', node.x).
+                attr('y', node.y).
+                attr('stroke', borderColor).
+                attr('class', 'title').
+                style('width', node.width);
+            g.append('text').
+                attr('x', node.x + 4).
+                attr('y', node.y + 15).
+                attr('class', 'unselectable').
+                text(() => node.name).
+                each(function wrap() {
+                  let self = d3.select(this),
+                      textLength = self.node().getComputedTextLength(),
+                      text = self.text();
+                  while (textLength > (node.width - 2 * 4) && text.length > 0) {
+                    text = text.slice(0, -1);
+                    self.text(text + '...');
+                    textLength = self.node().getComputedTextLength();
+                  }
+                });
           }
-        });
+
+          // body
+          let body = g.append('rect').attr('class', 'body');
+          body.style('width', node.width + 'px');
+          if (node.type !== 'start' && node.type !== 'end') {
+            body.attr('x', node.x).attr('y', node.y + 20);
+            body.style('height', roundTo20(node.height - 20) + 'px');
+          } else {
+            body.attr('x', node.x).attr('y', node.y).classed(node.type, true).attr('rx', 30);
+            body.style('height', roundTo20(node.height) + 'px');
+          }
+          body.attr('stroke', borderColor);
+
+          // body text
+          let text = node.type === 'start'
+              ? i18n.t('message.start')
+              : (node.type === 'end' ? i18n.t('message.end') : (
+                      (!node.approvers || node.approvers.length === 0)
+                          ? i18n.t('message.noApprover')
+                          : (
+                              node.approvers.length > 1
+                                  ? `${node.approvers[0].name + i18n.t('message.etc')}`
+                                  : node.approvers[0].name
+                          )
+                  )
+              );
+          let bodyTextY;
+          if (node.type !== 'start' && node.type !== 'end') {
+            bodyTextY = node.y + 25 + roundTo20(node.height - 20) / 2;
+          } else {
+            bodyTextY = node.y + 5 + roundTo20(node.height) / 2;
+          }
+          g.append('text').
+              attr('x', node.x + node.width / 2).
+              attr('y', bodyTextY).
+              attr('class', 'unselectable').
+              attr('text-anchor', 'middle').
+              text(function() {return text;}).each(function wrap() {
+            let self = d3.select(this),
+                textLength = self.node().getComputedTextLength(),
+                text = self.text();
+            while (textLength > (node.width - 2 * 4) && text.length > 0) {
+              text = text.slice(0, -1);
+              self.text(text + '...');
+              textLength = self.node().getComputedTextLength();
+            }
+          });
+        };
+        node.render(g, node);
 
         let drag = d3.drag().
             on('start', function() {
@@ -620,7 +624,7 @@
         that.internalNodes.splice(0, that.internalNodes.length);
         that.internalConnections.splice(0, that.internalConnections.length);
         that.nodes.forEach(node => {
-          let newNode = JSON.parse(JSON.stringify(node));
+          let newNode = Object.assign({}, node);
           newNode.width = newNode.width || 120;
           newNode.height = newNode.height || 60;
           that.internalNodes.push(newNode);

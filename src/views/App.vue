@@ -42,15 +42,43 @@
             type: 'operation',
             approvers: [{id: 1, name: 'Joyce'}],
             width: 100,
-            height: 40
+            height: 40,
           },
           {
             id: 4,
             x: 240,
             y: 220,
-            name: 'Operation',
+            name: 'Custom render',
             type: 'operation',
             approvers: [{id: 2, name: 'Allen'}],
+            render: function(g, node) {
+              // title
+              g.append('rect').
+                  attr('x', node.x).
+                  attr('y', node.y).
+                  attr('stroke', '#bbbbbb').
+                  attr('class', 'title').
+                  style('width', node.width);
+              g.append('text').
+                  attr('x', node.x + 4).
+                  attr('y', node.y + 15).
+                  attr('class', 'unselectable').
+                  text(() => node.name);
+
+              // body
+              let body = g.append('rect').attr('class', 'body');
+              body.style('width', '120px');
+              body.attr('x', node.x).attr('y', node.y + 20);
+              body.style('height', '40px');
+
+              // body text
+              g.append('text').
+                  attr('x', node.x + node.width / 2).
+                  attr('y', node.y + 45).
+                  attr('class', 'unselectable').
+                  attr('text-anchor', 'middle').
+                  text(() => 'Allen');
+            },
           },
           {
             id: 5,
