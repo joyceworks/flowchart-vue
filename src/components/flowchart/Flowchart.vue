@@ -325,11 +325,7 @@
 
           // render nodes
           that.internalNodes.forEach(node => {
-            if (that.currentNodes.filter(item => item === node).length > 0) {
-              that.renderNode(node, '#666666');
-            } else {
-              that.renderNode(node, '#bbbbbb');
-            }
+            that.renderNode(node, that.currentNodes.filter(item => item === node).length > 0);
           });
 
           resolve();
@@ -355,12 +351,12 @@
         // a 5px cover to make mouse operation conveniently
         return line2(g, x1, y1, x2, y2, startPosition, endPosition, 5, 'transparent', false);
       },
-      renderNode(node, borderColor) {
+      renderNode(node, isSelected) {
         let that = this;
         let g = that.append('g').attr('cursor', 'move').classed('node', true);
-        g.attr('stroke', borderColor);
 
-        node.render = node.render || function(g, node) {
+        node.render = node.render || function(g, node, isCurrent) {
+          let borderColor = isCurrent ? '#666666' : '#bbbbbb';
           if (node.type !== 'start' && node.type !== 'end') {
             // title
             g.append('rect').
@@ -385,7 +381,6 @@
                   }
                 });
           }
-
           // body
           let body = g.append('rect').attr('class', 'body');
           body.style('width', node.width + 'px');
@@ -433,7 +428,8 @@
             }
           });
         };
-        node.render(g, node);
+
+        node.render(g, node, isSelected);
 
         let drag = d3.drag().
             on('start', function() {

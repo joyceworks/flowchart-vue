@@ -51,12 +51,13 @@
             name: 'Custom render',
             type: 'operation',
             approvers: [{id: 2, name: 'Allen'}],
-            render: function(g, node) {
+            render: function(g, node, isSelected) {
+              let borderColor = isSelected ? '#666666' : '#bbbbbb';
               // title
               g.append('rect').
                   attr('x', node.x).
                   attr('y', node.y).
-                  attr('stroke', '#bbbbbb').
+                  attr('stroke', borderColor).
                   attr('class', 'title').
                   style('width', node.width);
               g.append('text').
@@ -70,6 +71,7 @@
               body.style('width', '120px');
               body.attr('x', node.x).attr('y', node.y + 20);
               body.style('height', '40px');
+              body.attr('stroke', borderColor);
 
               // body text
               g.append('text').
@@ -77,7 +79,7 @@
                   attr('y', node.y + 45).
                   attr('class', 'unselectable').
                   attr('text-anchor', 'middle').
-                  text(() => 'Allen');
+                  text(() => 'Allen.');
             },
           },
           {
