@@ -41,7 +41,7 @@
             name: 'Custom size',
             type: 'operation',
             approvers: [{id: 1, name: 'Joyce'}],
-            width: 100,
+            width: 120,
             height: 40,
           },
           {
@@ -58,7 +58,8 @@
                   attr('x', node.x).
                   attr('y', node.y).
                   attr('stroke', borderColor).
-                  attr('class', 'title').
+                  attr('fill', 'lightblue').
+                  style('height', '20px').
                   style('width', node.width);
               g.append('text').
                   attr('x', node.x + 4).
@@ -79,7 +80,7 @@
                   attr('y', node.y + 45).
                   attr('class', 'unselectable').
                   attr('text-anchor', 'middle').
-                  text(() => 'Allen.');
+                  text(() => node.approvers[0].name);
             },
           },
           {
