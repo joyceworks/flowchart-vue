@@ -60,7 +60,7 @@
                   attr('stroke', borderColor).
                   attr('fill', 'lightblue').
                   style('height', '20px').
-                  style('width', node.width);
+                  style('width', node.width + 'px');
               g.append('text').
                   attr('x', node.x + 4).
                   attr('y', node.y + 15).
@@ -69,7 +69,7 @@
 
               // body
               let body = g.append('rect').attr('class', 'body');
-              body.style('width', '120px');
+              body.style('width', '120px').style('fill', 'white').style('stroke-width', '1px');
               body.attr('x', node.x).attr('y', node.y + 20);
               body.style('height', '40px');
               body.attr('stroke', borderColor);

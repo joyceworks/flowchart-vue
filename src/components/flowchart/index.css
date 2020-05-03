@@ -47,24 +47,6 @@
     stroke: red;
 }
 
-#svg .title {
-    height: 20px;
-    stroke-width: 1px;
-    fill: #f1f3f4;
-}
-
-#svg .body {
-    stroke-width: 1px;
-    fill: white;
-}
-
-#svg .body.start, #svg .body.end {
-    height: 60px;
-}
-
-#svg .container {
-}
-
 #svg .selection {
     stroke: lightblue;
     fill: lightblue;
