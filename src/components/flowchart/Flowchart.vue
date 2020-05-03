@@ -83,7 +83,10 @@
                 attr('y', node.y).
                 attr('stroke', borderColor).
                 attr('class', 'title').
-                style('width', node.width);
+                style('height', '20px').
+                style('fill', '#f1f3f4').
+                style('stroke-width', '1px').
+                style('width', node.width + 'px');
             g.append('text').
                 attr('x', node.x + 4).
                 attr('y', node.y + 15).
@@ -102,7 +105,7 @@
           }
           // body
           let body = g.append('rect').attr('class', 'body');
-          body.style('width', node.width + 'px');
+          body.style('width', node.width + 'px').style('fill', 'white').style('stroke-width', '1px');
           if (node.type !== 'start' && node.type !== 'end') {
             body.attr('x', node.x).attr('y', node.y + 20);
             body.style('height', roundTo20(node.height - 20) + 'px');
