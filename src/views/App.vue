@@ -48,40 +48,9 @@
             id: 4,
             x: 240,
             y: 220,
-            name: 'Custom render',
+            name: 'Operation',
             type: 'operation',
             approvers: [{id: 2, name: 'Allen'}],
-            render: function(g, node, isSelected) {
-              let borderColor = isSelected ? '#666666' : '#bbbbbb';
-              // title
-              g.append('rect').
-                  attr('x', node.x).
-                  attr('y', node.y).
-                  attr('stroke', borderColor).
-                  attr('fill', 'lightblue').
-                  style('height', '20px').
-                  style('width', node.width + 'px');
-              g.append('text').
-                  attr('x', node.x + 4).
-                  attr('y', node.y + 15).
-                  attr('class', 'unselectable').
-                  text(() => node.name);
-
-              // body
-              let body = g.append('rect').attr('class', 'body');
-              body.style('width', '120px').style('fill', 'white').style('stroke-width', '1px');
-              body.attr('x', node.x).attr('y', node.y + 20);
-              body.style('height', '40px');
-              body.attr('stroke', borderColor);
-
-              // body text
-              g.append('text').
-                  attr('x', node.x + node.width / 2).
-                  attr('y', node.y + 45).
-                  attr('class', 'unselectable').
-                  attr('text-anchor', 'middle').
-                  text(() => node.approvers[0].name);
-            },
           },
           {
             id: 5,

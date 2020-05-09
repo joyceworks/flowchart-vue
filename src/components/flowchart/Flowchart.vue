@@ -360,7 +360,7 @@
         let that = this;
         let g = that.append('g').attr('cursor', 'move').classed('node', true);
 
-        node.render = node.render || that.render;
+        node.render = that.render;
         node.render(g, node, isSelected);
 
         let drag = d3.drag().
