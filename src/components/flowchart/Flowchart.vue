@@ -107,7 +107,7 @@
           return;
         }
         let name = i18n.t('message.new');
-        this.internalNodes.push({id: +new Date(), x: x, y: y, name: name, type: 'operation'});
+        this.internalNodes.push({id: +new Date(), x: x, y: y, name: name, type: 'operation', approvers: []});
       },
       editCurrent() {
         if (this.currentNodes.length === 1) {
