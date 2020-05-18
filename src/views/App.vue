@@ -3,7 +3,9 @@
         <h1 class="title">Flowchart Vue</h1>
         <h5 class="subtitle">Flowchart & Flowchart designer component for Vue.js.</h5>
         <div id="toolbar">
-            <button @click="handleDblClick">Add(Double-click canvas)</button>
+            <button @click="$refs.chart.add({id: +new Date(), x: 10, y: 10, name: name, type: 'operation', approvers: []})">
+                Add(Double-click canvas)
+            </button>
             <button @click="$refs.chart.remove()">Delete(Del)</button>
             <button @click="$refs.chart.editCurrent()">Edit(Double-click node)</button>
             <button @click="$refs.chart.save()">Save</button>
