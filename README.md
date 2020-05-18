@@ -11,7 +11,7 @@ yarn add flowchart-vue
 ```vue
 <template>
     <div id="app">
-        <button type="button" @click="$refs.chart.add(10, 10)">
+        <button type="button" @click="$refs.chart.add({id: +new Date(), x: 10, y: 10, name: 'New', type: 'operation', approvers: []})">
             Add
         </button>
         <button type="button" @click="$refs.chart.remove()">
