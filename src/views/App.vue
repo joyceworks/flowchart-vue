@@ -3,13 +3,14 @@
         <h1 class="title">Flowchart Vue</h1>
         <h5 class="subtitle">Flowchart & Flowchart designer component for Vue.js.</h5>
         <div id="toolbar">
-            <button @click="$refs.chart.add(10, 10)">Add(Double-click canvas)</button>
+            <button @click="handleDblClick">Add(Double-click canvas)</button>
             <button @click="$refs.chart.remove()">Delete(Del)</button>
             <button @click="$refs.chart.editCurrent()">Edit(Double-click node)</button>
             <button @click="$refs.chart.save()">Save</button>
         </div>
         <flowchart :nodes="nodes" :connections="connections" @editnode="handleEditNode"
                    :width="'100%'" :height="500" :readonly="false"
+                   @dblclick="handleDblClick"
                    @editconnection="handleEditConnection" @save="handleChartSave" ref="chart">
         </flowchart>
         <node-dialog :visible.sync="nodeDialogVisible" :node.sync="nodeForm.target"></node-dialog>
@@ -108,6 +109,16 @@
     async mounted() {
     },
     methods: {
+      handleDblClick(position) {
+        this.$refs.chart.add({
+          id: +new Date(),
+          x: position.x,
+          y: position.y,
+          name: 'New',
+          type: 'operation',
+          approvers: [],
+        });
+      },
       async handleChartSave(nodes, connections) {
         // axios.post(url, {nodes, connection}).then(resp => {
         //   this.nodes = resp.nodes;

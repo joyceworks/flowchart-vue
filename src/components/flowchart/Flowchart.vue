@@ -102,12 +102,11 @@
       };
     },
     methods: {
-      add(x, y) {
+      add(node) {
         if (this.readonly) {
           return;
         }
-        let name = i18n.t('message.new');
-        this.internalNodes.push({id: +new Date(), x: x, y: y, name: name, type: 'operation', approvers: []});
+        this.internalNodes.push(node);
       },
       editCurrent() {
         if (this.currentNodes.length === 1) {
@@ -197,7 +196,7 @@
         if (this.readonly) {
           return;
         }
-        this.add(event.offsetX, event.offsetY);
+        this.$emit('dblclick', {x: event.offsetX, y: event.offsetY});
       },
       handleChartMouseDown(event) {
         if (event.ctrlKey) {
