@@ -24,7 +24,8 @@ yarn add flowchart-vue
             Save
         </button>
         <flowchart :nodes="nodes" :connections="connections" @editnode="handleEditNode"
-                    @editconnection="handleEditConnection" @save="handleChartSave" ref="chart">
+                    @dblclick="handleDblClick" @editconnection="handleEditConnection" 
+                    @save="handleChartSave" ref="chart">
         </flowchart>
     </div>
 </template>
@@ -63,6 +64,16 @@ yarn add flowchart-vue
       handleEditNode(node) {
       },
       handleEditConnection(connection) {
+      },
+      handleDblClick(position) {
+        this.$refs.chart.add({
+          id: +new Date(),
+          x: position.x,
+          y: position.y,
+          name: 'New',
+          type: 'operation',
+          approvers: [],
+        });
       },
     }
   };
