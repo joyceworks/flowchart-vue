@@ -40,8 +40,11 @@ yarn add flowchart-vue
     data: function() {
       return {
         nodes: [
+          // Basic fields
           {id: 1, x: 140, y: 270, name: 'Start', type: 'start'},
-          {id: 2, x: 540, y: 270, name: 'End', type: 'end'},
+          // You can add any generic fields to node, for example: description
+          // It will be passed to @save, @editnode
+          {id: 2, x: 540, y: 270, name: 'End', type: 'end', description: 'I'm here'},
         ],
         connections: [
           {
@@ -62,6 +65,9 @@ yarn add flowchart-vue
         // });
       },
       handleEditNode(node) {
+        if (node.id === 2) {
+          console.log(node.description);
+        }
       },
       handleEditConnection(connection) {
       },
