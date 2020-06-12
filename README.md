@@ -2,7 +2,7 @@
 
 Flowchart & Flowchart designer component for Vue.js.
 
-English | [中文](https://github.com/joyceworks/flowchart-vue/edit/master/README-zh_CN.md)
+English | [中文](https://github.com/joyceworks/flowchart-vue/blob/master/README-zh_CN.md)
 
 ## Usage
 
