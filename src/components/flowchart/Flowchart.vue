@@ -429,8 +429,16 @@ export default {
 
           let zoom = parseFloat(document.getElementById("svg").style.zoom || 1);
           for (let currentNode of that.currentNodes) {
-            currentNode.x += d3.event.dx / zoom;
-            currentNode.y += d3.event.dy / zoom;
+            let x = d3.event.dx / zoom;
+            if (currentNode.x + x < 0) {
+              x = -currentNode.x;
+            }
+            currentNode.x += x;
+            let y = d3.event.dy / zoom;
+            if (currentNode.y + y < 0) {
+              y = -currentNode.y;
+            }
+            currentNode.y += y;
           }
 
           d3.selectAll("#svg > g.guideline").remove();
@@ -616,7 +624,13 @@ export default {
     moveCurrentNode(x, y) {
       if (this.currentNodes.length > 0 && !this.readonly) {
         for (let node of this.currentNodes) {
+          if (node.x + x < 0) {
+            x = -node.x;
+          }
           node.x += x;
+          if (node.y + y < 0) {
+            y = -node.y;
+          }
           node.y += y;
         }
       }
