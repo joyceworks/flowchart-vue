@@ -1,6 +1,6 @@
 # Flowchart
 
-Flowchart & Flowchart designer component for Vue.js.
+Flowchart & Flowchart designer component for Vue.js([flowchart-react](https://github.com/joyceworks/flowchart-react) for React.js).
 
 English | [中文](https://github.com/joyceworks/flowchart-vue/blob/master/README-zh_CN.md)
 
