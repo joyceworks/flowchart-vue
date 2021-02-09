@@ -153,6 +153,7 @@ export default {
               name: "Pass",
             };
             this.internalConnections.push(conn);
+            this.$emit("connect", conn, this.internalNodes, this.internalConnections);
           }
         }
         this.connectingInfo.source = null;
@@ -550,6 +551,7 @@ export default {
                   name: "Pass",
                 };
                 that.internalConnections.push(conn);
+                that.$emit("connect", conn, that.internalNodes, that.internalConnections);
               }
               that.connectingInfo.source = null;
               that.connectingInfo.sourcePosition = null;
