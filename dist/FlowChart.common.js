@@ -6459,7 +6459,7 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"05af82f8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=029a860d&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3dcd2886-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=d45d1c04&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({
     width: isNaN(_vm.width) ? _vm.width : _vm.width + 'px',
     height: isNaN(_vm.height) ? _vm.height : _vm.height + 'px',
@@ -6468,7 +6468,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=029a860d&
+// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=d45d1c04&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js
 var iterator = __webpack_require__("5d58");
@@ -19546,6 +19546,7 @@ function render_render(g, node, isSelected) {
       }
 
       this.internalNodes.push(node);
+      this.$emit("add", node, this.internalNodes, this.internalConnections);
     },
     editCurrent: function editCurrent() {
       if (this.currentNodes.length === 1) {
@@ -20355,10 +20356,12 @@ function render_render(g, node, isSelected) {
       }
 
       this.internalNodes.splice(this.internalNodes.indexOf(node), 1);
+      this.$emit("delete", node, this.internalNodes, this.internalConnections);
     },
     removeConnection: function removeConnection(conn) {
       var index = this.internalConnections.indexOf(conn);
       this.internalConnections.splice(index, 1);
+      this.$emit("disconnect", conn, this.internalNodes, this.internalConnections);
     },
     moveCurrentNode: function moveCurrentNode(x, y) {
       if (this.currentNodes.length > 0 && !this.readonly) {
