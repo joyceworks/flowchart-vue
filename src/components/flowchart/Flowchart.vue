@@ -100,6 +100,7 @@ export default {
         return;
       }
       this.internalNodes.push(node);
+      this.$emit("add", node, this.internalNodes, this.internalConnections);
     },
     editCurrent() {
       if (this.currentNodes.length === 1) {
@@ -618,10 +619,12 @@ export default {
         );
       }
       this.internalNodes.splice(this.internalNodes.indexOf(node), 1);
+      this.$emit("delete", node, this.internalNodes, this.internalConnections);
     },
     removeConnection(conn) {
       let index = this.internalConnections.indexOf(conn);
       this.internalConnections.splice(index, 1);
+      this.$emit("disconnect", conn, this.internalNodes, this.internalConnections);
     },
     moveCurrentNode(x, y) {
       if (this.currentNodes.length > 0 && !this.readonly) {
