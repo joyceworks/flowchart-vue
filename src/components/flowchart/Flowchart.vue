@@ -781,6 +781,7 @@ export default {
       deep: true,
       handler() {
         this.renderNodes();
+        this.$emit('select', this.currentNodes);
       },
     },
     currentConnections: {

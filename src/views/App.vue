@@ -35,6 +35,7 @@
       @dblclick="handleDblClick"
       @editconnection="handleEditConnection"
       @save="handleChartSave"
+      @select="handleSelect"
       ref="chart"
       :render="render"
     >
@@ -153,6 +154,9 @@ export default {
         type: "operation",
         approvers: [],
       });
+    },
+    handleSelect(nodes) {
+      // console.log(nodes);
     },
     async handleChartSave(nodes, connections) {
       // axios.post(url, {nodes, connection}).then(resp => {
