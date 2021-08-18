@@ -780,14 +780,15 @@ export default {
       immediate: true,
       deep: true,
       handler() {
-        this.renderNodes();
         this.$emit('select', this.currentNodes);
+        this.renderNodes();
       },
     },
     currentConnections: {
       immediate: true,
       deep: true,
       handler() {
+        this.$emit('selectconnection', this.currentConnections);
         this.renderConnections();
       },
     },
