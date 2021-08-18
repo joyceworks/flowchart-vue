@@ -36,6 +36,7 @@
       @editconnection="handleEditConnection"
       @save="handleChartSave"
       @select="handleSelect"
+      @selectconnection="handleSelectConnection"
       ref="chart"
       :render="render"
     >
@@ -157,6 +158,9 @@ export default {
     },
     handleSelect(nodes) {
       // console.log(nodes);
+    },
+    handleSelectConnection(connections) {
+      // console.log(connections);
     },
     async handleChartSave(nodes, connections) {
       // axios.post(url, {nodes, connection}).then(resp => {
