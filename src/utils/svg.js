@@ -18,6 +18,10 @@ function lineTo(g, x1, y1, x2, y2, lineWidth, strokeStyle, dash) {
 
 function line2(g, x1, y1, x2, y2, startPosition, endPosition, lineWidth,
     strokeStyle, markered) {
+  if (!endPosition) {
+    endPosition = x1 > x2 ? 'right' : 'left';
+  }
+  
   let points = [];
   let start = [x1, y1];
   let end = [x2, y2];
