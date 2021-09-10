@@ -16,8 +16,8 @@ function lineTo(g, x1, y1, x2, y2, lineWidth, strokeStyle, dash) {
   return path;
 }
 
-function line2(g, x1, y1, x2, y2, startPosition, endPosition, lineWidth,
-    strokeStyle, markered) {
+function connect(g, x1, y1, x2, y2, startPosition, endPosition, lineWidth,
+                 strokeStyle, markered) {
   if (!endPosition) {
     endPosition = x1 > x2 ? 'right' : 'left';
   }
@@ -667,5 +667,5 @@ export {
   arrowTo,
   lineTo,
   getDirection,
-  line2,
+  connect,
 };

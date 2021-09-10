@@ -23,7 +23,7 @@
 </template>
 <style src="./index.css"></style>
 <script>
-import { line2, lineTo } from "../../utils/svg";
+import { connect, lineTo } from "../../utils/svg";
 import * as d3 from "d3";
 import {
   between,
@@ -368,7 +368,7 @@ export default {
     arrowTo(x1, y1, x2, y2, startPosition, endPosition, color) {
       let g = this.append("g");
       g.classed("connection", true);
-      line2(
+      connect(
         g,
         x1,
         y1,
@@ -381,7 +381,7 @@ export default {
         true
       );
       // a 5px cover to make mouse operation conveniently
-      return line2(
+      return connect(
         g,
         x1,
         y1,
