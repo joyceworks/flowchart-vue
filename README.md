@@ -95,7 +95,7 @@ See more at [src/views/App.vue](https://github.com/joyceworks/flowchart-vue/blob
 ## Demo
 
 - [GitHub Pages](https://joyceworks.github.io/flowchart-vue/)
-
+- [CodeSandbox](https://codesandbox.io/s/funny-shaw-971s84)
 - Development Environment
 
   ``` shell
