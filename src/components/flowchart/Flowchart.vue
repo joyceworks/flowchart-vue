@@ -23,14 +23,14 @@
 </template>
 <style src="./index.css"></style>
 <script>
-import { connect, lineTo } from "../../utils/svg";
+import { connect, lineTo } from "@/utils/svg";
 import * as d3 from "d3";
 import {
   between,
   distanceOfPointToLine,
   getEdgeOfPoints,
   pointRectangleIntersection,
-} from "../../utils/math";
+} from "@/utils/math";
 import render from "./render";
 
 export default {
@@ -65,10 +65,6 @@ export default {
     readonly: {
       type: Boolean,
       default: false,
-    },
-    render: {
-      type: Function,
-      default: render,
     },
   },
   data() {
@@ -398,8 +394,7 @@ export default {
       let that = this;
       let g = that.append("g").attr("cursor", "move").classed("node", true);
 
-      node.render = that.render;
-      node.render(g, node, isSelected);
+      render(g, node, isSelected);
 
       let drag = d3
         .drag()
