@@ -109,4 +109,52 @@ See more at [src/views/App.vue](https://github.com/joyceworks/flowchart-vue/blob
 
 ## API
 
-See [Wiki](https://github.com/joyceworks/flowchart-vue/wiki).
+## Props
+
+Property|Description|Type|Default
+-|-|-|-
+nodes|Collection of nodes|`Array`|`[{id: 1, x: 140, y: 270, name: 'Start', type: 'start'}, {id: 2, x: 540, y: 270, name: 'End', type: 'end'}]`
+connections|Collection of connections|`Array`|`[{source: {id: 1, position: 'right'}, destination: {id: 2, position: 'left'}, id: 1, type: 'pass',          }]`
+width|Width of canvas|`String` \| `Number`|`800`
+height|Height of canvas|`String` \| `Number`|`600`
+locale|Display language, available values: `'en'`, `'zh'`|`String`|`'en'`
+readonly|Read-only|`Boolean`|false
+render|Custom render function|`null`
+editnode|Node double-click event|`(node) => void`|-
+editconnection|Connection double-click event|`(connection) => void`|-
+save|Save event|`(nodes, connections) => void`|-
+dblclick|Background double-click event|`(position: {x: number, y: number}) => void`|-
+connect|Connect event|`(node, nodes, connections) => void`|-
+disconnect|Disconnect event|`(node, nodes, connections) => void`|-
+add|Add node event|`(node, nodes, connections) => void`|-
+delete|Delete node event|`(node, nodes, connections) => void`|-
+select|Select node event|`nodes => void`|-
+selectconnection|Select connection event|`connections => void`|-
+
+### Properties.Node
+
+Property|Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Type|Default
+-|-|-|-
+id|ID|`Number`|`+new Date()`
+x|Horizontal position of node|`Number`|-
+y|Vertical position of node|`Number`|-
+type|Type of node|`String`|`'operation'`
+width|Width of node|`Number`|`120`
+height|Height of node|`Number`|`60`
+approvers|Approvers of node, eg: [{name: 'admin'}]|`Array`|[]
+
+### Properties.Connection
+
+Property|Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Type|Default
+-|-|-|-
+id|ID|`Number`|`+new Date()`
+source|Source of connection|`Object`|-
+destination|Destination of connection|`Object`|-
+type|Type of connection|`String`|`pass`
+
+### Properties.Connection.Source & Properties.Connection.Destination
+
+Property|Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Type|Default
+-|-|-|-
+id|Node id|`Object`|-
+position|Starting/Ending position of node|`Object`|-
