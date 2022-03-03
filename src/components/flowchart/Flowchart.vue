@@ -507,7 +507,7 @@ export default {
             }
           });
       g.call(drag);
-      g.on("mousedown", function (event) {
+      g.on("mousedown", function () {
         // handle ctrl+mousedown
         if (!d3.event.ctrlKey) {
           return;

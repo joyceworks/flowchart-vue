@@ -1,15 +1,13 @@
-import * as d3 from 'd3';
 import {approximatelyEquals} from './math';
 
 function lineTo(g, x1, y1, x2, y2, lineWidth, strokeStyle, dash) {
   let sta = [x1, y1];
   let end = [x2, y2];
-  let lineGenerator = d3.line().x(d => d[0]).y(d => d[1]);
   let path = g.append('path').
       attr('stroke', strokeStyle).
       attr('stroke-width', lineWidth).
       attr('fill', 'none').
-      attr('d', lineGenerator([sta, end]));
+      attr('d', `M ${sta[0]} ${sta[1]} L ${end[0]} ${end[1]}`);
   if (dash) {
     path.style('stroke-dasharray', dash.join(','));
   }
@@ -21,7 +19,7 @@ function connect(g, x1, y1, x2, y2, startPosition, endPosition, lineWidth,
   if (!endPosition) {
     endPosition = x1 > x2 ? 'right' : 'left';
   }
-  
+
   let points = [];
   let start = [x1, y1];
   let end = [x2, y2];
