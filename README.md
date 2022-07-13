@@ -50,7 +50,7 @@ yarn add flowchart-vue
           {id: 1, x: 140, y: 270, name: 'Start', type: 'start'},
           // You can add any generic fields to node, for example: description
           // It will be passed to @save, @editnode
-          {id: 2, x: 540, y: 270, name: 'End', type: 'end', description: 'I'm here'},
+          {id: 2, x: 540, y: 270, name: 'End', type: 'end', description: 'I\'m here'},
         ],
         connections: [
           {
@@ -98,6 +98,7 @@ See more at [src/views/App.vue](https://github.com/joyceworks/flowchart-vue/blob
 
 - [GitHub Pages](https://joyceworks.github.io/flowchart-vue/)
 - [CodeSandbox](https://codesandbox.io/s/funny-shaw-971s84)
+- [Flowchart Vue Demo](https://github.com/joyceworks/flowchart-vue-demo)
 - Development Environment
 
   ``` shell
@@ -144,6 +145,10 @@ type|Type of node|`String`|`'operation'`
 width|Width of node|`Number`|`120`
 height|Height of node|`Number`|`60`
 approvers|Approvers of node, eg: [{name: 'admin'}]|`Array`|[]
+bodyBackgroundColor|Background color of node body|`(isSelected: boolean) => string`|undefined
+titleBackgroundColor|Background color of node title|`(isSelected: boolean) => string`|undefined
+borderColor|Color of node border|`(isSelected: boolean) => string`|undefined
+textColor|Color of node text|`(isSelected: boolean) => string`|undefined
 
 ### Properties.Connection
 
