@@ -5,14 +5,22 @@ function render(g, node, isSelected) {
   node.width = node.width || 120;
   node.height = node.height || 60;
   let borderColor = node.borderColor
-    ? node.borderColor(isSelected)
+    ? typeof node.borderColor === "function"
+      ? node.borderColor(isSelected)
+      : node.borderColor
     : isSelected
     ? "#666666"
     : "#bbbbbb";
-  let textColor = node.textColor ? node.textColor(isSelected) : "black";
+  let textColor = node.textColor
+    ? typeof node.textColor === "function"
+      ? node.textColor(isSelected)
+      : node.textColor
+    : "black";
   if (node.type !== "start" && node.type !== "end") {
     let titleBackgroundColor = node.titleBackgroundColor
-      ? node.titleBackgroundColor(isSelected)
+      ? typeof node.titleBackgroundColor === "function"
+        ? node.titleBackgroundColor(isSelected)
+        : node.titleBackgroundColor
       : "#f1f3f4";
     // title
     g.append("rect")
@@ -44,7 +52,9 @@ function render(g, node, isSelected) {
   // body
   let body = g.append("rect").attr("class", "body");
   let bodyBackgroundColor = node.bodyBackgroundColor
-    ? node.bodyBackgroundColor(isSelected)
+    ? typeof bodyBackgroundColor === "function"
+      ? node.bodyBackgroundColor(isSelected)
+      : node.bodyBackgroundColor
     : "white";
   body
     .style("width", node.width + "px")

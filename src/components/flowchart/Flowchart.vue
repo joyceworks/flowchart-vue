@@ -66,6 +66,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    colors: {
+      type: Function,
+      default: undefined
+    }
   },
   data() {
     return {
@@ -353,10 +357,11 @@ export default {
 
         // render nodes
         that.internalNodes.forEach((node) => {
-          that.renderNode(
-            node,
-            that.currentNodes.filter((item) => item === node).length > 0
-          );
+          let selected = that.currentNodes.filter((item) => item === node).length > 0;
+          if (that.colors) {
+            node = {...node, ...that.colors(node, selected)};
+          }
+          that.renderNode(node, selected);
         });
 
         resolve();
