@@ -210,10 +210,39 @@ export default {
     },
     handleChartMouseDown(event) {
       if (event.ctrlKey) {
-        this.moveInfo = { x: event.offsetX, y: event.offsetY };
+        this.initializeMovingAllElements(event);
       } else {
         this.selectionInfo = { x: event.offsetX, y: event.offsetY };
       }
+    },
+    initializeMovingAllElements(event) {
+      if (!this.isMouseOverAnyNode()) {
+        this.moveInfo = { x: event.offsetX, y: event.offsetY };
+      }
+    },
+    isMouseOverAnyNode() {
+      let cursorPosition = { x: this.cursorToChartOffset.x, y: this.cursorToChartOffset.y };
+      
+      let result = false;
+      
+      for(let currentNodeIndex = 0; currentNodeIndex < this.internalNodes.length; currentNodeIndex++) {
+        const node = this.internalNodes[currentNodeIndex];
+        const nodeArea = {
+          start: { x: node.x, y: node.y },
+          end: { x: node.x + node.width, y: node.y + node.height }
+        }
+        
+        const mousePointIntersectNodeArea = 
+               cursorPosition.x >= nodeArea.start.x && cursorPosition.x <= nodeArea.end.x
+            && cursorPosition.y >= nodeArea.start.y &&  cursorPosition.y <= nodeArea.end.y;
+
+        if (mousePointIntersectNodeArea) {
+          result = true;
+          break;
+        }
+      }
+      
+      return result;
     },
     getConnectorPosition(node) {
       const halfWidth = node.width / 2;
