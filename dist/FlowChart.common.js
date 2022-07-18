@@ -6459,7 +6459,7 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"75b09dd0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=df997bb8&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"75b09dd0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=9e416df4&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({
     width: isNaN(_vm.width) ? _vm.width : _vm.width + 'px',
     height: isNaN(_vm.height) ? _vm.height : _vm.height + 'px',
@@ -6468,7 +6468,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=df997bb8&
+// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=9e416df4&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js
 var iterator = __webpack_require__("5d58");
@@ -19354,6 +19354,7 @@ function render_render(g, node, isSelected) {
         sourcePosition: null
       },
       selectionInfo: null,
+      moveInfo: null,
       currentNodes: [],
       currentConnections: [],
 
@@ -19459,7 +19460,11 @@ function render_render(g, node, isSelected) {
                   this.selectionInfo = null;
                 }
 
-              case 2:
+                if (this.moveInfo) {
+                  this.moveInfo = null;
+                }
+
+              case 3:
               case "end":
                 return _context.stop();
             }
@@ -19573,13 +19578,50 @@ function render_render(g, node, isSelected) {
     },
     handleChartMouseDown: function handleChartMouseDown(event) {
       if (event.ctrlKey) {
-        return;
+        this.initializeMovingAllElements(event);
+      } else {
+        this.selectionInfo = {
+          x: event.offsetX,
+          y: event.offsetY
+        };
+      }
+    },
+    initializeMovingAllElements: function initializeMovingAllElements(event) {
+      if (!this.isMouseOverAnyNode()) {
+        this.moveInfo = {
+          x: event.offsetX,
+          y: event.offsetY
+        };
+      }
+    },
+    isMouseOverAnyNode: function isMouseOverAnyNode() {
+      var cursorPosition = {
+        x: this.cursorToChartOffset.x,
+        y: this.cursorToChartOffset.y
+      };
+      var result = false;
+
+      for (var currentNodeIndex = 0; currentNodeIndex < this.internalNodes.length; currentNodeIndex++) {
+        var node = this.internalNodes[currentNodeIndex];
+        var nodeArea = {
+          start: {
+            x: node.x,
+            y: node.y
+          },
+          end: {
+            x: node.x + node.width,
+            y: node.y + node.height
+          }
+        };
+        var mousePointIntersectNodeArea = cursorPosition.x >= nodeArea.start.x && cursorPosition.x <= nodeArea.end.x && cursorPosition.y >= nodeArea.start.y && cursorPosition.y <= nodeArea.end.y;
+
+        if (mousePointIntersectNodeArea) {
+          result = true;
+          break;
+        }
       }
 
-      this.selectionInfo = {
-        x: event.offsetX,
-        y: event.offsetY
-      };
+      return result;
     },
     getConnectorPosition: function getConnectorPosition(node) {
       var halfWidth = node.width / 2;
@@ -19606,6 +19648,22 @@ function render_render(g, node, isSelected) {
         top: top,
         bottom: bottom
       };
+    },
+    moveAllElements: function moveAllElements() {
+      var that = this;
+
+      if (!that.moveInfo) {
+        return;
+      }
+
+      var moveX = that.moveInfo.x - that.cursorToChartOffset.x;
+      var moveY = that.moveInfo.y - that.cursorToChartOffset.y;
+      this.internalNodes.forEach(function (element) {
+        element.x -= moveX;
+        element.y -= moveY;
+      });
+      that.moveInfo.x = that.cursorToChartOffset.x;
+      that.moveInfo.y = that.cursorToChartOffset.y;
     },
     renderSelection: function renderSelection() {
       var that = this; // render selection rectangle
@@ -20646,6 +20704,11 @@ function render_render(g, node, isSelected) {
       handler: function handler() {
         if (this.selectionInfo) {
           this.renderSelection();
+          return;
+        }
+
+        if (this.moveInfo) {
+          this.moveAllElements();
         }
       }
     },
