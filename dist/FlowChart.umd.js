@@ -6468,7 +6468,7 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"75b09dd0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=9e416df4&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"75b09dd0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=2e6955d0&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({
     width: isNaN(_vm.width) ? _vm.width : _vm.width + 'px',
     height: isNaN(_vm.height) ? _vm.height : _vm.height + 'px',
@@ -6477,7 +6477,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=9e416df4&
+// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=2e6955d0&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js
 var iterator = __webpack_require__("5d58");
@@ -19200,14 +19200,16 @@ function defaultConstrain(transform, extent, translateExtent) {
 function render_render(g, node, isSelected) {
   node.width = node.width || 120;
   node.height = node.height || 60;
-  var borderColor = node.borderColor ? node.borderColor(isSelected) : isSelected ? "#666666" : "#bbbbbb";
-  var textColor = node.textColor ? node.textColor(isSelected) : "black";
+  var borderColor = isSelected ? "#666666" : "#bbbbbb";
+  var textColor = "black";
+  var header = null;
+  var title = null;
 
   if (node.type !== "start" && node.type !== "end") {
-    var titleBackgroundColor = node.titleBackgroundColor ? node.titleBackgroundColor(isSelected) : "#f1f3f4"; // title
+    var titleBackgroundColor = "#f1f3f4"; // title
 
-    g.append("rect").attr("x", node.x).attr("y", node.y).attr("stroke", borderColor).attr("class", "title").style("height", "20px").style("fill", titleBackgroundColor).style("stroke-width", "1px").style("width", node.width + "px");
-    g.append("text").attr("fill", textColor).attr("x", node.x + 4).attr("y", node.y + 15).attr("class", "unselectable").text(function () {
+    header = g.append("rect").attr("x", node.x).attr("y", node.y).attr("stroke", borderColor).attr("class", "title").style("height", "20px").style("fill", titleBackgroundColor).style("stroke-width", "1px").style("width", node.width + "px");
+    title = g.append("text").attr("fill", textColor).attr("x", node.x + 4).attr("y", node.y + 15).attr("class", "unselectable").text(function () {
       return node.name;
     }).each(function wrap() {
       var self = src_select(this),
@@ -19224,7 +19226,7 @@ function render_render(g, node, isSelected) {
 
 
   var body = g.append("rect").attr("class", "body");
-  var bodyBackgroundColor = node.bodyBackgroundColor ? node.bodyBackgroundColor(isSelected) : "white";
+  var bodyBackgroundColor = "white";
   body.style("width", node.width + "px").style("fill", bodyBackgroundColor).style("stroke-width", "1px");
 
   if (node.type !== "start" && node.type !== "end") {
@@ -19246,7 +19248,7 @@ function render_render(g, node, isSelected) {
     bodyTextY = node.y + 5 + roundTo20(node.height) / 2;
   }
 
-  g.append("text").attr("fill", textColor).attr("x", node.x + node.width / 2).attr("y", bodyTextY).attr("class", "unselectable").attr("text-anchor", "middle").text(function () {
+  var content = g.append("text").attr("fill", textColor).attr("x", node.x + node.width / 2).attr("y", bodyTextY).attr("class", "unselectable").attr("text-anchor", "middle").text(function () {
     return text;
   }).each(function wrap() {
     var self = src_select(this),
@@ -19259,6 +19261,12 @@ function render_render(g, node, isSelected) {
       textLength = self.node().getComputedTextLength();
     }
   });
+  return {
+    header: header,
+    title: title,
+    body: body,
+    content: content
+  };
 }
 
 /* harmony default export */ var flowchart_render = (render_render);
@@ -19965,7 +19973,8 @@ function render_render(g, node, isSelected) {
     renderNode: function renderNode(node, isSelected) {
       var that = this;
       var g = that.append("g").attr("cursor", "move").classed("node", true);
-      flowchart_render(g, node, isSelected);
+      var children = flowchart_render(g, node, isSelected);
+      that.$emit('render', node, children);
       var drag = src_drag().on("start", function () {
         // handle mousedown
         var isNotCurrentNode = that.currentNodes.filter(function (item) {

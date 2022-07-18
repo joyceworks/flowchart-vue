@@ -4,18 +4,15 @@ import { roundTo20 } from "../../utils/math";
 function render(g, node, isSelected) {
   node.width = node.width || 120;
   node.height = node.height || 60;
-  let borderColor = node.borderColor
-    ? node.borderColor(isSelected)
-    : isSelected
-    ? "#666666"
-    : "#bbbbbb";
-  let textColor = node.textColor ? node.textColor(isSelected) : "black";
+  let borderColor = isSelected ? "#666666" : "#bbbbbb";
+  let textColor = "black";
+  let header = null;
+  let title = null;
   if (node.type !== "start" && node.type !== "end") {
-    let titleBackgroundColor = node.titleBackgroundColor
-      ? node.titleBackgroundColor(isSelected)
-      : "#f1f3f4";
+    let titleBackgroundColor = "#f1f3f4";
     // title
-    g.append("rect")
+    header = g
+      .append("rect")
       .attr("x", node.x)
       .attr("y", node.y)
       .attr("stroke", borderColor)
@@ -24,7 +21,8 @@ function render(g, node, isSelected) {
       .style("fill", titleBackgroundColor)
       .style("stroke-width", "1px")
       .style("width", node.width + "px");
-    g.append("text")
+    title = g
+      .append("text")
       .attr("fill", textColor)
       .attr("x", node.x + 4)
       .attr("y", node.y + 15)
@@ -43,9 +41,7 @@ function render(g, node, isSelected) {
   }
   // body
   let body = g.append("rect").attr("class", "body");
-  let bodyBackgroundColor = node.bodyBackgroundColor
-    ? node.bodyBackgroundColor(isSelected)
-    : "white";
+  let bodyBackgroundColor = "white";
   body
     .style("width", node.width + "px")
     .style("fill", bodyBackgroundColor)
@@ -80,7 +76,8 @@ function render(g, node, isSelected) {
   } else {
     bodyTextY = node.y + 5 + roundTo20(node.height) / 2;
   }
-  g.append("text")
+  let content = g
+    .append("text")
     .attr("fill", textColor)
     .attr("x", node.x + node.width / 2)
     .attr("y", bodyTextY)
@@ -99,6 +96,7 @@ function render(g, node, isSelected) {
         textLength = self.node().getComputedTextLength();
       }
     });
+  return { header, title, body, content };
 }
 
 export default render;
