@@ -460,7 +460,7 @@ export default {
       let g = that.append("g").attr("cursor", "move").classed("node", true);
 
       let children = render(g, node, isSelected);
-      that.$emit('render', children);
+      that.$emit('render', node, children);
 
       let drag = d3
           .drag()

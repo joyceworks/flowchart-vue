@@ -133,6 +133,7 @@ add|Add node event|`(node, nodes, connections) => void`|-
 delete|Delete node event|`(node, nodes, connections) => void`|-
 select|Select node event|`nodes => void`|-
 selectconnection|Select connection event|`connections => void`|-
+render|Node render event, children is a collection of svg elements |`(node: Node, children: { header, title, body, content }) => vod`|-
 
 ### Properties.Node
 
@@ -145,10 +146,6 @@ type|Type of node|`String`|`'operation'`
 width|Width of node|`Number`|`120`
 height|Height of node|`Number`|`60`
 approvers|Approvers of node, eg: [{name: 'admin'}]|`Array`|[]
-bodyBackgroundColor|Background color of node body|`(isSelected: boolean) => string`|undefined
-titleBackgroundColor|Background color of node title|`(isSelected: boolean) => string`|undefined
-borderColor|Color of node border|`(isSelected: boolean) => string`|undefined
-textColor|Color of node text|`(isSelected: boolean) => string`|undefined
 
 ### Properties.Connection
 
