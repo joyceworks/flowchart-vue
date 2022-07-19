@@ -24,7 +24,9 @@
 <style src="./index.css"></style>
 <script>
 import { connect, lineTo } from "@/utils/svg";
-import * as d3 from "d3";
+import {event, select} from "d3-selection";
+import {drag} from "d3-drag";
+
 import {
   between,
   distanceOfPointToLine,
@@ -92,7 +94,6 @@ export default {
     };
   },
   methods: {
-
     add(node) {
       if (this.readonly) {
         return;
@@ -363,7 +364,7 @@ export default {
             );
             for (const path of result.paths) {
               path.on("mousedown", function (event) {
-                d3.event.stopPropagation();
+                event.stopPropagation();
                 if (that.pathClickedOnce) {
                   that.editConnection(conn);
                 } else {
@@ -418,7 +419,7 @@ export default {
       return this.getConnectorPosition(node)[connectorPosition];
     },
     append(element) {
-      let svg = d3.select("#svg");
+      let svg = select("#svg");
       return svg.insert(element, ".selection");
     },
     guideLineTo(x1, y1, x2, y2) {
@@ -462,8 +463,7 @@ export default {
       let children = render(g, node, isSelected);
       that.$emit('render', node, children);
 
-      let drag = d3
-          .drag()
+      let dragHandler = drag()
           .on("start", function () {
             // handle mousedown
             let isNotCurrentNode =
@@ -492,12 +492,12 @@ export default {
 
             let zoom = parseFloat(document.getElementById("svg").style.zoom || 1);
             for (let currentNode of that.currentNodes) {
-              let x = d3.event.dx / zoom;
+              let x = event.dx / zoom;
               if (currentNode.x + x < 0) {
                 x = -currentNode.x;
               }
               currentNode.x += x;
-              let y = d3.event.dy / zoom;
+              let y = event.dy / zoom;
               if (currentNode.y + y < 0) {
                 y = -currentNode.y;
               }
@@ -563,10 +563,9 @@ export default {
               currentNode.y = Math.round(Math.round(currentNode.y) / 10) * 10;
             }
           });
-      g.call(drag);
+      g.call(dragHandler);
       g.on("mousedown", function () {
-        // handle ctrl+mousedown
-        if (!d3.event.ctrlKey) {
+        if (!event.ctrlKey) {
           return;
         }
         let isNotCurrentNode =
@@ -590,7 +589,7 @@ export default {
             .attr("class", "connector");
         connector
             .on("mousedown", function () {
-              d3.event.stopPropagation();
+              event.stopPropagation();
               if (node.type === "end" || that.readonly) {
                 return;
               }
@@ -598,7 +597,7 @@ export default {
               that.connectingInfo.sourcePosition = position;
             })
             .on("mouseup", function () {
-              d3.event.stopPropagation();
+              event.stopPropagation();
               if (that.connectingInfo.source) {
                 if (that.connectingInfo.source.id !== node.id) {
                   // Node can't connect to itself
