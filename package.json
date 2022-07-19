@@ -16,10 +16,12 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "build-lib": "vue-cli-service build --target lib --name FlowChart src/components/flowchart/index.js"
+    "build-lib": "vue-cli-service build --target lib --name FlowChart src/components/flowchart/index.js",
+    "analyze": "source-map-explorer 'dist/FlowChart.umd.min.js'"
   },
   "dependencies": {
-    "d3": "^5.15.0"
+    "d3-selection": "1.4.1",
+    "d3-drag": "1.2.5"
   },
   "peerDependencies": {
     "vue": "^2.5.22"
@@ -33,6 +35,7 @@
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
     "prettier": "^2.0.5",
+    "source-map-explorer": "^2.5.2",
     "vue-template-compiler": "^2.5.21"
   },
   "eslintConfig": {

@@ -58,8 +58,6 @@
 import ConnectionDialog from "../components/ConnectionDialog";
 import NodeDialog from "../components/NodeDialog";
 import Flowchart from "../components/flowchart/Flowchart";
-import * as d3 from "d3";
-import { roundTo20 } from "../utils/math";
 
 export default {
   components: {

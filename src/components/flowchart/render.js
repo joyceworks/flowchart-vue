@@ -1,5 +1,5 @@
-import * as d3 from "d3";
-import { roundTo20 } from "../../utils/math";
+import { select } from "d3-selection";
+import { roundTo20 } from "@/utils/math";
 
 function render(g, node, isSelected) {
   node.width = node.width || 120;
@@ -29,7 +29,7 @@ function render(g, node, isSelected) {
       .attr("class", "unselectable")
       .text(() => node.name)
       .each(function wrap() {
-        let self = d3.select(this),
+        let self = select(this),
           textLength = self.node().getComputedTextLength(),
           text = self.text();
         while (textLength > node.width - 2 * 4 && text.length > 0) {
@@ -87,7 +87,7 @@ function render(g, node, isSelected) {
       return text;
     })
     .each(function wrap() {
-      let self = d3.select(this),
+      let self = select(this),
         textLength = self.node().getComputedTextLength(),
         text = self.text();
       while (textLength > node.width - 2 * 4 && text.length > 0) {
