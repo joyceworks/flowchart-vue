@@ -6459,7 +6459,7 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"01b9e4c9-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=239d089c&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"01b9e4c9-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=3d0048a7&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({
     width: isNaN(_vm.width) ? _vm.width : _vm.width + 'px',
     height: isNaN(_vm.height) ? _vm.height : _vm.height + 'px',
@@ -6468,7 +6468,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=239d089c&
+// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=3d0048a7&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js
 var iterator = __webpack_require__("5d58");
@@ -9075,7 +9075,7 @@ function render_render(g, node, isSelected) {
       event.stopPropagation();
       event.preventDefault();
 
-      if (event.ctrlKey || event.metaKey) {
+      if (event.ctrlKey) {
         var svg = document.getElementById("svg");
         var zoom = parseFloat(svg.style.zoom || 1);
 
@@ -9244,7 +9244,7 @@ function render_render(g, node, isSelected) {
       });
     },
     handleChartMouseDown: function handleChartMouseDown(event) {
-      if (event.ctrlKey || event.metaKey) {
+      if (event.ctrlKey) {
         this.initializeMovingAllElements(event);
       } else {
         this.selectionInfo = {
@@ -9853,11 +9853,10 @@ function render_render(g, node, isSelected) {
       });
       g.call(dragHandler);
       g.on("mousedown", function () {
-        if (!on_event.ctrlKey && !on_event.metaKey) {
+        if (!on_event.ctrlKey) {
           return;
         }
 
-        alert("multi-selection");
         var isNotCurrentNode = that.currentNodes.filter(function (item) {
           return item === node;
         }).length === 0;
