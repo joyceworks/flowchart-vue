@@ -19,7 +19,9 @@
     "build-lib": "vue-cli-service build --target lib --name FlowChart src/components/flowchart/index.js"
   },
   "dependencies": {
-    "d3": "^5.15.0",
+    "d3": "^5.15.0"
+  },
+  "peerDependencies": {
     "vue": "^2.5.22"
   },
   "devDependencies": {
