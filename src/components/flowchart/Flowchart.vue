@@ -562,6 +562,8 @@ export default {
               currentNode.x = Math.round(Math.round(currentNode.x) / 10) * 10;
               currentNode.y = Math.round(Math.round(currentNode.y) / 10) * 10;
             }
+
+            that.$emit("nodesdragged", that.currentNodes);
           });
       g.call(dragHandler);
       g.on("mousedown", function () {
