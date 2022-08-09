@@ -134,6 +134,7 @@ delete|Delete node event|`(node, nodes, connections) => void`|-
 select|Select node event|`nodes => void`|-
 selectconnection|Select connection event|`connections => void`|-
 render|Node render event, children is a collection of svg elements |`(node: Node, children: { header, title, body, content }) => vod`|-
+nodesdragged|Notify which nodes dragging just ended|`(nodes) => void`|-
 
 ### Properties.Node
 
