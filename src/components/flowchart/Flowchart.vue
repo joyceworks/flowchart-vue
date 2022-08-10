@@ -363,7 +363,7 @@ export default {
                 colors[conn.type]
             );
             for (const path of result.paths) {
-              path.on("mousedown", function (event) {
+              path.on("mousedown", () => {
                 event.stopPropagation();
                 if (that.pathClickedOnce) {
                   that.editConnection(conn);
