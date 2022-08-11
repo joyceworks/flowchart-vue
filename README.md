@@ -29,8 +29,11 @@ yarn add flowchart-vue
         <button type="button" @click="$refs.chart.save()">
             Save
         </button>
-        <button type="button" @click="confirmRemoving">
+        <button type="button" v-if="showRemovingConfirmation" @click="confirmRemoving">
             Confirm removing
+        </button>
+        <button type="button" v-if="showRemovingConfirmation" @click="showRemovingConfirmation = false">
+            Reject removing
         </button>
         <flowchart :nodes="nodes" 
                    :connections="connections" 
