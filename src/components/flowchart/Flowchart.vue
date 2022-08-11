@@ -68,6 +68,13 @@ export default {
       type: Boolean,
       default: false,
     },
+    readOnlyPermissions: {
+      type: Object,
+      default: () => ({
+        allowDragNodes: false,
+        allowSave: false
+      })
+    }
   },
   data() {
     return {
@@ -486,7 +493,7 @@ export default {
             }
           })
           .on("drag", async function () {
-            if (that.readonly) {
+            if (that.readonly && !that.readOnlyPermissions.allowDragNodes) {
               return;
             }
 
@@ -657,7 +664,7 @@ export default {
       return getEdgeOfPoints(points);
     },
     save() {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowSave) {
         return;
       }
       this.$emit("save", this.internalNodes, this.internalConnections);

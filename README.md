@@ -123,6 +123,7 @@ height|Height of canvas|`String` \| `Number`|`600`
 locale|Display language, available values: `'en'`, `'zh'`|`String`|`'en'`
 readonly|Read-only|`Boolean`|false
 render|Custom render function|`null`
+readOnlyPermissions|Allows to specify more granular read-only mode permissions|`Object`|`{allowDragNodes: false, allowSave: false}`
 editnode|Node double-click event|`(node) => void`|-
 editconnection|Connection double-click event|`(connection) => void`|-
 save|Save event|`(nodes, connections) => void`|-
