@@ -674,7 +674,7 @@ export default {
       this.$emit("save", this.internalNodes, this.internalConnections);
     },
     async remove() {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowRemove) {
         return;
       }
       if (this.currentConnections.length > 0) {

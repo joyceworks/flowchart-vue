@@ -129,7 +129,8 @@ readOnlyPermissions|Allows to specify more granular read-only mode permissions|`
   allowAddNodes: false,
   allowEditNodes: false,
   allowEditConnections: false,
-  allowDblClick: false
+  allowDblClick: false,
+  allowRemove: false,
 }`
 editnode|Node double-click event|`(node) => void`|-
 editconnection|Connection double-click event|`(connection) => void`|-
