@@ -72,7 +72,11 @@ export default {
       type: Object,
       default: () => ({
         allowDragNodes: false,
-        allowSave: false
+        allowSave: false,
+        allowAddNodes: false,
+        allowEditNodes: false,
+        allowEditConnections: false,
+        allowDblClick: false
       })
     }
   },
@@ -102,7 +106,7 @@ export default {
   },
   methods: {
     add(node) {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowAddNodes) {
         return;
       }
       this.internalNodes.push(node);
@@ -116,13 +120,13 @@ export default {
       }
     },
     editNode(node) {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowEditNodes) {
         return;
       }
       this.$emit("editnode", node);
     },
     editConnection(connection) {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowEditConnections) {
         return;
       }
       this.$emit("editconnection", connection);
@@ -211,7 +215,7 @@ export default {
       }
     },
     handleChartDblClick(event) {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowDblClick) {
         return;
       }
       this.$emit("dblclick", { x: event.offsetX, y: event.offsetY });
