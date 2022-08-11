@@ -126,7 +126,7 @@ render|Custom render function|`null`
 
 ## Events
 
-Event name|Description
+Event|Description|Handler
 -|-|-
 editnode|Node double-click event|`(node) => void`
 editconnection|Connection double-click event|`(connection) => void`
