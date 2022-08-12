@@ -132,18 +132,23 @@ readOnlyPermissions|Allows to specify more granular read-only mode permissions|`
   allowDblClick: false,
   allowRemove: false,
 }`
-editnode|Node double-click event|`(node) => void`|-
-editconnection|Connection double-click event|`(connection) => void`|-
-save|Save event|`(nodes, connections) => void`|-
-dblclick|Background double-click event|`(position: {x: number, y: number}) => void`|-
-connect|Connect event|`(node, nodes, connections) => void`|-
-disconnect|Disconnect event|`(node, nodes, connections) => void`|-
-add|Add node event|`(node, nodes, connections) => void`|-
-delete|Delete node event|`(node, nodes, connections) => void`|-
-select|Select node event|`nodes => void`|-
-selectconnection|Select connection event|`connections => void`|-
-render|Node render event, children is a collection of svg elements |`(node: Node, children: { header, title, body, content }) => vod`|-
-nodesdragged|Notify which nodes dragging just ended|`(nodes) => void`|-
+
+## Events
+
+Event|Description|Handler
+-|-|-
+editnode|Node double-click event|`(node) => void`
+editconnection|Connection double-click event|`(connection) => void`
+save|Save event|`(nodes, connections) => void`
+dblclick|Background double-click event|`(position: {x: number, y: number}) => void`
+connect|Connect event|`(connection, nodes, connections) => void`
+disconnect|Disconnect event|`(connection, nodes, connections) => void`
+add|Add node event|`(node, nodes, connections) => void`
+delete|Delete node event|`(node, nodes, connections) => void`
+select|Select node event|`nodes => void`
+selectconnection|Select connection event|`connections => void`
+render|Node render event, children is a collection of svg elements |`(node: Node, children: { header, title, body, content }) => vod`
+nodesdragged|Notify which nodes dragging just ended|`(nodes) => void`
 
 ### Properties.Node
 
