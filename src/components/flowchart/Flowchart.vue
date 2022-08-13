@@ -68,6 +68,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    removeRequiresConfirmation: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -666,6 +670,24 @@ export default {
       if (this.readonly) {
         return;
       }
+      const anyElementToRemove = this.currentConnections.length > 0 || this.currentNodes.length > 0;
+      if (!anyElementToRemove) { 
+        return;
+      }
+      if (!this.removeRequiresConfirmation) {
+        this.removeSelectedNodesAndConnections();
+      } else {
+        this.$emit("removeconfirmationrequired", this.currentNodes, this.currentConnections);
+      }
+    },
+    confirmRemove() {
+      this.removeSelectedNodesAndConnections();
+    },
+    removeSelectedNodesAndConnections() {
+      if (this.readonly) {
+        return;
+      }
+
       if (this.currentConnections.length > 0) {
         for (let conn of this.currentConnections) {
           this.removeConnection(conn);
