@@ -677,7 +677,7 @@ export default {
       if (!this.removeRequiresConfirmation) {
         this.removeSelectedNodesAndConnections();
       } else {
-        this.$emit("removeConfirmationRequired", this.currentNodes, this.currentConnections);
+        this.$emit("removeconfirmationrequired", this.currentNodes, this.currentConnections);
       }
     },
     confirmRemove() {

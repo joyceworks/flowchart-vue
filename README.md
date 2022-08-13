@@ -37,7 +37,7 @@ yarn add flowchart-vue
         </button>
         <flowchart :nodes="nodes" 
                    :connections="connections" 
-                   :removeRequiresConfirmation
+                   :remove-requires-confirmation="true"
                    @editnode="handleEditNode"
                    @dblclick="handleDblClick" 
                    @editconnection="handleEditConnection"
@@ -104,7 +104,7 @@ yarn add flowchart-vue
       },
       confirmRemoving() {
         this.$refs.chart.confirmRemove();
-        this.showRemovingConfirmation = true;
+        this.showRemovingConfirmation = false;
       }
     }
   };
