@@ -41,7 +41,7 @@ yarn add flowchart-vue
                    @editnode="handleEditNode"
                    @dblclick="handleDblClick" 
                    @editconnection="handleEditConnection"
-                   @removeConfirmationRequired="initRemovingConfirmation"
+                   @removeconfirmationrequired="initRemovingConfirmation"
                    @save="handleChartSave" ref="chart">
         </flowchart>
     </div>
