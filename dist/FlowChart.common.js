@@ -6459,7 +6459,7 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"859d94fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=04144940&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"859d94fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=5a126c2a&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({
     width: isNaN(_vm.width) ? _vm.width : _vm.width + 'px',
     height: isNaN(_vm.height) ? _vm.height : _vm.height + 'px',
@@ -6468,7 +6468,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=04144940&
+// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=5a126c2a&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js
 var iterator = __webpack_require__("5d58");
@@ -9010,6 +9010,23 @@ function render_render(g, node, isSelected) {
     readonly: {
       type: Boolean,
       default: false
+    },
+    readOnlyPermissions: {
+      type: Object,
+      default: function _default() {
+        return {
+          allowDragNodes: false,
+          allowSave: false,
+          allowAddNodes: false,
+          allowEditNodes: false,
+          allowEditConnections: false,
+          allowDblClick: false
+        };
+      }
+    },
+    removeRequiresConfirmation: {
+      type: Boolean,
+      default: false
     }
   },
   data: function data() {
@@ -9043,7 +9060,7 @@ function render_render(g, node, isSelected) {
   },
   methods: {
     add: function add(node) {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowAddNodes) {
         return;
       }
 
@@ -9058,14 +9075,14 @@ function render_render(g, node, isSelected) {
       }
     },
     editNode: function editNode(node) {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowEditNodes) {
         return;
       }
 
       this.$emit("editnode", node);
     },
     editConnection: function editConnection(connection) {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowEditConnections) {
         return;
       }
 
@@ -9234,7 +9251,7 @@ function render_render(g, node, isSelected) {
       return handleChartMouseMove;
     }(),
     handleChartDblClick: function handleChartDblClick(event) {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowDblClick) {
         return;
       }
 
@@ -9658,7 +9675,7 @@ function render_render(g, node, isSelected) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                if (!that.readonly) {
+                if (!(that.readonly && !that.readOnlyPermissions.allowDragNodes)) {
                   _context3.next = 2;
                   break;
                 }
@@ -9949,7 +9966,7 @@ function render_render(g, node, isSelected) {
       return getEdgeOfPoints(points);
     },
     save: function save() {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowSave) {
         return;
       }
 
@@ -9959,13 +9976,12 @@ function render_render(g, node, isSelected) {
       var _remove = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee4() {
-        var _iteratorNormalCompletion12, _didIteratorError12, _iteratorError12, _iterator12, _step12, conn, _iteratorNormalCompletion13, _didIteratorError13, _iteratorError13, _iterator13, _step13, node;
-
+        var anyElementToRemove;
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                if (!this.readonly) {
+                if (!(this.readonly && !this.readOnlyPermissions.allowRemove)) {
                   _context4.next = 2;
                   break;
                 }
@@ -9973,115 +9989,28 @@ function render_render(g, node, isSelected) {
                 return _context4.abrupt("return");
 
               case 2:
-                if (!(this.currentConnections.length > 0)) {
-                  _context4.next = 23;
+                anyElementToRemove = this.currentConnections.length > 0 || this.currentNodes.length > 0;
+
+                if (anyElementToRemove) {
+                  _context4.next = 5;
                   break;
                 }
 
-                _iteratorNormalCompletion12 = true;
-                _didIteratorError12 = false;
-                _iteratorError12 = undefined;
-                _context4.prev = 6;
+                return _context4.abrupt("return");
 
-                for (_iterator12 = this.currentConnections[Symbol.iterator](); !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
-                  conn = _step12.value;
-                  this.removeConnection(conn);
+              case 5:
+                if (!this.removeRequiresConfirmation) {
+                  this.removeSelectedNodesAndConnections();
+                } else {
+                  this.$emit("removeconfirmationrequired", this.currentNodes, this.currentConnections);
                 }
 
-                _context4.next = 14;
-                break;
-
-              case 10:
-                _context4.prev = 10;
-                _context4.t0 = _context4["catch"](6);
-                _didIteratorError12 = true;
-                _iteratorError12 = _context4.t0;
-
-              case 14:
-                _context4.prev = 14;
-                _context4.prev = 15;
-
-                if (!_iteratorNormalCompletion12 && _iterator12.return != null) {
-                  _iterator12.return();
-                }
-
-              case 17:
-                _context4.prev = 17;
-
-                if (!_didIteratorError12) {
-                  _context4.next = 20;
-                  break;
-                }
-
-                throw _iteratorError12;
-
-              case 20:
-                return _context4.finish(17);
-
-              case 21:
-                return _context4.finish(14);
-
-              case 22:
-                this.currentConnections.splice(0, this.currentConnections.length);
-
-              case 23:
-                if (!(this.currentNodes.length > 0)) {
-                  _context4.next = 44;
-                  break;
-                }
-
-                _iteratorNormalCompletion13 = true;
-                _didIteratorError13 = false;
-                _iteratorError13 = undefined;
-                _context4.prev = 27;
-
-                for (_iterator13 = this.currentNodes[Symbol.iterator](); !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
-                  node = _step13.value;
-                  this.removeNode(node);
-                }
-
-                _context4.next = 35;
-                break;
-
-              case 31:
-                _context4.prev = 31;
-                _context4.t1 = _context4["catch"](27);
-                _didIteratorError13 = true;
-                _iteratorError13 = _context4.t1;
-
-              case 35:
-                _context4.prev = 35;
-                _context4.prev = 36;
-
-                if (!_iteratorNormalCompletion13 && _iterator13.return != null) {
-                  _iterator13.return();
-                }
-
-              case 38:
-                _context4.prev = 38;
-
-                if (!_didIteratorError13) {
-                  _context4.next = 41;
-                  break;
-                }
-
-                throw _iteratorError13;
-
-              case 41:
-                return _context4.finish(38);
-
-              case 42:
-                return _context4.finish(35);
-
-              case 43:
-                this.currentNodes.splice(0, this.currentNodes.length);
-
-              case 44:
+              case 6:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4, this, [[6, 10, 14, 22], [15,, 17, 21], [27, 31, 35, 43], [36,, 38, 42]]);
+        }, _callee4, this);
       }));
 
       function remove() {
@@ -10090,6 +10019,70 @@ function render_render(g, node, isSelected) {
 
       return remove;
     }(),
+    confirmRemove: function confirmRemove() {
+      this.removeSelectedNodesAndConnections();
+    },
+    removeSelectedNodesAndConnections: function removeSelectedNodesAndConnections() {
+      if (this.readonly) {
+        return;
+      }
+
+      if (this.currentConnections.length > 0) {
+        var _iteratorNormalCompletion12 = true;
+        var _didIteratorError12 = false;
+        var _iteratorError12 = undefined;
+
+        try {
+          for (var _iterator12 = this.currentConnections[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
+            var conn = _step12.value;
+            this.removeConnection(conn);
+          }
+        } catch (err) {
+          _didIteratorError12 = true;
+          _iteratorError12 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion12 && _iterator12.return != null) {
+              _iterator12.return();
+            }
+          } finally {
+            if (_didIteratorError12) {
+              throw _iteratorError12;
+            }
+          }
+        }
+
+        this.currentConnections.splice(0, this.currentConnections.length);
+      }
+
+      if (this.currentNodes.length > 0) {
+        var _iteratorNormalCompletion13 = true;
+        var _didIteratorError13 = false;
+        var _iteratorError13 = undefined;
+
+        try {
+          for (var _iterator13 = this.currentNodes[Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
+            var node = _step13.value;
+            this.removeNode(node);
+          }
+        } catch (err) {
+          _didIteratorError13 = true;
+          _iteratorError13 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion13 && _iterator13.return != null) {
+              _iterator13.return();
+            }
+          } finally {
+            if (_didIteratorError13) {
+              throw _iteratorError13;
+            }
+          }
+        }
+
+        this.currentNodes.splice(0, this.currentNodes.length);
+      }
+    },
     removeNode: function removeNode(node) {
       var connections = this.internalConnections.filter(function (item) {
         return item.source.id === node.id || item.destination.id === node.id;
