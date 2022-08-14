@@ -29,9 +29,20 @@ yarn add flowchart-vue
         <button type="button" @click="$refs.chart.save()">
             Save
         </button>
-        <flowchart :nodes="nodes" :connections="connections" @editnode="handleEditNode"
-                    @dblclick="handleDblClick" @editconnection="handleEditConnection" 
-                    @save="handleChartSave" ref="chart">
+        <button type="button" v-if="showRemovingConfirmation" @click="confirmRemoving">
+            Confirm removing
+        </button>
+        <button type="button" v-if="showRemovingConfirmation" @click="showRemovingConfirmation = false">
+            Reject removing
+        </button>
+        <flowchart :nodes="nodes" 
+                   :connections="connections" 
+                   :remove-requires-confirmation="true"
+                   @editnode="handleEditNode"
+                   @dblclick="handleDblClick" 
+                   @editconnection="handleEditConnection"
+                   @removeconfirmationrequired="initRemovingConfirmation"
+                   @save="handleChartSave" ref="chart">
         </flowchart>
     </div>
 </template>
@@ -60,6 +71,7 @@ yarn add flowchart-vue
             type: 'pass',
           },
         ],
+        showRemovingConfirmation: false,
       };
     },
     methods: {
@@ -87,6 +99,13 @@ yarn add flowchart-vue
           approvers: [],
         });
       },
+      initRemovingConfirmation() {
+        this.showRemovingConfirmation = true;
+      },
+      confirmRemoving() {
+        this.$refs.chart.confirmRemove();
+        this.showRemovingConfirmation = false;
+      }
     }
   };
 </script>
@@ -149,6 +168,7 @@ select|Select node event|`nodes => void`
 selectconnection|Select connection event|`connections => void`
 render|Node render event, children is a collection of svg elements |`(node: Node, children: { header, title, body, content }) => vod`
 nodesdragged|Notify which nodes dragging just ended|`(nodes) => void`
+removeConfirmationRequired|Notify that remove confirmation required. Pass nodes and connections selected to remove.|`(nodes, connections) => void`|-
 
 ### Properties.Node
 

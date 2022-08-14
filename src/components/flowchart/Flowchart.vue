@@ -78,7 +78,11 @@ export default {
         allowEditConnections: false,
         allowDblClick: false
       })
-    }
+    },
+    removeRequiresConfirmation: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -677,6 +681,24 @@ export default {
       if (this.readonly && !this.readOnlyPermissions.allowRemove) {
         return;
       }
+      const anyElementToRemove = this.currentConnections.length > 0 || this.currentNodes.length > 0;
+      if (!anyElementToRemove) { 
+        return;
+      }
+      if (!this.removeRequiresConfirmation) {
+        this.removeSelectedNodesAndConnections();
+      } else {
+        this.$emit("removeconfirmationrequired", this.currentNodes, this.currentConnections);
+      }
+    },
+    confirmRemove() {
+      this.removeSelectedNodesAndConnections();
+    },
+    removeSelectedNodesAndConnections() {
+      if (this.readonly) {
+        return;
+      }
+
       if (this.currentConnections.length > 0) {
         for (let conn of this.currentConnections) {
           this.removeConnection(conn);
