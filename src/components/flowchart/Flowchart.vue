@@ -68,6 +68,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    readOnlyPermissions: {
+      type: Object,
+      default: () => ({
+        allowDragNodes: false,
+        allowSave: false,
+        allowAddNodes: false,
+        allowEditNodes: false,
+        allowEditConnections: false,
+        allowDblClick: false
+      })
+    },
     removeRequiresConfirmation: {
       type: Boolean,
       default: false,
@@ -99,7 +110,7 @@ export default {
   },
   methods: {
     add(node) {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowAddNodes) {
         return;
       }
       this.internalNodes.push(node);
@@ -113,13 +124,13 @@ export default {
       }
     },
     editNode(node) {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowEditNodes) {
         return;
       }
       this.$emit("editnode", node);
     },
     editConnection(connection) {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowEditConnections) {
         return;
       }
       this.$emit("editconnection", connection);
@@ -208,7 +219,7 @@ export default {
       }
     },
     handleChartDblClick(event) {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowDblClick) {
         return;
       }
       this.$emit("dblclick", { x: event.offsetX, y: event.offsetY });
@@ -490,7 +501,7 @@ export default {
             }
           })
           .on("drag", async function () {
-            if (that.readonly) {
+            if (that.readonly && !that.readOnlyPermissions.allowDragNodes) {
               return;
             }
 
@@ -661,13 +672,13 @@ export default {
       return getEdgeOfPoints(points);
     },
     save() {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowSave) {
         return;
       }
       this.$emit("save", this.internalNodes, this.internalConnections);
     },
     async remove() {
-      if (this.readonly) {
+      if (this.readonly && !this.readOnlyPermissions.allowRemove) {
         return;
       }
       const anyElementToRemove = this.currentConnections.length > 0 || this.currentNodes.length > 0;
