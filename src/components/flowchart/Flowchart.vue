@@ -106,6 +106,7 @@ export default {
        * lines of all internalConnections
        */
       lines: [],
+      invalidConnections: []
     };
   },
   methods: {
@@ -360,7 +361,12 @@ export default {
           }
           // render lines
           that.lines = [];
+          that.invalidConnections = [];
           that.internalConnections.forEach((conn) => {
+            if (!that.haveNodesSelectedConnectors(conn)) {
+              that.invalidConnections.push(conn);
+              return;
+            }
             let sourcePosition = that.getNodeConnectorOffset(
                 conn.source.id,
                 conn.source.position
@@ -423,6 +429,17 @@ export default {
           resolve();
         });
       });
+    },
+    haveNodesSelectedConnectors(connection) {
+      const sourceNode = this.nodes.find(x => x.id === connection.source.id);
+      const destinationNode = this.nodes.find(x => x.id === connection.destination.id);
+      if (sourceNode.connectors && !sourceNode.connectors.includes(connection.source.position)) {
+        return false;
+      }
+      if (destinationNode.connectors && !destinationNode.connectors.includes(connection.destination.position)) {
+        return false;
+      }
+      return true;
     },
     renderNodes() {
       let that = this;

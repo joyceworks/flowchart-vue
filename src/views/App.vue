@@ -138,7 +138,7 @@ export default {
         {
           source: { id: 3, position: "bottom" },
           destination: { id: 5, position: "top" },
-          id: 76,
+          id: 7,
           type: "pass",
         },
       ],
