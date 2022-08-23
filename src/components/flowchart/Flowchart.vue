@@ -263,11 +263,24 @@ export default {
     getConnectorPosition(node) {
       const halfWidth = node.width / 2;
       const halfHeight = node.height / 2;
-      let top = { x: node.x + halfWidth, y: node.y };
-      let left = { x: node.x, y: node.y + halfHeight };
-      let bottom = { x: node.x + halfWidth, y: node.y + node.height };
-      let right = { x: node.x + node.width, y: node.y + halfHeight };
-      return { left, right, top, bottom };
+      const result = {};
+      if (this.canAddConnector(node, "top")) {
+        result.top = { x: node.x + halfWidth, y: node.y };
+      }
+      if (this.canAddConnector(node, "right")) {
+        result.right = { x: node.x + node.width, y: node.y + halfHeight };
+      }
+      if (this.canAddConnector(node, "bottom")) {
+        result.bottom = { x: node.x + halfWidth, y: node.y + node.height };
+      }
+      if (this.canAddConnector(node, "left")) {
+        result.left = { x: node.x, y: node.y + halfHeight };
+      }
+      
+      return result;
+    },
+    canAddConnector(node, position) {
+      return !node.connectors || node.connectors.includes(position);
     },
     moveAllElements() {
       let that = this;
