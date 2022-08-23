@@ -265,22 +265,22 @@ export default {
       const halfWidth = node.width / 2;
       const halfHeight = node.height / 2;
       const result = {};
-      if (this.canAddConnector(node, "top")) {
+      if (this.hasNodeConnector(node, "top")) {
         result.top = { x: node.x + halfWidth, y: node.y };
       }
-      if (this.canAddConnector(node, "right")) {
+      if (this.hasNodeConnector(node, "right")) {
         result.right = { x: node.x + node.width, y: node.y + halfHeight };
       }
-      if (this.canAddConnector(node, "bottom")) {
+      if (this.hasNodeConnector(node, "bottom")) {
         result.bottom = { x: node.x + halfWidth, y: node.y + node.height };
       }
-      if (this.canAddConnector(node, "left")) {
+      if (this.hasNodeConnector(node, "left")) {
         result.left = { x: node.x, y: node.y + halfHeight };
       }
       
       return result;
     },
-    canAddConnector(node, position) {
+    hasNodeConnector(node, position) {
       return !node.connectors || node.connectors.includes(position);
     },
     moveAllElements() {
@@ -433,13 +433,8 @@ export default {
     haveNodesSelectedConnectors(connection) {
       const sourceNode = this.nodes.find(x => x.id === connection.source.id);
       const destinationNode = this.nodes.find(x => x.id === connection.destination.id);
-      if (sourceNode.connectors && !sourceNode.connectors.includes(connection.source.position)) {
-        return false;
-      }
-      if (destinationNode.connectors && !destinationNode.connectors.includes(connection.destination.position)) {
-        return false;
-      }
-      return true;
+      return this.hasNodeConnector(sourceNode, connection.source.position) 
+          && this.hasNodeConnector(destinationNode, connection.destination.position);
     },
     renderNodes() {
       let that = this;
