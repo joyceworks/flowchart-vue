@@ -151,7 +151,7 @@ export default {
     async handleChartMouseUp() {
       if (this.connectingInfo.source) {
         if (this.hoveredConnector) {
-          if (this.connectingInfo.source.id !== this.hoveredConnector.node.id) {
+          if (this.isNodesConnectionValid()) {
             // Node can't connect to itself
             let tempId = +new Date();
             let conn = {
@@ -185,6 +185,17 @@ export default {
       if (this.moveInfo) {
         this.moveInfo = null;
       }
+    },
+    isNodesConnectionValid() {
+      const connectionToItself = this.connectingInfo.source.id === this.hoveredConnector.node.id;
+      const connectionAlreadyExists = this.internalConnections
+          .some(x =>
+              x.source.id === this.connectingInfo.source.id
+              && x.source.position === this.connectingInfo.sourcePosition
+              && x.destination.id === this.hoveredConnector.node.id
+              && x.destination.position === this.hoveredConnector.position);
+      
+      return !connectionToItself && !connectionAlreadyExists;
     },
     async handleChartMouseMove(event) {
       // calc offset of cursor to chart
