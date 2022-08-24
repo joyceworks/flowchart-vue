@@ -495,6 +495,57 @@ module.exports = function (it, key) {
 
 /***/ }),
 
+/***/ "0a49":
+/***/ (function(module, exports, __webpack_require__) {
+
+// 0 -> Array#forEach
+// 1 -> Array#map
+// 2 -> Array#filter
+// 3 -> Array#some
+// 4 -> Array#every
+// 5 -> Array#find
+// 6 -> Array#findIndex
+var ctx = __webpack_require__("9b43");
+var IObject = __webpack_require__("626a");
+var toObject = __webpack_require__("4bf8");
+var toLength = __webpack_require__("9def");
+var asc = __webpack_require__("cd1c");
+module.exports = function (TYPE, $create) {
+  var IS_MAP = TYPE == 1;
+  var IS_FILTER = TYPE == 2;
+  var IS_SOME = TYPE == 3;
+  var IS_EVERY = TYPE == 4;
+  var IS_FIND_INDEX = TYPE == 6;
+  var NO_HOLES = TYPE == 5 || IS_FIND_INDEX;
+  var create = $create || asc;
+  return function ($this, callbackfn, that) {
+    var O = toObject($this);
+    var self = IObject(O);
+    var f = ctx(callbackfn, that, 3);
+    var length = toLength(self.length);
+    var index = 0;
+    var result = IS_MAP ? create($this, length) : IS_FILTER ? create($this, 0) : undefined;
+    var val, res;
+    for (;length > index; index++) if (NO_HOLES || index in self) {
+      val = self[index];
+      res = f(val, index, O);
+      if (TYPE) {
+        if (IS_MAP) result[index] = res;   // map
+        else if (res) switch (TYPE) {
+          case 3: return true;             // some
+          case 5: return val;              // find
+          case 6: return index;            // findIndex
+          case 2: result.push(val);        // filter
+        } else if (IS_EVERY) return false; // every
+      }
+    }
+    return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : result;
+  };
+};
+
+
+/***/ }),
+
 /***/ "0bfb":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1542,6 +1593,26 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ "2fdb":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// 21.1.3.7 String.prototype.includes(searchString, position = 0)
+
+var $export = __webpack_require__("5ca1");
+var context = __webpack_require__("d2c8");
+var INCLUDES = 'includes';
+
+$export($export.P + $export.F * __webpack_require__("5147")(INCLUDES), 'String', {
+  includes: function includes(searchString /* , position = 0 */) {
+    return !!~context(this, searchString, INCLUDES)
+      .indexOf(searchString, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+
+
+/***/ }),
+
 /***/ "3024":
 /***/ (function(module, exports) {
 
@@ -2495,6 +2566,25 @@ module.exports = function (done, value) {
 
 /***/ }),
 
+/***/ "5147":
+/***/ (function(module, exports, __webpack_require__) {
+
+var MATCH = __webpack_require__("2b4c")('match');
+module.exports = function (KEY) {
+  var re = /./;
+  try {
+    '/./'[KEY](re);
+  } catch (e) {
+    try {
+      re[MATCH] = false;
+      return !'/./'[KEY](re);
+    } catch (f) { /* empty */ }
+  } return true;
+};
+
+
+/***/ }),
+
 /***/ "5168":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3319,6 +3409,26 @@ module.exports = function (name) {
 
 /***/ }),
 
+/***/ "6762":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// https://github.com/tc39/Array.prototype.includes
+var $export = __webpack_require__("5ca1");
+var $includes = __webpack_require__("c366")(true);
+
+$export($export.P, 'Array', {
+  includes: function includes(el /* , fromIndex = 0 */) {
+    return $includes(this, el, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+
+__webpack_require__("9c6c")('includes');
+
+
+/***/ }),
+
 /***/ "67ab":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3569,6 +3679,28 @@ module.exports = !$assign || __webpack_require__("79e5")(function () {
     }
   } return T;
 } : $assign;
+
+
+/***/ }),
+
+/***/ "7514":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// 22.1.3.8 Array.prototype.find(predicate, thisArg = undefined)
+var $export = __webpack_require__("5ca1");
+var $find = __webpack_require__("0a49")(5);
+var KEY = 'find';
+var forced = true;
+// Shouldn't skip holes
+if (KEY in []) Array(1)[KEY](function () { forced = false; });
+$export($export.P + $export.F * forced, 'Array', {
+  find: function find(callbackfn /* , that = undefined */) {
+    return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+__webpack_require__("9c6c")(KEY);
 
 
 /***/ }),
@@ -5391,6 +5523,21 @@ module.exports = exporter;
 
 /***/ }),
 
+/***/ "aae3":
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.2.8 IsRegExp(argument)
+var isObject = __webpack_require__("d3f4");
+var cof = __webpack_require__("2d95");
+var MATCH = __webpack_require__("2b4c")('match');
+module.exports = function (it) {
+  var isRegExp;
+  return isObject(it) && ((isRegExp = it[MATCH]) !== undefined ? !!isRegExp : cof(it) == 'RegExp');
+};
+
+
+/***/ }),
+
 /***/ "aba2":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5970,6 +6117,19 @@ exports.f = __webpack_require__("5168");
 
 /***/ }),
 
+/***/ "cd1c":
+/***/ (function(module, exports, __webpack_require__) {
+
+// 9.4.2.3 ArraySpeciesCreate(originalArray, length)
+var speciesConstructor = __webpack_require__("e853");
+
+module.exports = function (original, length) {
+  return new (speciesConstructor(original))(length);
+};
+
+
+/***/ }),
+
 /***/ "cd78":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6008,6 +6168,21 @@ module.exports = function (object, names) {
     ~arrayIndexOf(result, key) || result.push(key);
   }
   return result;
+};
+
+
+/***/ }),
+
+/***/ "d2c8":
+/***/ (function(module, exports, __webpack_require__) {
+
+// helper for String#{startsWith, endsWith, includes}
+var isRegExp = __webpack_require__("aae3");
+var defined = __webpack_require__("be13");
+
+module.exports = function (that, searchString, NAME) {
+  if (isRegExp(searchString)) throw TypeError('String#' + NAME + " doesn't accept regex!");
+  return String(defined(that));
 };
 
 
@@ -6222,6 +6397,29 @@ module.exports = function (object, names) {
     ~arrayIndexOf(result, key) || result.push(key);
   }
   return result;
+};
+
+
+/***/ }),
+
+/***/ "e853":
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__("d3f4");
+var isArray = __webpack_require__("1169");
+var SPECIES = __webpack_require__("2b4c")('species');
+
+module.exports = function (original) {
+  var C;
+  if (isArray(original)) {
+    C = original.constructor;
+    // cross-realm fallback
+    if (typeof C == 'function' && (C === Array || isArray(C.prototype))) C = undefined;
+    if (isObject(C)) {
+      C = C[SPECIES];
+      if (C === null) C = undefined;
+    }
+  } return C === undefined ? Array : C;
 };
 
 
@@ -6459,7 +6657,7 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"859d94fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=5a126c2a&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"859d94fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=4131bd99&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({
     width: isNaN(_vm.width) ? _vm.width : _vm.width + 'px',
     height: isNaN(_vm.height) ? _vm.height : _vm.height + 'px',
@@ -6468,7 +6666,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=5a126c2a&
+// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=4131bd99&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js
 var iterator = __webpack_require__("5d58");
@@ -6543,8 +6741,17 @@ function _nonIterableSpread() {
 function _toConsumableArray(arr) {
   return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
 }
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es6.array.find.js
+var es6_array_find = __webpack_require__("7514");
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.promise.js
 var es6_promise = __webpack_require__("551c");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es7.array.includes.js
+var es7_array_includes = __webpack_require__("6762");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es6.string.includes.js
+var es6_string_includes = __webpack_require__("2fdb");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es7.symbol.async-iterator.js
 var es7_symbol_async_iterator = __webpack_require__("ac4d");
@@ -8932,6 +9139,9 @@ function render_render(g, node, isSelected) {
 
 
 
+
+
+
 //
 //
 //
@@ -9055,7 +9265,8 @@ function render_render(g, node, isSelected) {
       /**
        * lines of all internalConnections
        */
-      lines: []
+      lines: [],
+      invalidConnections: []
     };
   },
   methods: {
@@ -9115,7 +9326,7 @@ function render_render(g, node, isSelected) {
               case 0:
                 if (this.connectingInfo.source) {
                   if (this.hoveredConnector) {
-                    if (this.connectingInfo.source.id !== this.hoveredConnector.node.id) {
+                    if (this.isNodesConnectionValid()) {
                       // Node can't connect to itself
                       tempId = +new Date();
                       conn = {
@@ -9162,6 +9373,15 @@ function render_render(g, node, isSelected) {
 
       return handleChartMouseUp;
     }(),
+    isNodesConnectionValid: function isNodesConnectionValid() {
+      var _this = this;
+
+      var connectionToItself = this.connectingInfo.source.id === this.hoveredConnector.node.id;
+      var connectionAlreadyExists = this.internalConnections.some(function (x) {
+        return x.source.id === _this.connectingInfo.source.id && x.source.position === _this.connectingInfo.sourcePosition && x.destination.id === _this.hoveredConnector.node.id && x.destination.position === _this.hoveredConnector.position;
+      });
+      return !connectionToItself && !connectionAlreadyExists;
+    },
     handleChartMouseMove: function () {
       var _handleChartMouseMove = _asyncToGenerator(
       /*#__PURE__*/
@@ -9310,28 +9530,40 @@ function render_render(g, node, isSelected) {
     getConnectorPosition: function getConnectorPosition(node) {
       var halfWidth = node.width / 2;
       var halfHeight = node.height / 2;
-      var top = {
-        x: node.x + halfWidth,
-        y: node.y
-      };
-      var left = {
-        x: node.x,
-        y: node.y + halfHeight
-      };
-      var bottom = {
-        x: node.x + halfWidth,
-        y: node.y + node.height
-      };
-      var right = {
-        x: node.x + node.width,
-        y: node.y + halfHeight
-      };
-      return {
-        left: left,
-        right: right,
-        top: top,
-        bottom: bottom
-      };
+      var result = {};
+
+      if (this.hasNodeConnector(node, "top")) {
+        result.top = {
+          x: node.x + halfWidth,
+          y: node.y
+        };
+      }
+
+      if (this.hasNodeConnector(node, "right")) {
+        result.right = {
+          x: node.x + node.width,
+          y: node.y + halfHeight
+        };
+      }
+
+      if (this.hasNodeConnector(node, "bottom")) {
+        result.bottom = {
+          x: node.x + halfWidth,
+          y: node.y + node.height
+        };
+      }
+
+      if (this.hasNodeConnector(node, "left")) {
+        result.left = {
+          x: node.x,
+          y: node.y + halfHeight
+        };
+      }
+
+      return result;
+    },
+    hasNodeConnector: function hasNodeConnector(node, position) {
+      return !node.connectors || node.connectors.includes(position);
     },
     moveAllElements: function moveAllElements() {
       var that = this;
@@ -9487,7 +9719,13 @@ function render_render(g, node, isSelected) {
           }
 
           that.lines = [];
+          that.invalidConnections = [];
           that.internalConnections.forEach(function (conn) {
+            if (!that.haveNodesSelectedConnectors(conn)) {
+              that.invalidConnections.push(conn);
+              return;
+            }
+
             var sourcePosition = that.getNodeConnectorOffset(conn.source.id, conn.source.position);
             var destinationPosition = that.getNodeConnectorOffset(conn.destination.id, conn.destination.position);
             var colors = {
@@ -9578,6 +9816,15 @@ function render_render(g, node, isSelected) {
           resolve();
         });
       });
+    },
+    haveNodesSelectedConnectors: function haveNodesSelectedConnectors(connection) {
+      var sourceNode = this.nodes.find(function (x) {
+        return x.id === connection.source.id;
+      });
+      var destinationNode = this.nodes.find(function (x) {
+        return x.id === connection.destination.id;
+      });
+      return this.hasNodeConnector(sourceNode, connection.source.position) && this.hasNodeConnector(destinationNode, connection.destination.position);
     },
     renderNodes: function renderNodes() {
       var that = this;
@@ -10265,7 +10512,7 @@ function render_render(g, node, isSelected) {
       return null;
     },
     hoveredConnection: function hoveredConnection() {
-      var _this = this;
+      var _this2 = this;
 
       var _iteratorNormalCompletion17 = true;
       var _didIteratorError17 = false;
@@ -10274,10 +10521,10 @@ function render_render(g, node, isSelected) {
       try {
         var _loop2 = function _loop2() {
           var line = _step17.value;
-          var distance = distanceOfPointToLine(line.sourceX, line.sourceY, line.destinationX, line.destinationY, _this.cursorToChartOffset.x, _this.cursorToChartOffset.y);
+          var distance = distanceOfPointToLine(line.sourceX, line.sourceY, line.destinationX, line.destinationY, _this2.cursorToChartOffset.x, _this2.cursorToChartOffset.y);
 
-          if (distance < 5 && between(line.sourceX - 2, line.destinationX + 2, _this.cursorToChartOffset.x) && between(line.sourceY - 2, line.destinationY + 2, _this.cursorToChartOffset.y)) {
-            var connections = _this.internalConnections.filter(function (item) {
+          if (distance < 5 && between(line.sourceX - 2, line.destinationX + 2, _this2.cursorToChartOffset.x) && between(line.sourceY - 2, line.destinationY + 2, _this2.cursorToChartOffset.y)) {
+            var connections = _this2.internalConnections.filter(function (item) {
               return item.id === line.id;
             });
 
