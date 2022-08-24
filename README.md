@@ -173,6 +173,7 @@ type|Type of node|`String`|`'operation'`
 width|Width of node|`Number`|`120`
 height|Height of node|`Number`|`60`
 approvers|Approvers of node, eg: [{name: 'admin'}]|`Array`|[]
+connectors|Defines which connectors should be rendered|`Array`|['top', 'right', 'bottom', 'left']
 
 ### Properties.Connection
 

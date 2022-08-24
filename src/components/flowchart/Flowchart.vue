@@ -106,6 +106,7 @@ export default {
        * lines of all internalConnections
        */
       lines: [],
+      invalidConnections: []
     };
   },
   methods: {
@@ -274,11 +275,24 @@ export default {
     getConnectorPosition(node) {
       const halfWidth = node.width / 2;
       const halfHeight = node.height / 2;
-      let top = { x: node.x + halfWidth, y: node.y };
-      let left = { x: node.x, y: node.y + halfHeight };
-      let bottom = { x: node.x + halfWidth, y: node.y + node.height };
-      let right = { x: node.x + node.width, y: node.y + halfHeight };
-      return { left, right, top, bottom };
+      const result = {};
+      if (this.hasNodeConnector(node, "top")) {
+        result.top = { x: node.x + halfWidth, y: node.y };
+      }
+      if (this.hasNodeConnector(node, "right")) {
+        result.right = { x: node.x + node.width, y: node.y + halfHeight };
+      }
+      if (this.hasNodeConnector(node, "bottom")) {
+        result.bottom = { x: node.x + halfWidth, y: node.y + node.height };
+      }
+      if (this.hasNodeConnector(node, "left")) {
+        result.left = { x: node.x, y: node.y + halfHeight };
+      }
+      
+      return result;
+    },
+    hasNodeConnector(node, position) {
+      return !node.connectors || node.connectors.includes(position);
     },
     moveAllElements() {
       let that = this;
@@ -358,7 +372,12 @@ export default {
           }
           // render lines
           that.lines = [];
+          that.invalidConnections = [];
           that.internalConnections.forEach((conn) => {
+            if (!that.haveNodesSelectedConnectors(conn)) {
+              that.invalidConnections.push(conn);
+              return;
+            }
             let sourcePosition = that.getNodeConnectorOffset(
                 conn.source.id,
                 conn.source.position
@@ -421,6 +440,12 @@ export default {
           resolve();
         });
       });
+    },
+    haveNodesSelectedConnectors(connection) {
+      const sourceNode = this.nodes.find(x => x.id === connection.source.id);
+      const destinationNode = this.nodes.find(x => x.id === connection.destination.id);
+      return this.hasNodeConnector(sourceNode, connection.source.position) 
+          && this.hasNodeConnector(destinationNode, connection.destination.position);
     },
     renderNodes() {
       let that = this;

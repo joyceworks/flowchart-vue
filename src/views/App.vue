@@ -79,6 +79,7 @@ export default {
           approvers: [{ id: 1, name: "Joyce" }],
           width: 120,
           height: 40,
+          connectors: ["left", "right"]
         },
         {
           id: 4,
@@ -132,6 +133,12 @@ export default {
           source: { id: 3, position: "right" },
           destination: { id: 2, position: "top" },
           id: 6,
+          type: "pass",
+        },
+        {
+          source: { id: 3, position: "bottom" },
+          destination: { id: 5, position: "top" },
+          id: 7,
           type: "pass",
         },
       ],
