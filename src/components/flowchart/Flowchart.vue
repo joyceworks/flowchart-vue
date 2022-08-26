@@ -37,7 +37,7 @@ import {
   pointRectangleIntersection,
 } from "@/utils/math";
 import render from "./render";
-import { isMouseDownOnAnyChildElement } from "@/utils/dom";
+import { ifElementContainChildNode } from "@/utils/dom";
 
 export default {
   name: "flowchart",
@@ -235,7 +235,7 @@ export default {
       }
     },
     handleChartDblClick(event) {
-      if (this.isMouseClickOnSlot(event)) {
+      if (this.isMouseClickOnSlot(event.target)) {
         return;
       }
       if (this.readonly && !this.readOnlyPermissions.allowDblClick) {
@@ -244,7 +244,7 @@ export default {
       this.$emit("dblclick", { x: event.offsetX, y: event.offsetY });
     },
     handleChartMouseDown(event) {
-      if (this.isMouseClickOnSlot(event)) {
+      if (this.isMouseClickOnSlot(event.target)) {
         return;
       }
       if (event.ctrlKey) {
@@ -253,8 +253,8 @@ export default {
         this.selectionInfo = { x: event.offsetX, y: event.offsetY };
       }
     },
-    isMouseClickOnSlot(event) {
-      return isMouseDownOnAnyChildElement('#chart-slot', event);
+    isMouseClickOnSlot(eventTargetNode) {
+      return ifElementContainChildNode('#chart-slot', eventTargetNode);
     },
     initializeMovingAllElements(event) {
       if (!this.isMouseOverAnyNode()) {
