@@ -190,3 +190,23 @@ Property|Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Type|Defaul
 -|-|-|-
 id|Node id|`Object`|-
 position|Starting/Ending position of node|`Object`|-
+
+### Slot
+If you want you can pass value as slot. It allows you to add new UI elements to chart playground.
+These slot elements aren't selectable - are ignored while selection. Moreover actions on click and on double click are disabled
+in area filled by passed elements. 
+You can use this functionality to e.g. in quite easy way add toolbar inside.
+
+```vue
+<flowchart ...>
+  <div id="toolbox" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 50px; 
+                           display: flex; align-items: center; 
+                           background-color: rgba(225, 225, 225, 0.7);">
+    <button @click="$refs.chart.remove()">Delete(Del)</button>
+    <button @click="$refs.chart.editCurrent()">
+      Edit(Double-click node)
+    </button>
+    <button @click="$refs.chart.save()">Save</button>
+  </div>
+</flowchart>
+```

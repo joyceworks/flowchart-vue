@@ -19,6 +19,9 @@
     <svg id="svg">
       <rect class="selection" height="0" width="0"></rect>
     </svg>
+    <div id="chart-slot" class="unselectable">
+      <slot></slot>
+    </div>
   </div>
 </template>
 <style src="./index.css"></style>
@@ -34,6 +37,7 @@ import {
   pointRectangleIntersection,
 } from "@/utils/math";
 import render from "./render";
+import { ifElementContainChildNode } from "@/utils/dom";
 
 export default {
   name: "flowchart",
@@ -231,17 +235,26 @@ export default {
       }
     },
     handleChartDblClick(event) {
+      if (this.isMouseClickOnSlot(event.target)) {
+        return;
+      }
       if (this.readonly && !this.readOnlyPermissions.allowDblClick) {
         return;
       }
       this.$emit("dblclick", { x: event.offsetX, y: event.offsetY });
     },
     handleChartMouseDown(event) {
+      if (this.isMouseClickOnSlot(event.target)) {
+        return;
+      }
       if (event.ctrlKey) {
         this.initializeMovingAllElements(event);
       } else {
         this.selectionInfo = { x: event.offsetX, y: event.offsetY };
       }
+    },
+    isMouseClickOnSlot(eventTargetNode) {
+      return ifElementContainChildNode('#chart-slot', eventTargetNode);
     },
     initializeMovingAllElements(event) {
       if (!this.isMouseOverAnyNode()) {
