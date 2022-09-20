@@ -8,7 +8,7 @@
       cursor: cursor,
     }"
       @mousemove="handleChartMouseMove"
-      @mouseup="handleChartMouseUp"
+      @mouseup="handleChartMouseUp($event)"
       @dblclick="handleChartDblClick($event)"
       @mousewheel="handleChartMouseWheel"
       @mousedown="handleChartMouseDown($event)"
@@ -110,7 +110,13 @@ export default {
        * lines of all internalConnections
        */
       lines: [],
-      invalidConnections: []
+      invalidConnections: [],
+      moveCoordinates: {
+        startX: 0,
+        startY: 0,
+        diffX: 0,
+        diffY: 0,
+      },
     };
   },
   methods: {
@@ -153,7 +159,7 @@ export default {
         svg.style.zoom = zoom;
       }
     },
-    async handleChartMouseUp() {
+    async handleChartMouseUp(event) {
       if (this.connectingInfo.source) {
         if (this.hoveredConnector) {
           if (this.isNodesConnectionValid()) {
@@ -188,6 +194,12 @@ export default {
         this.selectionInfo = null;
       }
       if (this.moveInfo) {
+        this.moveCoordinates.diffX += event.pageX - this.moveCoordinates.startX;
+        this.moveCoordinates.diffY += event.pageY - this.moveCoordinates.startY;
+        this.$emit(
+            "moveDiff",
+            { x: this.moveCoordinates.diffX, y: this.moveCoordinates.diffY }
+        );
         this.moveInfo = null;
       }
     },
@@ -248,6 +260,8 @@ export default {
         return;
       }
       if (event.ctrlKey) {
+        this.moveCoordinates.startX = event.pageX;
+        this.moveCoordinates.startY = event.pageY;
         this.initializeMovingAllElements(event);
       } else {
         this.selectionInfo = { x: event.offsetX, y: event.offsetY };
