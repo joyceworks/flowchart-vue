@@ -834,6 +834,51 @@ module.exports = function (it, S) {
 
 /***/ }),
 
+/***/ "1c4c":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var ctx = __webpack_require__("9b43");
+var $export = __webpack_require__("5ca1");
+var toObject = __webpack_require__("4bf8");
+var call = __webpack_require__("1fa8");
+var isArrayIter = __webpack_require__("33a4");
+var toLength = __webpack_require__("9def");
+var createProperty = __webpack_require__("f1ae");
+var getIterFn = __webpack_require__("27ee");
+
+$export($export.S + $export.F * !__webpack_require__("5cc5")(function (iter) { Array.from(iter); }), 'Array', {
+  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
+  from: function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
+    var O = toObject(arrayLike);
+    var C = typeof this == 'function' ? this : Array;
+    var aLen = arguments.length;
+    var mapfn = aLen > 1 ? arguments[1] : undefined;
+    var mapping = mapfn !== undefined;
+    var index = 0;
+    var iterFn = getIterFn(O);
+    var length, result, step, iterator;
+    if (mapping) mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
+    // if object isn't iterable or it's array with default iterator - use simple case
+    if (iterFn != undefined && !(C == Array && isArrayIter(iterFn))) {
+      for (iterator = iterFn.call(O), result = new C(); !(step = iterator.next()).done; index++) {
+        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
+      }
+    } else {
+      length = toLength(O.length);
+      for (result = new C(length); length > index; index++) {
+        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
+      }
+    }
+    result.length = index;
+    return result;
+  }
+});
+
+
+/***/ }),
+
 /***/ "1ec9":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3228,6 +3273,31 @@ module.exports = function (that, target, C) {
     setPrototypeOf(that, P);
   } return that;
 };
+
+
+/***/ }),
+
+/***/ "5df3":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $at = __webpack_require__("02f4")(true);
+
+// 21.1.3.27 String.prototype[@@iterator]()
+__webpack_require__("01f9")(String, 'String', function (iterated) {
+  this._t = String(iterated); // target
+  this._i = 0;                // next index
+// 21.1.5.2.1 %StringIteratorPrototype%.next()
+}, function () {
+  var O = this._t;
+  var index = this._i;
+  var point;
+  if (index >= O.length) return { value: undefined, done: true };
+  point = $at(O, index);
+  this._i += point.length;
+  return { value: point, done: false };
+});
 
 
 /***/ }),
@@ -6501,6 +6571,22 @@ var meta = module.exports = {
 
 /***/ }),
 
+/***/ "f1ae":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $defineProperty = __webpack_require__("86cc");
+var createDesc = __webpack_require__("4630");
+
+module.exports = function (object, index, value) {
+  if (index in object) $defineProperty.f(object, index, createDesc(0, value));
+  else object[index] = value;
+};
+
+
+/***/ }),
+
 /***/ "f201":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6657,16 +6743,16 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"859d94fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=4131bd99&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"859d94fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=1c629598&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({
     width: isNaN(_vm.width) ? _vm.width : _vm.width + 'px',
     height: isNaN(_vm.height) ? _vm.height : _vm.height + 'px',
     cursor: _vm.cursor,
-  }),attrs:{"id":"chart","tabindex":"0"},on:{"mousemove":_vm.handleChartMouseMove,"mouseup":_vm.handleChartMouseUp,"dblclick":function($event){return _vm.handleChartDblClick($event)},"mousewheel":_vm.handleChartMouseWheel,"mousedown":function($event){return _vm.handleChartMouseDown($event)}}},[_c('span',{staticClass:"unselectable",attrs:{"id":"position"}},[_vm._v("\n    "+_vm._s(_vm.cursorToChartOffset.x + ", " + _vm.cursorToChartOffset.y)+"\n  ")]),_c('svg',{attrs:{"id":"svg"}},[_c('rect',{staticClass:"selection",attrs:{"height":"0","width":"0"}})])])}
+  }),attrs:{"id":"chart","tabindex":"0"},on:{"mousemove":_vm.handleChartMouseMove,"mouseup":_vm.handleChartMouseUp,"dblclick":function($event){return _vm.handleChartDblClick($event)},"mousewheel":_vm.handleChartMouseWheel,"mousedown":function($event){return _vm.handleChartMouseDown($event)}}},[_c('span',{staticClass:"unselectable",attrs:{"id":"position"}},[_vm._v("\n    "+_vm._s(_vm.cursorToChartOffset.x + ", " + _vm.cursorToChartOffset.y)+"\n  ")]),_c('svg',{attrs:{"id":"svg"}},[_c('rect',{staticClass:"selection",attrs:{"height":"0","width":"0"}})]),_c('div',{staticClass:"unselectable",attrs:{"id":"chart-slot"}},[_vm._t("default")],2)])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=4131bd99&
+// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=1c629598&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js
 var iterator = __webpack_require__("5d58");
@@ -9126,6 +9212,25 @@ function render_render(g, node, isSelected) {
 }
 
 /* harmony default export */ var flowchart_render = (render_render);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es6.string.iterator.js
+var es6_string_iterator = __webpack_require__("5df3");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es6.array.from.js
+var es6_array_from = __webpack_require__("1c4c");
+
+// CONCATENATED MODULE: ./src/utils/dom.js
+
+
+
+function ifElementContainChildNode(parentSelector, checkedNode) {
+  var parentElement = document.querySelector(parentSelector);
+  var childrenNodes = Array.from(parentElement.childNodes);
+  return childrenNodes.some(function (node) {
+    return node.contains(checkedNode);
+  });
+}
+
+
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=script&lang=js&
 
 
@@ -9166,6 +9271,10 @@ function render_render(g, node, isSelected) {
 //
 //
 //
+//
+//
+//
+
 
 
 
@@ -9471,6 +9580,10 @@ function render_render(g, node, isSelected) {
       return handleChartMouseMove;
     }(),
     handleChartDblClick: function handleChartDblClick(event) {
+      if (this.isMouseClickOnSlot(event.target)) {
+        return;
+      }
+
       if (this.readonly && !this.readOnlyPermissions.allowDblClick) {
         return;
       }
@@ -9481,6 +9594,10 @@ function render_render(g, node, isSelected) {
       });
     },
     handleChartMouseDown: function handleChartMouseDown(event) {
+      if (this.isMouseClickOnSlot(event.target)) {
+        return;
+      }
+
       if (event.ctrlKey) {
         this.initializeMovingAllElements(event);
       } else {
@@ -9489,6 +9606,9 @@ function render_render(g, node, isSelected) {
           y: event.offsetY
         };
       }
+    },
+    isMouseClickOnSlot: function isMouseClickOnSlot(eventTargetNode) {
+      return ifElementContainChildNode('#chart-slot', eventTargetNode);
     },
     initializeMovingAllElements: function initializeMovingAllElements(event) {
       if (!this.isMouseOverAnyNode()) {
