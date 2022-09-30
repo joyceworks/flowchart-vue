@@ -161,7 +161,7 @@ selectconnection|Select connection event|`connections => void`
 render|Node render event, children is a collection of svg elements |`(node: Node, children: { header, title, body, content }) => vod`
 nodesdragged|Notifies which nodes dragging just ended|`(nodes) => void`
 removeConfirmationRequired|Notifies that remove confirmation required. Pass nodes and connections selected to remove|`(nodes, connections) => void`
-moveDiff|Notifies about change in chart view position|`(diff: {x: number, y: number}) => void`
+movediff|Notifies about change in chart view position|`(diff: {x: number, y: number}) => void`
 
 ### Properties.Node
 

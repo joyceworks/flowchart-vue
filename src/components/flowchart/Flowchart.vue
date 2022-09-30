@@ -197,7 +197,7 @@ export default {
         this.moveCoordinates.diffX += event.pageX - this.moveCoordinates.startX;
         this.moveCoordinates.diffY += event.pageY - this.moveCoordinates.startY;
         this.$emit(
-            "moveDiff",
+            "movediff",
             { x: this.moveCoordinates.diffX, y: this.moveCoordinates.diffY }
         );
         this.moveInfo = null;
