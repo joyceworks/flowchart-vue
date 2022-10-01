@@ -6752,16 +6752,16 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"859d94fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=1c629598&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"859d94fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=66cd895b&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({
     width: isNaN(_vm.width) ? _vm.width : _vm.width + 'px',
     height: isNaN(_vm.height) ? _vm.height : _vm.height + 'px',
     cursor: _vm.cursor,
-  }),attrs:{"id":"chart","tabindex":"0"},on:{"mousemove":_vm.handleChartMouseMove,"mouseup":_vm.handleChartMouseUp,"dblclick":function($event){return _vm.handleChartDblClick($event)},"mousewheel":_vm.handleChartMouseWheel,"mousedown":function($event){return _vm.handleChartMouseDown($event)}}},[_c('span',{staticClass:"unselectable",attrs:{"id":"position"}},[_vm._v("\n    "+_vm._s(_vm.cursorToChartOffset.x + ", " + _vm.cursorToChartOffset.y)+"\n  ")]),_c('svg',{attrs:{"id":"svg"}},[_c('rect',{staticClass:"selection",attrs:{"height":"0","width":"0"}})]),_c('div',{staticClass:"unselectable",attrs:{"id":"chart-slot"}},[_vm._t("default")],2)])}
+  }),attrs:{"id":"chart","tabindex":"0"},on:{"mousemove":_vm.handleChartMouseMove,"mouseup":function($event){return _vm.handleChartMouseUp($event)},"dblclick":function($event){return _vm.handleChartDblClick($event)},"mousewheel":_vm.handleChartMouseWheel,"mousedown":function($event){return _vm.handleChartMouseDown($event)}}},[_c('span',{staticClass:"unselectable",attrs:{"id":"position"}},[_vm._v("\n    "+_vm._s(_vm.cursorToChartOffset.x + ", " + _vm.cursorToChartOffset.y)+"\n  ")]),_c('svg',{attrs:{"id":"svg"}},[_c('rect',{staticClass:"selection",attrs:{"height":"0","width":"0"}})]),_c('div',{staticClass:"unselectable",attrs:{"id":"chart-slot"}},[_vm._t("default")],2)])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=1c629598&
+// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=66cd895b&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js
 var iterator = __webpack_require__("5d58");
@@ -9384,7 +9384,13 @@ function ifElementContainChildNode(parentSelector, checkedNode) {
        * lines of all internalConnections
        */
       lines: [],
-      invalidConnections: []
+      invalidConnections: [],
+      moveCoordinates: {
+        startX: 0,
+        startY: 0,
+        diffX: 0,
+        diffY: 0
+      }
     };
   },
   methods: {
@@ -9436,7 +9442,7 @@ function ifElementContainChildNode(parentSelector, checkedNode) {
     handleChartMouseUp: function () {
       var _handleChartMouseUp = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee() {
+      regeneratorRuntime.mark(function _callee(event) {
         var tempId, conn;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -9474,6 +9480,12 @@ function ifElementContainChildNode(parentSelector, checkedNode) {
                 }
 
                 if (this.moveInfo) {
+                  this.moveCoordinates.diffX += event.pageX - this.moveCoordinates.startX;
+                  this.moveCoordinates.diffY += event.pageY - this.moveCoordinates.startY;
+                  this.$emit("movediff", {
+                    x: this.moveCoordinates.diffX,
+                    y: this.moveCoordinates.diffY
+                  });
                   this.moveInfo = null;
                 }
 
@@ -9485,7 +9497,7 @@ function ifElementContainChildNode(parentSelector, checkedNode) {
         }, _callee, this);
       }));
 
-      function handleChartMouseUp() {
+      function handleChartMouseUp(_x) {
         return _handleChartMouseUp.apply(this, arguments);
       }
 
@@ -9582,7 +9594,7 @@ function ifElementContainChildNode(parentSelector, checkedNode) {
         }, _callee2, this, [[11, 15, 19, 27], [20,, 22, 26]]);
       }));
 
-      function handleChartMouseMove(_x) {
+      function handleChartMouseMove(_x2) {
         return _handleChartMouseMove.apply(this, arguments);
       }
 
@@ -9608,6 +9620,8 @@ function ifElementContainChildNode(parentSelector, checkedNode) {
       }
 
       if (event.ctrlKey) {
+        this.moveCoordinates.startX = event.pageX;
+        this.moveCoordinates.startY = event.pageY;
         this.initializeMovingAllElements(event);
       } else {
         this.selectionInfo = {
