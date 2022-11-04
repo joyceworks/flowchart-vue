@@ -6752,7 +6752,7 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"859d94fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=66cd895b&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"859d94fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=000b0134&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({
     width: isNaN(_vm.width) ? _vm.width : _vm.width + 'px',
     height: isNaN(_vm.height) ? _vm.height : _vm.height + 'px',
@@ -6761,7 +6761,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=66cd895b&
+// CONCATENATED MODULE: ./src/components/flowchart/Flowchart.vue?vue&type=template&id=000b0134&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js
 var iterator = __webpack_require__("5d58");
@@ -9480,7 +9480,7 @@ function ifElementContainChildNode(parentSelector, checkedNode) {
                 }
 
                 if (this.moveInfo) {
-                  this.moveCoordinates.diffX += event.pageX - this.moveCoordinates.startX;
+                  this.moveCoordinates.diffX -= event.pageX - this.moveCoordinates.startX;
                   this.moveCoordinates.diffY += event.pageY - this.moveCoordinates.startY;
                   this.$emit("movediff", {
                     x: this.moveCoordinates.diffX,
@@ -10548,11 +10548,15 @@ function ifElementContainChildNode(parentSelector, checkedNode) {
       }
     },
     init: function init() {
+      var _this2 = this;
+
       var that = this;
       that.internalNodes.splice(0, that.internalNodes.length);
       that.internalConnections.splice(0, that.internalConnections.length);
       that.nodes.forEach(function (node) {
         var newNode = Object.assign({}, node);
+        newNode.x = newNode.x + _this2.moveCoordinates.diffX;
+        newNode.y = newNode.y + _this2.moveCoordinates.diffY;
         newNode.width = newNode.width || 120;
         newNode.height = newNode.height || 60;
         that.internalNodes.push(newNode);
@@ -10655,7 +10659,7 @@ function ifElementContainChildNode(parentSelector, checkedNode) {
       return null;
     },
     hoveredConnection: function hoveredConnection() {
-      var _this2 = this;
+      var _this3 = this;
 
       var _iteratorNormalCompletion17 = true;
       var _didIteratorError17 = false;
@@ -10664,10 +10668,10 @@ function ifElementContainChildNode(parentSelector, checkedNode) {
       try {
         var _loop2 = function _loop2() {
           var line = _step17.value;
-          var distance = distanceOfPointToLine(line.sourceX, line.sourceY, line.destinationX, line.destinationY, _this2.cursorToChartOffset.x, _this2.cursorToChartOffset.y);
+          var distance = distanceOfPointToLine(line.sourceX, line.sourceY, line.destinationX, line.destinationY, _this3.cursorToChartOffset.x, _this3.cursorToChartOffset.y);
 
-          if (distance < 5 && between(line.sourceX - 2, line.destinationX + 2, _this2.cursorToChartOffset.x) && between(line.sourceY - 2, line.destinationY + 2, _this2.cursorToChartOffset.y)) {
-            var connections = _this2.internalConnections.filter(function (item) {
+          if (distance < 5 && between(line.sourceX - 2, line.destinationX + 2, _this3.cursorToChartOffset.x) && between(line.sourceY - 2, line.destinationY + 2, _this3.cursorToChartOffset.y)) {
+            var connections = _this3.internalConnections.filter(function (item) {
               return item.id === line.id;
             });
 
