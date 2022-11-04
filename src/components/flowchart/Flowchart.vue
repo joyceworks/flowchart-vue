@@ -194,7 +194,7 @@ export default {
         this.selectionInfo = null;
       }
       if (this.moveInfo) {
-        this.moveCoordinates.diffX += event.pageX - this.moveCoordinates.startX;
+        this.moveCoordinates.diffX -= event.pageX - this.moveCoordinates.startX;
         this.moveCoordinates.diffY += event.pageY - this.moveCoordinates.startY;
         this.$emit(
             "movediff",
@@ -818,6 +818,8 @@ export default {
       that.internalConnections.splice(0, that.internalConnections.length);
       that.nodes.forEach((node) => {
         let newNode = Object.assign({}, node);
+        newNode.x = newNode.x + this.moveCoordinates.diffX;
+        newNode.y = newNode.y + this.moveCoordinates.diffY;
         newNode.width = newNode.width || 120;
         newNode.height = newNode.height || 60;
         that.internalNodes.push(newNode);
