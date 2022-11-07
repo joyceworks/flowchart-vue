@@ -27,15 +27,10 @@
 <style src="./index.css"></style>
 <script>
 import { connect, lineTo } from "@/utils/svg";
-import {event, select} from "d3-selection";
-import {drag} from "d3-drag";
+import { event, select } from "d3-selection";
+import { drag } from "d3-drag";
 
-import {
-  between,
-  distanceOfPointToLine,
-  getEdgeOfPoints,
-  pointRectangleIntersection,
-} from "@/utils/math";
+import { between, distanceOfPointToLine, getEdgeOfPoints, pointRectangleIntersection, } from "@/utils/math";
 import render from "./render";
 import { ifElementContainChildNode } from "@/utils/dom";
 
@@ -120,12 +115,21 @@ export default {
     };
   },
   methods: {
+    getNodesToReturn() {
+      return this.internalNodes
+          .map(node => {
+            const clonedNode = JSON.parse(JSON.stringify(node));
+            clonedNode.x = clonedNode.x + this.moveCoordinates.diffX;
+            clonedNode.y = clonedNode.y - this.moveCoordinates.diffY;
+            return clonedNode;
+          });
+    },
     add(node) {
       if (this.readonly && !this.readOnlyPermissions.allowAddNodes) {
         return;
       }
       this.internalNodes.push(node);
-      this.$emit("add", node, this.internalNodes, this.internalConnections);
+      this.$emit("add", node, this.getNodesToReturn(), this.internalConnections);
     },
     editCurrent() {
       if (this.currentNodes.length === 1) {
@@ -182,7 +186,7 @@ export default {
             this.$emit(
                 "connect",
                 conn,
-                this.internalNodes,
+                this.getNodesToReturn(),
                 this.internalConnections
             );
           }
@@ -738,7 +742,7 @@ export default {
       if (this.readonly && !this.readOnlyPermissions.allowSave) {
         return;
       }
-      this.$emit("save", this.internalNodes, this.internalConnections);
+      this.$emit("save", this.getNodesToReturn(), this.internalConnections);
     },
     async remove() {
       if (this.readonly && !this.readOnlyPermissions.allowRemove) {
@@ -786,7 +790,7 @@ export default {
         );
       }
       this.internalNodes.splice(this.internalNodes.indexOf(node), 1);
-      this.$emit("delete", node, this.internalNodes, this.internalConnections);
+      this.$emit("delete", node, this.getNodesToReturn(), this.internalConnections);
     },
     removeConnection(conn) {
       let index = this.internalConnections.indexOf(conn);
@@ -794,7 +798,7 @@ export default {
       this.$emit(
           "disconnect",
           conn,
-          this.internalNodes,
+          this.getNodesToReturn(),
           this.internalConnections
       );
     },
