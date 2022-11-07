@@ -115,25 +115,35 @@ export default {
     };
   },
   methods: {
-    getNodesToReturn() {
-      return this.internalNodes
-          .map(node => {
-            const clonedNode = JSON.parse(JSON.stringify(node));
-            clonedNode.x = clonedNode.x + this.moveCoordinates.diffX;
-            clonedNode.y = clonedNode.y - this.moveCoordinates.diffY;
-            return clonedNode;
-          });
+    cloneObject(data) {
+      return JSON.parse(JSON.stringify(data));
     },
-    getConnectionsToReturn() {
+    getInternalNodesToReturn() {
+      return this.internalNodes
+          .map(node => this.getInternalNodeToReturn(node));
+    },
+    getInternalNodeToReturn(node) {
+      const clonedNode = this.cloneObject(node);
+      clonedNode.x = clonedNode.x + this.moveCoordinates.diffX;
+      clonedNode.y = clonedNode.y - this.moveCoordinates.diffY;
+      return clonedNode;
+    },
+    getInternalConnectionsToReturn() {
       return this.internalConnections
-          .map(connection => JSON.parse(JSON.stringify(connection)));
+          .map(connection => this.cloneObject(connection));
+    },
+    getCurrentNodesToReturn() {
+      return this.currentNodes.map(node => this.getInternalNodeToReturn(node));
+    },
+    getCurrentConnectionsToReturn() {
+      return this.currentConnections.map(connection => this.cloneObject(connection));
     },
     add(node) {
       if (this.readonly && !this.readOnlyPermissions.allowAddNodes) {
         return;
       }
       this.internalNodes.push(node);
-      this.$emit("add", node, this.getNodesToReturn(), this.getConnectionsToReturn());
+      this.$emit("add", node, this.getInternalNodesToReturn(), this.getInternalConnectionsToReturn());
     },
     editCurrent() {
       if (this.currentNodes.length === 1) {
@@ -146,13 +156,13 @@ export default {
       if (this.readonly && !this.readOnlyPermissions.allowEditNodes) {
         return;
       }
-      this.$emit("editnode", node);
+      this.$emit("editnode", this.getInternalNodeToReturn(node));
     },
     editConnection(connection) {
       if (this.readonly && !this.readOnlyPermissions.allowEditConnections) {
         return;
       }
-      this.$emit("editconnection", connection);
+      this.$emit("editconnection", this.cloneObject(connection));
     },
     handleChartMouseWheel(event) {
       event.stopPropagation();
@@ -189,9 +199,9 @@ export default {
             this.internalConnections.push(conn);
             this.$emit(
                 "connect",
-                conn,
-                this.getNodesToReturn(),
-                this.getConnectionsToReturn()
+                this.cloneObject(conn),
+                this.getInternalNodesToReturn(),
+                this.getInternalConnectionsToReturn()
             );
           }
         }
@@ -547,7 +557,7 @@ export default {
       let g = that.append("g").attr("cursor", "move").classed("node", true);
 
       let children = render(g, node, isSelected);
-      that.$emit('render', node, children);
+      that.$emit('render', this.getInternalNodeToReturn(node), children);
 
       let dragHandler = drag()
           .on("start", function () {
@@ -649,7 +659,7 @@ export default {
               currentNode.y = Math.round(Math.round(currentNode.y) / 10) * 10;
             }
 
-            that.$emit("nodesdragged", that.currentNodes);
+            that.$emit("nodesdragged", that.getCurrentNodesToReturn());
           });
       g.call(dragHandler);
       g.on("mousedown", function () {
@@ -706,9 +716,9 @@ export default {
                   that.internalConnections.push(conn);
                   that.$emit(
                       "connect",
-                      conn,
-                      that.internalNodes,
-                      that.internalConnections
+                      this.cloneObject(conn),
+                      that.getInternalNodesToReturn(),
+                      that.getInternalConnectionsToReturn()
                   );
                 }
                 that.connectingInfo.source = null;
@@ -746,7 +756,7 @@ export default {
       if (this.readonly && !this.readOnlyPermissions.allowSave) {
         return;
       }
-      this.$emit("save", this.getNodesToReturn(), this.getConnectionsToReturn());
+      this.$emit("save", this.getInternalNodesToReturn(), this.getInternalConnectionsToReturn());
     },
     async remove() {
       if (this.readonly && !this.readOnlyPermissions.allowRemove) {
@@ -759,7 +769,7 @@ export default {
       if (!this.removeRequiresConfirmation) {
         this.removeSelectedNodesAndConnections();
       } else {
-        this.$emit("removeconfirmationrequired", this.currentNodes, this.currentConnections);
+        this.$emit("removeconfirmationrequired", this.getCurrentNodesToReturn(), this.getCurrentConnectionsToReturn());
       }
     },
     confirmRemove() {
@@ -794,16 +804,16 @@ export default {
         );
       }
       this.internalNodes.splice(this.internalNodes.indexOf(node), 1);
-      this.$emit("delete", node, this.getNodesToReturn(), this.getConnectionsToReturn());
+      this.$emit("delete", node, this.getInternalNodesToReturn(), this.getInternalConnectionsToReturn());
     },
     removeConnection(conn) {
       let index = this.internalConnections.indexOf(conn);
       this.internalConnections.splice(index, 1);
       this.$emit(
           "disconnect",
-          conn,
-          this.getNodesToReturn(),
-          this.getConnectionsToReturn()
+          this.cloneObject(conn),
+          this.getInternalNodesToReturn(),
+          this.getInternalConnectionsToReturn()
       );
     },
     moveCurrentNode(x, y) {
@@ -962,7 +972,7 @@ export default {
       immediate: true,
       deep: true,
       handler() {
-        this.$emit("select", this.currentNodes);
+        this.$emit("select", this.getCurrentNodesToReturn());
         this.renderNodes();
       },
     },
@@ -970,7 +980,7 @@ export default {
       immediate: true,
       deep: true,
       handler() {
-        this.$emit("selectconnection", this.currentConnections);
+        this.$emit("selectconnection", this.getCurrentConnectionsToReturn());
         this.renderConnections();
       },
     },
