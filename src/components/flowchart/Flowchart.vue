@@ -124,12 +124,16 @@ export default {
             return clonedNode;
           });
     },
+    getConnectionsToReturn() {
+      return this.internalConnections
+          .map(connection => JSON.parse(JSON.stringify(connection)));
+    },
     add(node) {
       if (this.readonly && !this.readOnlyPermissions.allowAddNodes) {
         return;
       }
       this.internalNodes.push(node);
-      this.$emit("add", node, this.getNodesToReturn(), this.internalConnections);
+      this.$emit("add", node, this.getNodesToReturn(), this.getConnectionsToReturn());
     },
     editCurrent() {
       if (this.currentNodes.length === 1) {
@@ -187,7 +191,7 @@ export default {
                 "connect",
                 conn,
                 this.getNodesToReturn(),
-                this.internalConnections
+                this.getConnectionsToReturn()
             );
           }
         }
@@ -742,7 +746,7 @@ export default {
       if (this.readonly && !this.readOnlyPermissions.allowSave) {
         return;
       }
-      this.$emit("save", this.getNodesToReturn(), this.internalConnections);
+      this.$emit("save", this.getNodesToReturn(), this.getConnectionsToReturn());
     },
     async remove() {
       if (this.readonly && !this.readOnlyPermissions.allowRemove) {
@@ -790,7 +794,7 @@ export default {
         );
       }
       this.internalNodes.splice(this.internalNodes.indexOf(node), 1);
-      this.$emit("delete", node, this.getNodesToReturn(), this.internalConnections);
+      this.$emit("delete", node, this.getNodesToReturn(), this.getConnectionsToReturn());
     },
     removeConnection(conn) {
       let index = this.internalConnections.indexOf(conn);
@@ -799,7 +803,7 @@ export default {
           "disconnect",
           conn,
           this.getNodesToReturn(),
-          this.internalConnections
+          this.getConnectionsToReturn()
       );
     },
     moveCurrentNode(x, y) {
