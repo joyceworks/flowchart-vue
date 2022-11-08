@@ -818,7 +818,7 @@ export default {
       that.internalConnections.splice(0, that.internalConnections.length);
       that.nodes.forEach((node) => {
         let newNode = Object.assign({}, node);
-        newNode.x = newNode.x + this.moveCoordinates.diffX;
+        newNode.x = newNode.x - this.moveCoordinates.diffX;
         newNode.y = newNode.y + this.moveCoordinates.diffY;
         newNode.width = newNode.width || 120;
         newNode.height = newNode.height || 60;
