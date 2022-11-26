@@ -4,8 +4,6 @@ Flowchart & Flowchart designer component for Vue.js([flowchart-react](https://gi
 
 [![NPM](https://img.shields.io/npm/v/flowchart-vue.svg)](https://www.npmjs.com/package/flowchart-vue)
 
-English | [中文](https://www.joyceworks.com/2022/02/16/flowchart-vue-readme/)
-
 <img width="801" alt="image" src="https://user-images.githubusercontent.com/5696485/156284211-1bd18756-d785-440a-8292-4fdeb89fca5b.png">
 
 ## Usage
