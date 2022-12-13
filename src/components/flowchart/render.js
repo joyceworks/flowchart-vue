@@ -4,12 +4,26 @@ import { roundTo20 } from "@/utils/math";
 function render(g, node, isSelected) {
   node.width = node.width || 120;
   node.height = node.height || 60;
-  let borderColor = isSelected ? "#666666" : "#bbbbbb";
-  let textColor = "black";
   let header = null;
   let title = null;
+
+  const theme = !node.theme ? {} : node.theme;
+  const headerBackgroundColor = theme.headerBackgroundColor ? theme.headerBackgroundColor : "#f1f3f4";
+  const bodyBackgroundColor = theme.bodyBackgroundColor ? theme.bodyBackgroundColor : "white";
+  const bodyTextColor = theme.bodyTextColor ? theme.bodyTextColor : "black";
+  const headerTextColor = theme.headerTextColor ? theme.headerTextColor : "black";
+  
+  let borderColor = isSelected ? "#666666" : "#bbbbbb";
+  if (theme.borderColor) {
+    if (isSelected) {
+      borderColor = theme.borderColorSelected;
+    } else {
+      borderColor = theme.borderColor;
+    }
+  }
+  
+  
   if (node.type !== "start" && node.type !== "end") {
-    let titleBackgroundColor = "#f1f3f4";
     // title
     header = g
       .append("rect")
@@ -18,12 +32,12 @@ function render(g, node, isSelected) {
       .attr("stroke", borderColor)
       .attr("class", "title")
       .style("height", "20px")
-      .style("fill", titleBackgroundColor)
+      .style("fill", headerBackgroundColor)
       .style("stroke-width", "1px")
       .style("width", node.width + "px");
     title = g
       .append("text")
-      .attr("fill", textColor)
+      .attr("fill", headerTextColor)
       .attr("x", node.x + 4)
       .attr("y", node.y + 15)
       .attr("class", "unselectable")
@@ -41,7 +55,6 @@ function render(g, node, isSelected) {
   }
   // body
   let body = g.append("rect").attr("class", "body");
-  let bodyBackgroundColor = "white";
   body
     .style("width", node.width + "px")
     .style("fill", bodyBackgroundColor)
@@ -78,7 +91,7 @@ function render(g, node, isSelected) {
   }
   let content = g
     .append("text")
-    .attr("fill", textColor)
+    .attr("fill", bodyTextColor)
     .attr("x", node.x + node.width / 2)
     .attr("y", bodyTextY)
     .attr("class", "unselectable")
