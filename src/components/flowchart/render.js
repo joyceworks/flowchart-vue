@@ -22,7 +22,6 @@ function render(g, node, isSelected) {
     }
   }
   
-  
   if (node.type !== "start" && node.type !== "end") {
     // title
     header = g
