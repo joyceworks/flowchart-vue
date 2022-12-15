@@ -6752,7 +6752,7 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"859d94fc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=f5ca651c&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"46fb55a1-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/flowchart/Flowchart.vue?vue&type=template&id=f5ca651c&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:({
     width: isNaN(_vm.width) ? _vm.width : _vm.width + 'px',
     height: isNaN(_vm.height) ? _vm.height : _vm.height + 'px',
@@ -9151,16 +9151,27 @@ function defaultTouchable() {
 function render_render(g, node, isSelected) {
   node.width = node.width || 120;
   node.height = node.height || 60;
-  var borderColor = isSelected ? "#666666" : "#bbbbbb";
-  var textColor = "black";
   var header = null;
   var title = null;
+  var theme = !node.theme ? {} : node.theme;
+  var headerBackgroundColor = theme.headerBackgroundColor ? theme.headerBackgroundColor : "#f1f3f4";
+  var bodyBackgroundColor = theme.bodyBackgroundColor ? theme.bodyBackgroundColor : "white";
+  var bodyTextColor = theme.bodyTextColor ? theme.bodyTextColor : "black";
+  var headerTextColor = theme.headerTextColor ? theme.headerTextColor : "black";
+  var borderColor = isSelected ? "#666666" : "#bbbbbb";
+
+  if (theme.borderColor) {
+    if (isSelected) {
+      borderColor = theme.borderColorSelected;
+    } else {
+      borderColor = theme.borderColor;
+    }
+  }
 
   if (node.type !== "start" && node.type !== "end") {
-    var titleBackgroundColor = "#f1f3f4"; // title
-
-    header = g.append("rect").attr("x", node.x).attr("y", node.y).attr("stroke", borderColor).attr("class", "title").style("height", "20px").style("fill", titleBackgroundColor).style("stroke-width", "1px").style("width", node.width + "px");
-    title = g.append("text").attr("fill", textColor).attr("x", node.x + 4).attr("y", node.y + 15).attr("class", "unselectable").text(function () {
+    // title
+    header = g.append("rect").attr("x", node.x).attr("y", node.y).attr("stroke", borderColor).attr("class", "title").style("height", "20px").style("fill", headerBackgroundColor).style("stroke-width", "1px").style("width", node.width + "px");
+    title = g.append("text").attr("fill", headerTextColor).attr("x", node.x + 4).attr("y", node.y + 15).attr("class", "unselectable").text(function () {
       return node.name;
     }).each(function wrap() {
       var self = src_select(this),
@@ -9177,7 +9188,6 @@ function render_render(g, node, isSelected) {
 
 
   var body = g.append("rect").attr("class", "body");
-  var bodyBackgroundColor = "white";
   body.style("width", node.width + "px").style("fill", bodyBackgroundColor).style("stroke-width", "1px");
 
   if (node.type !== "start" && node.type !== "end") {
@@ -9199,7 +9209,7 @@ function render_render(g, node, isSelected) {
     bodyTextY = node.y + 5 + roundTo20(node.height) / 2;
   }
 
-  var content = g.append("text").attr("fill", textColor).attr("x", node.x + node.width / 2).attr("y", bodyTextY).attr("class", "unselectable").attr("text-anchor", "middle").text(function () {
+  var content = g.append("text").attr("fill", bodyTextColor).attr("x", node.x + node.width / 2).attr("y", bodyTextY).attr("class", "unselectable").attr("text-anchor", "middle").text(function () {
     return text;
   }).each(function wrap() {
     var self = src_select(this),
