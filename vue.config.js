@@ -11,5 +11,5 @@ module.exports = {
     },
     extract: false,
   },
-  publicPath: process.env.NODE_ENV === "production" ? "/flowchart-vue" : "/"
+  baseUrl: process.env.NODE_ENV === "production" ? "/flowchart-vue" : "/"
 };

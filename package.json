@@ -1,6 +1,6 @@
 {
   "name": "flowchart-vue",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "license": "MIT",
   "main": "dist/FlowChart.umd.min.js",
   "repository": {
@@ -33,7 +33,7 @@
     "eslint-plugin-vue": "^5.0.0",
     "prettier": "^2.0.5",
     "source-map-explorer": "^2.5.2",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.22"
   },
   "eslintConfig": {
     "root": true,
