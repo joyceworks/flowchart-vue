@@ -13,10 +13,7 @@
   ],
   "private": false,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "build-lib": "vue-cli-service build --target lib --name FlowChart src/components/flowchart/index.js",
+    "build-lib": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --target lib --name FlowChart src/components/flowchart/index.js",
     "analyze": "source-map-explorer 'dist/FlowChart.umd.min.js'"
   },
   "dependencies": {
