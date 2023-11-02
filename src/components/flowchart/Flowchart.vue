@@ -211,7 +211,7 @@ export default {
               && x.source.position === this.connectingInfo.sourcePosition
               && x.destination.id === this.hoveredConnector.node.id
               && x.destination.position === this.hoveredConnector.position);
-      
+
       return !connectionToItself && !connectionAlreadyExists;
     },
     async handleChartMouseMove(event) {
@@ -277,17 +277,17 @@ export default {
     },
     isMouseOverAnyNode() {
       let cursorPosition = { x: this.cursorToChartOffset.x, y: this.cursorToChartOffset.y };
-      
+
       let result = false;
-      
+
       for(let currentNodeIndex = 0; currentNodeIndex < this.internalNodes.length; currentNodeIndex++) {
         const node = this.internalNodes[currentNodeIndex];
         const nodeArea = {
           start: { x: node.x, y: node.y },
           end: { x: node.x + node.width, y: node.y + node.height }
         }
-        
-        const mousePointIntersectNodeArea = 
+
+        const mousePointIntersectNodeArea =
                cursorPosition.x >= nodeArea.start.x && cursorPosition.x <= nodeArea.end.x
             && cursorPosition.y >= nodeArea.start.y &&  cursorPosition.y <= nodeArea.end.y;
 
@@ -296,7 +296,7 @@ export default {
           break;
         }
       }
-      
+
       return result;
     },
     getConnectorPosition(node) {
@@ -315,7 +315,7 @@ export default {
       if (this.hasNodeConnector(node, "left")) {
         result.left = { x: node.x, y: node.y + halfHeight };
       }
-      
+
       return result;
     },
     hasNodeConnector(node, position) {
@@ -471,7 +471,7 @@ export default {
     haveNodesSelectedConnectors(connection) {
       const sourceNode = this.nodes.find(x => x.id === connection.source.id);
       const destinationNode = this.nodes.find(x => x.id === connection.destination.id);
-      return this.hasNodeConnector(sourceNode, connection.source.position) 
+      return this.hasNodeConnector(sourceNode, connection.source.position)
           && this.hasNodeConnector(destinationNode, connection.destination.position);
     },
     renderNodes() {
@@ -745,7 +745,7 @@ export default {
         return;
       }
       const anyElementToRemove = this.currentConnections.length > 0 || this.currentNodes.length > 0;
-      if (!anyElementToRemove) { 
+      if (!anyElementToRemove) {
         return;
       }
       if (!this.removeRequiresConfirmation) {
@@ -860,6 +860,7 @@ export default {
           }
           break;
         case 46:
+        case 8:
           that.remove();
           break;
         default:
